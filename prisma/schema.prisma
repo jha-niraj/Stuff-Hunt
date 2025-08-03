@@ -22,6 +22,7 @@ model User {
     image                String    @default("https://res.cloudinary.com/dhfuckcax/image/upload/v1739810646/krk8x7fzjukcfcoefrea.jpg")
     role                 Role      @default(USER)
     roleExplicitlyChosen Boolean   @default(false)
+    onboardingCompleted  Boolean   @default(false)
 	createdAt            DateTime  @default(now())
 
     // Email verification
@@ -32,9 +33,23 @@ model User {
     resetToken           String?   @unique
     resetTokenExpiry     DateTime?
 
+    // Seller specific fields
+    companyName          String?
+    businessType         String?
+    gstNumber            String?
+    panNumber            String?
+    businessAddress      String?
+    phoneNumber          String?
+    kycStatus           String    @default("PENDING") // PENDING, APPROVED, REJECTED
+    verificationBadge   Boolean   @default(false)
+
     accounts              Account[]
+    products              Product[] @relation("SellerProducts")
+    orders                Order[]   @relation("BuyerOrders")
+    reviews               Review[]
 
     @@index([email])
+    @@index([role])
 }
 
 model Account {
@@ -58,4 +73,98 @@ model Account {
 
     @@unique([provider, providerAccountId])
     @@map("accounts")
+}
+
+model Product {
+    id                  String    @id @default(cuid())
+    name                String
+    price               Float
+    shortDescription    String?
+    detailedDescription String?
+    images              String[]  // Array of Cloudinary URLs
+    viewCount           Int       @default(0)
+    isActive            Boolean   @default(true)
+    createdAt           DateTime  @default(now())
+    updatedAt           DateTime  @updatedAt
+
+    // Seller relationship
+    sellerId            String
+    seller              User      @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
+
+    // Many-to-many relationship with categories
+    categories          Category[] @relation("ProductCategories")
+    
+    // One-to-many relationships
+    orders              Order[]
+    reviews             Review[]
+
+    @@index([sellerId])
+    @@index([isActive])
+    @@index([createdAt])
+}
+
+model Category {
+    id          String     @id @default(cuid())
+    name        String     @unique
+    description String?
+    parentId    String?
+    parent      Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+    children    Category[] @relation("CategoryHierarchy")
+    
+    // Many-to-many relationship with products
+    products    Product[]  @relation("ProductCategories")
+    
+    createdAt   DateTime   @default(now())
+
+    @@index([parentId])
+}
+
+model Order {
+    id        String      @id @default(cuid())
+    status    OrderStatus @default(PENDING)
+    total     Float
+    quantity  Int         @default(1)
+    createdAt DateTime    @default(now())
+    updatedAt DateTime    @updatedAt
+
+    // Buyer relationship
+    buyerId   String
+    buyer     User        @relation("BuyerOrders", fields: [buyerId], references: [id], onDelete: Cascade)
+
+    // Product relationship
+    productId String
+    product   Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+    @@index([buyerId])
+    @@index([productId])
+    @@index([status])
+}
+
+model Review {
+    id        String   @id @default(cuid())
+    rating    Int      // 1-5 stars
+    comment   String?
+    createdAt DateTime @default(now())
+
+    // User relationship
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    // Product relationship
+    productId String
+    product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
+    @@index([productId])
+    @@index([rating])
+}
+
+enum OrderStatus {
+    PENDING
+    CONFIRMED
+    PROCESSING
+    SHIPPED
+    DELIVERED
+    CANCELLED
+    REFUNDED
 }
