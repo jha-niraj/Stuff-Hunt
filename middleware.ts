@@ -1,186 +1,169 @@
-import CredentialsProvider from 'next-auth/providers/credentials';
-import GoogleProvider from "next-auth/providers/google";
-import { prisma } from "@/lib/prisma";
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import NextAuth from "next-auth";
-import { Role } from '@prisma/client';
-import bcrypt from "bcryptjs";
+import { auth } from "@/auth"
+import { NextResponse } from "next/server"
 
-export const { auth, handlers, signIn, signOut } = NextAuth({
-    adapter: PrismaAdapter(prisma),
-    providers: [
-        CredentialsProvider({
-            name: "Credentials",
-            credentials: {
-                email: {
-                    label: "Email",
-                    type: "email",
-                },
-                password: {
-                    label: "Password",
-                    type: "password"
-                }
-            },
-            async authorize(credentials) {
-                if (!credentials?.email || !credentials?.password) {
-                    return null;
-                }
+// Protected routes that require authentication
+const protectedRoutes = [
+	'/seller',
+	'/admin',
+	'/profile',
+	'/settings',
+	'/onboarding',
+	'/orders',
+	'/wishlist',
+	'/cart',
+	'/checkout'
+]
 
-                try {
-                    const user = await prisma.user.findUnique({
-                        where: {
-                            email: credentials.email as string
-                        }
-                    });
+// Seller-specific routes that require SELLER role
+const sellerRoutes = [
+	'/seller/dashboard',
+	'/seller/products',
+	'/seller/orders',
+	'/seller/analytics',
+	'/seller/settings'
+]
 
-                    if (!user || !user.password) {
-                        return null;
-                    }
+// Admin-specific routes that require ADMIN role
+const adminRoutes = [
+	'/admin/dashboard',
+	'/admin/users',
+	'/admin/products',
+	'/admin/orders',
+	'/admin/analytics'
+]
 
-                    // For special case where password is "verified" (after OTP verification)
-                    if (credentials.password === "verified") {
-                        // Refetch user to get latest verification status
-                        const freshUser = await prisma.user.findUnique({
-                            where: {
-                                email: credentials.email as string
-                            }
-                        });
+// Public routes that don't require authentication
+const publicRoutes = [
+	'/',
+	'/products',
+	'/categories',
+	'/search',
+	'/signin',
+	'/signup',
+	'/verify',
+	'/waiting',
+	'/forgotpassword',
+	'/resetpassword',
+	'/error',
+	'/about',
+	'/contact',
+	'/privacy',
+	'/terms',
+	'/seller' // Seller landing page is public
+]
 
-                        if (freshUser && freshUser.emailVerified) {
-                            return {
-                                id: freshUser.id,
-                                email: freshUser.email,
-                                name: freshUser.name,
-                                image: freshUser.image,
-                                role: freshUser.role,
-                                roleExplicitlyChosen: freshUser.roleExplicitlyChosen,
-                                onboardingCompleted: freshUser.onboardingCompleted,
-                            };
-                        } else {
-                            throw new Error("Email verification not completed");
-                        }
-                    }
+// API routes that should be excluded from auth checks
+const apiRoutes = [
+	'/api/auth',
+	'/api/health',
+	'/api/register',
+	'/api/verify',
+	'/api/forgot-password',
+	'/api/reset-password',
+	'/api/resend-verification',
+	'/api/products/public',
+	'/api/categories'
+]
 
-                    // Check if email is verified for regular password login
-                    if (!user.emailVerified) {
-                        throw new Error("Please verify your email before signing in");
-                    }
+export default auth((req) => {
+	const { nextUrl } = req
+	
+	// Allow API routes to pass through
+	if (apiRoutes.some(route => nextUrl.pathname.startsWith(route))) {
+		return NextResponse.next()
+	}
 
-                    // Regular password check
-                    const isPasswordValid = await bcrypt.compare(credentials.password as string, user.password);
+	// Allow static files and Next.js internals
+	if (
+		nextUrl.pathname.startsWith('/_next/') ||
+		nextUrl.pathname.startsWith('/api/') ||
+		nextUrl.pathname.includes('.')
+	) {
+		return NextResponse.next()
+	}
 
-                    if (!isPasswordValid) {
-                        return null;
-                    }
+	const isLoggedIn = !!req.auth
+	const userRole = req.auth?.user?.role
 
-                    return {
-                        id: user.id,
-                        email: user.email,
-                        name: user.name,
-                        image: user.image,
-                        role: user.role,
-                        roleExplicitlyChosen: user.roleExplicitlyChosen,
-                        };
-                } catch (error) {
-                    console.error("Authorization error:", error);
-                    throw new Error(error instanceof Error ? error.message : "Authentication failed");
-                }
-            }
-        }),
-        GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID || "",
-            clientSecret: process.env.GOOGLE_SECRET_ID || ""
-        }),
-    ],
-    callbacks: {
-        async jwt({ token, user, trigger, session }) {
-            if (user) {
-                token.id = user.id!;
-                token.role = user.role;
-                token.roleExplicitlyChosen = user.roleExplicitlyChosen;
-            }
+	// Check if current path is a protected route
+	const isProtectedRoute = protectedRoutes.some(route =>
+		nextUrl.pathname.startsWith(route)
+	)
 
-            // Only fetch from database during session updates or when explicitly triggered
-            // This prevents Prisma from running in Edge Runtime during middleware execution
-            if (token && !token.roleExplicitlyChosen && (trigger === "update" || trigger === "signIn")) {
-                try {
-                    // Check if we're in Edge Runtime by trying to access process
-                    if (typeof process !== 'undefined' && process.env) {
-                        const dbUser = await prisma.user.findUnique({
-                            where: { id: token.id as string },
-                            select: { roleExplicitlyChosen: true }
-                        });
-                        if (dbUser) {
-                            token.roleExplicitlyChosen = dbUser.roleExplicitlyChosen;
-                        }
-                    }
-                } catch (error) {
-                    // Silently fail if running in Edge Runtime (middleware)
-                    console.log("JWT callback: Skipping database query in Edge Runtime");
-                }
-            }
+	// Check if current path is a public route
+	const isPublicRoute = publicRoutes.some(route =>
+		nextUrl.pathname === route || (route !== '/' && nextUrl.pathname.startsWith(route))
+	)
 
-            return token;
-        },
-        async session({ session, token }) {
-            if (session.user) {
-                session.user.id = token.id as string;
-                session.user.role = token.role as Role
-                session.user.roleExplicitlyChosen = Boolean(token.roleExplicitlyChosen);
-            }
-            return session;
-        },
-        async signIn({ user, account, profile }) {
-            if (account?.provider === 'google') {
-                const existingUser = await prisma.user.findUnique({
-                    where: { email: profile?.email as string }
-                });
+	// Check role-specific routes
+	const isSellerRoute = sellerRoutes.some(route =>
+		nextUrl.pathname.startsWith(route)
+	)
+	
+	const isAdminRoute = adminRoutes.some(route =>
+		nextUrl.pathname.startsWith(route)
+	)
 
-                if (existingUser) {
-                    await prisma.user.update({
-                        where: {
-                            email: profile?.email as string
-                        },
-                        data: {
-                            emailVerified: new Date()
-                        }
-                    });
-                }
+	// If user is not logged in and trying to access protected route
+	if (!isLoggedIn && isProtectedRoute) {
+		const signInUrl = new URL('/signin', nextUrl.origin)
+		signInUrl.searchParams.set('callbackUrl', nextUrl.pathname)
+		return NextResponse.redirect(signInUrl)
+	}
 
-                return true;
-            }
-            return true;
-        },
-        async redirect({ url, baseUrl }) {
-            // If user is signing in and no specific redirect URL, go to dashboard
-            if (url.startsWith("/")) {
-                if (url === "/signin" || url === "/signup") {
-                    return `${baseUrl}/dashboard`
-                }
-                return `${baseUrl}${url}`
-            }
-            if (new URL(url).origin === baseUrl) return url
-            return `${baseUrl}/dashboard`
-        },
-    },
-    pages: {
-        signIn: '/signin',
-        error: '/error',
-        signOut: '/'
-    },
-    session: {
-        strategy: "jwt",
-    },
-    secret: process.env.NEXTAUTH_SECRET,
-    cookies: {
-        csrfToken: {
-            name: "next-auth.csrf-token",
-            options: {
-                httpOnly: true,
-                sameSite: "lax",
-                path: "/",
-                secure: process.env.NODE_ENV === "production",
-            },
-        },
-    },
+	// Role-based access control
+	if (isLoggedIn) {
+		// Check seller route access
+		if (isSellerRoute && userRole !== 'SELLER') {
+			// If not a seller, redirect to seller landing page
+			return NextResponse.redirect(new URL('/seller', nextUrl.origin))
+		}
+
+		// Check admin route access
+		if (isAdminRoute && userRole !== 'ADMIN') {
+			// If not an admin, redirect to home
+			return NextResponse.redirect(new URL('/', nextUrl.origin))
+		}
+
+		// Handle post-login redirection logic
+		if (nextUrl.pathname === '/signin' || nextUrl.pathname === '/signup') {
+			// Redirect based on user role after login
+			if (userRole === 'SELLER') {
+				return NextResponse.redirect(new URL('/seller/dashboard', nextUrl.origin))
+			} else if (userRole === 'ADMIN') {
+				return NextResponse.redirect(new URL('/admin/dashboard', nextUrl.origin))
+			} else {
+				return NextResponse.redirect(new URL('/', nextUrl.origin))
+			}
+		}
+
+		// For the root path, redirect based on role
+		if (nextUrl.pathname === '/' && nextUrl.search === '') {
+			if (userRole === 'SELLER') {
+				return NextResponse.redirect(new URL('/seller/dashboard', nextUrl.origin))
+			} else if (userRole === 'ADMIN') {
+				return NextResponse.redirect(new URL('/admin/dashboard', nextUrl.origin))
+			}
+			// Regular users stay on home page
+		}
+	}
+
+	return NextResponse.next()
 })
+
+export const config = {
+	// More specific matcher to avoid catching static files and API routes
+	matcher: [
+		/*
+		 * Match all request paths except for the ones starting with:
+		 * - api (API routes)
+		 * - _next/static (static files)
+		 * - _next/image (image optimization files)
+		 * - favicon.ico (favicon file)
+		 * - public folder files
+		 * - files with extensions (images, etc.)
+		 * - webhook endpoints
+		 */
+		'/((?!api/auth|_next/static|_next/image|favicon.ico|public/|.*\\..*).*)',
+	],
+}

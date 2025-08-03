@@ -5,6 +5,7 @@ declare module "next-auth" {
     interface User {
         role: Role;
         roleExplicitlyChosen: boolean;
+        onboardingCompleted?: boolean;
     }
 
     interface Session {
