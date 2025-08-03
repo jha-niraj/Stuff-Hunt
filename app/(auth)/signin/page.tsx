@@ -20,6 +20,7 @@ function SignInContent() {
 	const router = useRouter()
 	const searchParams = useSearchParams()
 	const callbackUrl = searchParams.get('callbackUrl') || '/dashboard'
+	const role = searchParams.get('role') // Get role from URL params
 
 	// Handle verified email parameter
 	useEffect(() => {
@@ -107,15 +108,32 @@ function SignInContent() {
 			<div className="flex-1 flex items-center justify-center p-4">
 				<div className="w-full max-w-md relative z-10">
 					<div className="text-center mb-4">
-						<h1 className="text-4xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300">
-							ValidateX
+						<h1 className="text-4xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#FF6EC7] to-[#DF87F3]">
+							StuffHunt
 						</h1>
-						<div className="w-12 h-0.5 bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 mx-auto"></div>
+						<div className="w-12 h-0.5 bg-gradient-to-r from-[#FF6EC7] to-[#DF87F3] mx-auto"></div>
 					</div>
 					<div className="bg-white/80 dark:bg-black/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-neutral-200/20 dark:border-neutral-800/20 p-8">
 						<div className="text-center mb-4">
-							<h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Welcome back</h2>
-							<p className="text-neutral-600 dark:text-neutral-400 mt-2">Sign in to your ValidateX account</p>
+							{role === 'seller' && (
+								<div className="mb-4 p-3 bg-gradient-to-r from-[#FF6EC7]/10 to-[#DF87F3]/10 border border-[#FF6EC7]/20 rounded-2xl">
+									<p className="text-sm font-medium bg-gradient-to-r from-[#FF6EC7] to-[#DF87F3] bg-clip-text text-transparent">
+										🛍️ You're signing in as a Seller
+									</p>
+									<p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
+										Access your seller dashboard, manage products, and track sales
+									</p>
+								</div>
+							)}
+							<h2 className="text-2xl font-bold text-neutral-900 dark:text-white">
+								{role === 'seller' ? 'Welcome back, Seller!' : 'Welcome back'}
+							</h2>
+							<p className="text-neutral-600 dark:text-neutral-400 mt-2">
+								{role === 'seller' 
+									? 'Sign in to your StuffHunt seller account' 
+									: 'Sign in to your StuffHunt account'
+								}
+							</p>
 						</div>
 						<form onSubmit={handleSubmit} className="space-y-6">
 							<div className="space-y-2">
@@ -161,7 +179,7 @@ function SignInContent() {
 						<div className="mt-8 text-center">
 							<p className="text-sm text-neutral-600 dark:text-neutral-400">
 								Don&apos;t have an account?{" "}
-								<Link href="/signup" className="text-neutral-900 dark:text-white hover:underline font-medium">
+								<Link href={`/signup${role ? `?role=${role}` : ''}`} className="text-neutral-900 dark:text-white hover:underline font-medium">
 									Sign up
 								</Link>
 							</p>

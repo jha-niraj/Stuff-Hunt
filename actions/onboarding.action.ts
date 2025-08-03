@@ -1,193 +1,122 @@
-'use server'
+"use server"
 
-import { prisma } from "@/lib/prisma";
-import { auth } from "@/auth";
-import { z } from "zod";
-import { redirect } from "next/navigation";
+import { auth } from "@/auth"
+import { prisma } from "@/lib/prisma"
 
-const onboardingSchema = z.object({
-	userRole: z.enum(["SUBMITTER", "VALIDATOR", "BOTH"]),
-	categories: z.array(z.string()).min(1, "Please select at least one category"),
-	customCategory: z.string().optional(),
-});
+export async function getUserOnboardingData() {
+    const session = await auth()
+    
+    if (!session?.user?.email) {
+        throw new Error("User not authenticated")
+    }
 
-export type OnboardingInput = z.infer<typeof onboardingSchema>;
+    const user = await prisma.user.findUnique({
+        where: { email: session.user.email },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            onboardingCompleted: true,
+            companyName: true,
+            businessType: true,
+            gstNumber: true,
+            panNumber: true,
+            businessAddress: true,
+            phoneNumber: true,
+        }
+    })
 
-export async function completeOnboarding(data: OnboardingInput) {
-	try {
-		const session = await auth();
+    if (!user) {
+        throw new Error("User not found")
+    }
 
-		if (!session?.user?.id) {
-			return { success: false, error: "Not authenticated" };
-		}
-
-		const validatedData = onboardingSchema.parse(data);
-		const { userRole, categories: inputCategories, customCategory } = validatedData;
-
-		// Ensure default categories exist in database
-		const existingCategories = await seedDefaultCategories();
-
-		// Map category names/IDs to database IDs
-		const categoryIds: string[] = [];
-		
-		for (const categoryNameOrId of inputCategories) {
-			// Check if it's already a valid CUID (database ID)
-			const existingCategory = existingCategories.find(cat => 
-				cat.id === categoryNameOrId || cat.name.toLowerCase() === categoryNameOrId.toLowerCase()
-			);
-			
-			if (existingCategory) {
-				categoryIds.push(existingCategory.id);
-			} else {
-				// If it's a fallback category name, try to find by name mapping
-				const fallbackMapping: Record<string, string> = {
-					'tech': 'Technology',
-					'business': 'Business', 
-					'assignments': 'Assignments',
-					'social-impact': 'Social Impact',
-					'creative': 'Creative'
-				};
-				
-				const mappedName = fallbackMapping[categoryNameOrId] || categoryNameOrId;
-				const mappedCategory = existingCategories.find(cat => 
-					cat.name.toLowerCase() === mappedName.toLowerCase()
-				);
-				
-				if (mappedCategory) {
-					categoryIds.push(mappedCategory.id);
-				}
-			}
-		}
-
-		// Create custom category if provided and doesn't exist
-		if (customCategory && customCategory.trim()) {
-			const existingCustom = existingCategories.find(cat => 
-				cat.name.toLowerCase() === customCategory.trim().toLowerCase()
-			);
-			
-			if (!existingCustom) {
-				const newCategory = await prisma.category.create({
-					data: {
-						name: customCategory.trim(),
-						description: `Custom category: ${customCategory.trim()}`,
-						icon: "⭐", // Default icon for custom categories
-						isActive: true
-					}
-				});
-				categoryIds.push(newCategory.id);
-			} else {
-				categoryIds.push(existingCustom.id);
-			}
-		}
-
-		// Update user with onboarding data
-		const user = await prisma.user.update({
-			where: { id: session.user.id },
-			data: {
-				userRole: validatedData.userRole,
-				onboardingCompleted: true,
-				updatedAt: new Date(),
-			}
-		});
-
-		// Create category selections for the user
-		if (categoryIds.length > 0) {
-			await prisma.categorySelection.createMany({
-				data: categoryIds.map(categoryId => ({
-					userId: session.user.id,
-					categoryId
-				})),
-				skipDuplicates: true
-			});
-		}
-
-		return { success: true };
-	} catch (error) {
-		console.error("Error completing onboarding:", error);
-
-		if (error instanceof z.ZodError) {
-			return { success: false, error: error.issues[0].message };
-		}
-
-		return { success: false, error: "Failed to complete onboarding" };
-	}
+    return user
 }
 
 export async function checkOnboardingStatus() {
-	try {
-		const session = await auth();
+    const session = await auth()
+    
+    if (!session?.user?.email) {
+        return { needsOnboarding: false }
+    }
 
-		if (!session?.user?.id) {
-			return { needsOnboarding: true };
-		}
+    const user = await prisma.user.findUnique({
+        where: { email: session.user.email },
+        select: {
+            onboardingCompleted: true,
+            role: true
+        }
+    })
 
-		const user = await prisma.user.findUnique({
-			where: { id: session.user.id },
-			select: {
-				onboardingCompleted: true,
-				userRole: true,
-			}
-		});
+    if (!user) {
+        return { needsOnboarding: false }
+    }
 
-		if (!user || !user.onboardingCompleted) {
-			return { needsOnboarding: true };
-		}
-
-		return {
-			needsOnboarding: false,
-			userRole: user.userRole
-		};
-	} catch (error) {
-		console.error("Error checking onboarding status:", error);
-		return { needsOnboarding: true };
-	}
+    return {
+        needsOnboarding: !user.onboardingCompleted,
+        userRole: user.role
+    }
 }
 
-export async function redirectAfterOnboarding(userRole: string) {
-	switch (userRole) {
-		case 'VALIDATOR':
-			redirect('/validatehub');
-		case 'SUBMITTER':
-			redirect('/dashboard?createPost=true');
-		case 'BOTH':
-			redirect('/dashboard');
-		default:
-			redirect('/dashboard');
-	}
+export async function completeUserOnboarding(data: {
+    name: string
+    phoneNumber?: string
+}) {
+    const session = await auth()
+    
+    if (!session?.user?.email) {
+        throw new Error("User not authenticated")
+    }
+
+    try {
+        await prisma.user.update({
+            where: { email: session.user.email },
+            data: {
+                name: data.name,
+                phoneNumber: data.phoneNumber,
+                onboardingCompleted: true,
+            }
+        })
+
+        return { success: true }
+    } catch (error) {
+        console.error("Error completing user onboarding:", error)
+        throw new Error("Failed to complete onboarding")
+    }
 }
 
-// Seed default categories if they don't exist
-export async function seedDefaultCategories() {
-	const DEFAULT_CATEGORIES = [
-		{ name: "Technology", icon: "💻", description: "Software, Hardware, AI, Web Development" },
-		{ name: "Business", icon: "🏢", description: "Startups, Business Models, Marketing" },
-		{ name: "Assignments", icon: "📚", description: "Academic Projects, Research, Studies" },
-		{ name: "Social Impact", icon: "❤️", description: "Non-profit, Community, Sustainability" },
-		{ name: "Creative", icon: "🎨", description: "Design, Art, Content, Media" },
-	]
+export async function completeSellerOnboarding(data: {
+    companyName: string
+    businessType: string
+    gstNumber?: string
+    panNumber: string
+    businessAddress: string
+    phoneNumber: string
+}) {
+    const session = await auth()
+    
+    if (!session?.user?.email) {
+        throw new Error("User not authenticated")
+    }
 
-	try {
-		const existingCategories = await prisma.category.findMany()
-		
-		if (existingCategories.length === 0) {
-			await prisma.category.createMany({
-				data: DEFAULT_CATEGORIES.map(category => ({
-					name: category.name,
-					description: category.description,
-					icon: category.icon,
-					isActive: true
-				})),
-				skipDuplicates: true
-			})
-			console.log("Default categories seeded")
-		}
-		
-		return await prisma.category.findMany({
-			where: { isActive: true },
-			orderBy: { name: 'asc' }
-		})
-	} catch (error) {
-		console.error("Error seeding categories:", error);
-		throw error;
-	}
+    try {
+        const updatedUser = await prisma.user.update({
+            where: { email: session.user.email },
+            data: {
+                companyName: data.companyName,
+                businessType: data.businessType,
+                gstNumber: data.gstNumber,
+                panNumber: data.panNumber,
+                businessAddress: data.businessAddress,
+                phoneNumber: data.phoneNumber,
+                onboardingCompleted: true,
+            }
+        })
+
+        return { success: true, user: updatedUser }
+    } catch (error) {
+        console.error("Error completing seller onboarding:", error)
+        throw new Error("Failed to complete seller onboarding")
+    }
 }

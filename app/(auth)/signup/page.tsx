@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ArrowRight } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { signIn } from "next-auth/react"
 import { toast } from "sonner"
 import { registerUser } from "@/actions/auth.action"
@@ -21,13 +21,16 @@ function SignUp() {
     const [isLoading, setIsLoading] = useState(false)
     const [isGoogleLoading, setIsGoogleLoading] = useState(false)
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const role = searchParams.get('role') // Get role from URL params
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
 
         try {
-            const result = await registerUser(name, email, password)
+            const userRole = role === 'seller' ? 'SELLER' : 'USER'
+            const result = await registerUser(name, email, password, userRole)
 
             if (!result.success) {
                 throw new Error(result.error || 'Registration failed')
@@ -35,8 +38,8 @@ function SignUp() {
 
             console.log("Signup Result: " + result?.message);
 
-            toast.success('Account created successfully! Please check your email for verification code.')
-            router.push(`/verify?email=${encodeURIComponent(email)}`)
+            toast.success(`${role === 'seller' ? 'Seller' : 'User'} account created successfully! Please check your email for verification code.`)
+            router.push(`/verify?email=${encodeURIComponent(email)}${role ? `&role=${role}` : ''}`)
         } catch (error) {
             console.error('Registration error:', error)
             toast.error(error instanceof Error ? error.message : 'Registration failed')
@@ -86,15 +89,32 @@ function SignUp() {
             <div className="flex-1 flex items-center justify-center py-24">
                 <div className="w-full max-w-md relative z-10">
                     <div className="text-center mb-2">
-                        <h1 className="text-4xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300">
-                            ValidateX
+                        <h1 className="text-4xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#FF6EC7] to-[#DF87F3]">
+                            StuffHunt
                         </h1>
-                        <div className="w-12 h-0.5 bg-gradient-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 mx-auto"></div>
+                        <div className="w-12 h-0.5 bg-gradient-to-r from-[#FF6EC7] to-[#DF87F3] mx-auto"></div>
                     </div>
                     <div className="bg-white/80 dark:bg-black/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-neutral-200/20 dark:border-neutral-800/20 p-8">
                         <div className="text-center mb-8">
-                            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Create your account</h2>
-                            <p className="text-neutral-600 dark:text-neutral-400 mt-2">Join the future of idea validation</p>
+                            {role === 'seller' && (
+                                <div className="mb-4 p-3 bg-gradient-to-r from-[#FF6EC7]/10 to-[#DF87F3]/10 border border-[#FF6EC7]/20 rounded-2xl">
+                                    <p className="text-sm font-medium bg-gradient-to-r from-[#FF6EC7] to-[#DF87F3] bg-clip-text text-transparent">
+                                        🛍️ You're registering as a Seller
+                                    </p>
+                                    <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
+                                        Get access to seller dashboard, product management, and analytics
+                                    </p>
+                                </div>
+                            )}
+                            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">
+                                {role === 'seller' ? 'Create your seller account' : 'Create your account'}
+                            </h2>
+                            <p className="text-neutral-600 dark:text-neutral-400 mt-2">
+                                {role === 'seller' 
+                                    ? 'Start selling on India\'s fastest-growing marketplace' 
+                                    : 'Join the future of AI-powered shopping'
+                                }
+                            </p>
                         </div>
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div className="space-y-2">
@@ -165,7 +185,7 @@ function SignUp() {
                         <div className="mt-8 text-center">
                             <p className="text-sm text-neutral-600 dark:text-neutral-400">
                                 Already have an account?{" "}
-                                <Link href="/signin" className="text-neutral-900 dark:text-white hover:underline font-medium">
+                                <Link href={`/signin${role ? `?role=${role}` : ''}`} className="text-neutral-900 dark:text-white hover:underline font-medium">
                                     Sign in
                                 </Link>
                             </p>

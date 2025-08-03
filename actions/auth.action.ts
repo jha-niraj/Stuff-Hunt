@@ -22,9 +22,9 @@ function generateResetToken(): string {
 async function sendVerificationEmail(email: string, otp: string) {
     try {
         await resend.emails.send({
-            from: "ValidateX <noreply@coderz.nirajjha.xyz>",
+            from: "StuffHunt <noreply@coderz.nirajjha.xyz>",
             to: email,
-            subject: "Verify your email address - ValidateX",
+            subject: "Verify your email address - StuffHunt",
             html: verificationEmailTemplate(otp)
         })
         return { success: true }
@@ -40,9 +40,9 @@ async function sendPasswordResetEmail(email: string, resetToken: string) {
     
     try {
         await resend.emails.send({
-            from: "ValidateX <noreply@coderz.nirajjha.xyz>",
+            from: "StuffHunt <noreply@coderz.nirajjha.xyz>",
             to: email,
-            subject: "Reset your password - ValidateX",
+            subject: "Reset your password - StuffHunt",
             html: passwordResetEmailTemplate(resetUrl)
         })
         return { success: true }
@@ -56,9 +56,9 @@ async function sendPasswordResetEmail(email: string, resetToken: string) {
 async function sendRegistrationSuccessEmail(email: string, name: string) {
     try {
         await resend.emails.send({
-            from: "ValidateX <noreply@coderz.nirajjha.xyz>",
+            from: "StuffHunt <noreply@coderz.nirajjha.xyz>",
             to: email,
-            subject: "Welcome to ValidateX - Registration Complete! 🎉",
+            subject: "Welcome to StuffHunt - Registration Complete! 🎉",
             html: registrationSuccessEmailTemplate(name, email)
         })
         return { success: true }
@@ -69,7 +69,7 @@ async function sendRegistrationSuccessEmail(email: string, name: string) {
 }
 
 // Register user action
-export async function registerUser(name: string, email: string, password: string) {
+export async function registerUser(name: string, email: string, password: string, role: "USER" | "SELLER" = "USER") {
     if (!name || !email || !password) {
         return { success: false, error: "All fields are required" }
     }
@@ -91,12 +91,14 @@ export async function registerUser(name: string, email: string, password: string
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 12)
 
-        // Create user with verification token
+        // Create user with verification token and role
         await prisma.user.create({
             data: {
                 name,
                 email,
                 password: hashedPassword,
+                role: role,
+                roleExplicitlyChosen: role === "SELLER", // Mark as explicitly chosen if seller
                 verificationToken: otp,
                 verificationTokenExpiry: otpExpiry,
             }
@@ -111,7 +113,11 @@ export async function registerUser(name: string, email: string, password: string
             return { success: false, error: emailResult.error }
         }
 
-        return { success: true, message: "User registered successfully. Please check your email for verification code." }
+        return { 
+            success: true, 
+            message: `${role === "SELLER" ? "Seller" : "User"} registered successfully. Please check your email for verification code.`,
+            role: role
+        }
     } catch (error) {
         console.error("Registration error:", error)
         return { success: false, error: "Failed to register user" }

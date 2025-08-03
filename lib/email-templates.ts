@@ -5,46 +5,44 @@ export const verificationEmailTemplate = (otp: string) => {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Verify your email - ValidateX</title>
+            <title>Verify your email - StuffHunt</title>
         </head>
-        <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%); min-height: 100vh;">
+        <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: linear-gradient(135deg, #FF6EC7 0%, #DF87F3 50%, #000000 100%); min-height: 100vh;">
             <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
                 <!-- Header -->
                 <div style="text-align: center; margin-bottom: 40px;">
-                    <div style="display: inline-flex; align-items: center; gap: 12px; background: white; padding: 16px 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
-                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0d9488, #10b981); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                            <span style="color: white; font-size: 20px; font-weight: bold;">V</span>
+                    <div style="display: inline-flex; align-items: center; gap: 16px; background: white; padding: 20px 32px; border-radius: 20px; box-shadow: 0 8px 32px rgba(255, 110, 199, 0.3);">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #FF6EC7, #DF87F3); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-size: 24px; font-weight: 900;">🛍️</span>
                         </div>
-                        <h1 style="margin: 0; color: #0d9488; font-size: 28px; font-weight: 700;">ValidateX</h1>
+                        <h1 style="margin: 0; background: linear-gradient(135deg, #FF6EC7, #DF87F3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 32px; font-weight: 800;">StuffHunt</h1>
                     </div>
                 </div>
 
                 <!-- Main Content Card -->
-                <div style="background: white; border-radius: 24px; padding: 40px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); border: 1px solid rgba(13, 148, 136, 0.1);">
+                <div style="background: white; border-radius: 24px; padding: 40px; box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15); border: 2px solid transparent; background-clip: padding-box;">
                     <div style="text-align: center; margin-bottom: 32px;">
-                        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #0d9488, #10b981); border-radius: 50%; margin: 0 auto 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(13, 148, 136, 0.3);">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M3 8L10.89 13.26C11.2187 13.4793 11.6049 13.5963 12 13.5963C12.3951 13.5963 12.7813 13.4793 13.11 13.26L21 8M5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
+                        <div style="width: 100px; height: 100px; background: linear-gradient(135deg, #FF6EC7, #DF87F3); border-radius: 50%; margin: 0 auto 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(255, 110, 199, 0.4); position: relative;">
+                            <div style="position: absolute; inset: 4px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 36px;">🎉</span>
+                            </div>
                         </div>
-                        <h2 style="margin: 0 0 16px 0; color: #1f2937; font-size: 32px; font-weight: 700;">Welcome to ValidateX!</h2>
-                        <p style="margin: 0; color: #6b7280; font-size: 18px; line-height: 1.6;">Thank you for joining our idea validation community. Please verify your email address to get started.</p>
+                        <h2 style="margin: 0 0 16px 0; color: #1f2937; font-size: 36px; font-weight: 800;">Welcome to StuffHunt!</h2>
+                        <p style="margin: 0; color: #6b7280; font-size: 18px; line-height: 1.6;">Discover amazing products with AI-powered search. Verify your email to start your shopping journey!</p>
                     </div>
 
                     <!-- OTP Section -->
-                    <div style="background: linear-gradient(135deg, #f0fdfa, #ccfbf1); border: 2px solid #0d9488; border-radius: 20px; padding: 32px; text-align: center; margin: 32px 0; position: relative; overflow: hidden;">
-                        <div style="position: absolute; top: -20px; right: -20px; width: 60px; height: 60px; background: rgba(13, 148, 136, 0.1); border-radius: 50%;"></div>
-                        <div style="position: absolute; bottom: -30px; left: -30px; width: 80px; height: 80px; background: rgba(16, 185, 129, 0.1); border-radius: 50%;"></div>
+                    <div style="background: linear-gradient(135deg, rgba(255, 110, 199, 0.1), rgba(223, 135, 243, 0.1)); border: 3px solid #FF6EC7; border-radius: 24px; padding: 40px; text-align: center; margin: 32px 0; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -30px; right: -30px; width: 80px; height: 80px; background: rgba(255, 110, 199, 0.2); border-radius: 50%;"></div>
+                        <div style="position: absolute; bottom: -40px; left: -40px; width: 100px; height: 100px; background: rgba(223, 135, 243, 0.2); border-radius: 50%;"></div>
                         <div style="position: relative; z-index: 1;">
-                            <h3 style="margin: 0 0 16px 0; color: #0d9488; font-size: 18px; font-weight: 600;">Your Verification Code</h3>
-                            <div style="background: white; border-radius: 12px; padding: 24px; margin: 16px 0; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
-                                <div style="font-size: 48px; font-weight: 800; letter-spacing: 12px; color: #0d9488; margin: 0; font-family: 'Courier New', monospace;">${otp}</div>
+                            <h3 style="margin: 0 0 20px 0; background: linear-gradient(135deg, #FF6EC7, #DF87F3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 20px; font-weight: 700;">Your Verification Code</h3>
+                            <div style="background: white; border-radius: 16px; padding: 32px; margin: 20px 0; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); border: 2px solid rgba(255, 110, 199, 0.2);">
+                                <div style="font-size: 56px; font-weight: 900; letter-spacing: 16px; background: linear-gradient(135deg, #FF6EC7, #DF87F3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; font-family: 'Courier New', monospace;">${otp}</div>
                             </div>
-                            <div style="margin-top: 20px;">
-                                <button onclick="navigator.clipboard.writeText('${otp}')" style="background: #0d9488; color: white; border: none; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M16 4H18C19.1046 4 20 4.89543 20 6V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V6C4 4.89543 4.89543 4 6 4H8M16 4C16 2.89543 15.1046 2 14 2H10C8.89543 2 8 2.89543 8 4M16 4C16 5.10457 15.1046 6 14 6H10C8.89543 6 8 5.10457 8 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
+                            <div style="margin-top: 24px;">
+                                <button onclick="navigator.clipboard.writeText('${otp}')" style="background: linear-gradient(135deg, #FF6EC7, #DF87F3); color: white; border: none; border-radius: 12px; padding: 16px 32px; font-size: 16px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s; box-shadow: 0 6px 20px rgba(255, 110, 199, 0.3);">
+                                    <span style="font-size: 18px;">📋</span>
                                     Copy Code
                                 </button>
                             </div>
@@ -53,17 +51,17 @@ export const verificationEmailTemplate = (otp: string) => {
 
                     <!-- Instructions -->
                     <div style="text-align: center; margin: 32px 0;">
-                        <p style="margin: 0 0 16px 0; color: #374151; font-size: 16px; line-height: 1.6;">Enter this code on the verification page to complete your registration. This code will expire in <strong style="color: #0d9488;">10 minutes</strong>.</p>
-                        <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 12px; padding: 16px; margin: 20px 0;">
-                            <p style="margin: 0; color: #92400e; font-size: 14px;">⚠️ If you didn't create an account with ValidateX, please ignore this email.</p>
+                        <p style="margin: 0 0 16px 0; color: #374151; font-size: 16px; line-height: 1.6;">Enter this code on the verification page to complete your registration. This code will expire in <strong style="color: #FF6EC7;">10 minutes</strong>.</p>
+                        <div style="background: linear-gradient(135deg, rgba(255, 110, 199, 0.1), rgba(223, 135, 243, 0.1)); border: 2px solid #FF6EC7; border-radius: 16px; padding: 20px; margin: 20px 0;">
+                            <p style="margin: 0; color: #1f2937; font-size: 14px; font-weight: 600;">⚠️ If you didn't create an account with StuffHunt, please ignore this email.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Footer -->
-                <div style="text-align: center; margin-top: 40px; padding: 24px; background: rgba(255, 255, 255, 0.5); border-radius: 16px;">
-                    <p style="margin: 0 0 8px 0; color: #6b7280; font-size: 14px;">This email was sent by ValidateX</p>
-                    <p style="margin: 0; color: #9ca3af; font-size: 12px;">Empowering innovation through community validation</p>
+                <div style="text-align: center; margin-top: 40px; padding: 24px; background: rgba(255, 255, 255, 0.9); border-radius: 16px; backdrop-filter: blur(10px);">
+                    <p style="margin: 0 0 8px 0; color: #1f2937; font-size: 16px; font-weight: 600;">This email was sent by StuffHunt</p>
+                    <p style="margin: 0; background: linear-gradient(135deg, #FF6EC7, #DF87F3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 14px; font-weight: 600;">🛍️ Find anything, buy everything!</p>
                 </div>
             </div>
         </body>
@@ -78,60 +76,61 @@ export const passwordResetEmailTemplate = (resetUrl: string) => {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Reset your password - ValidateX</title>
+            <title>Reset your password - StuffHunt</title>
         </head>
-        <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%); min-height: 100vh;">
+        <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: linear-gradient(135deg, #FF6EC7 0%, #DF87F3 50%, #000000 100%); min-height: 100vh;">
             <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
                 <!-- Header -->
                 <div style="text-align: center; margin-bottom: 40px;">
-                    <div style="display: inline-flex; align-items: center; gap: 12px; background: white; padding: 16px 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
-                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0d9488, #10b981); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                            <span style="color: white; font-size: 20px; font-weight: bold;">V</span>
+                    <div style="display: inline-flex; align-items: center; gap: 16px; background: white; padding: 20px 32px; border-radius: 20px; box-shadow: 0 8px 32px rgba(255, 110, 199, 0.3);">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #FF6EC7, #DF87F3); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-size: 24px; font-weight: 900;">🛍️</span>
                         </div>
-                        <h1 style="margin: 0; color: #0d9488; font-size: 28px; font-weight: 700;">ValidateX</h1>
+                        <h1 style="margin: 0; background: linear-gradient(135deg, #FF6EC7, #DF87F3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 32px; font-weight: 800;">StuffHunt</h1>
                     </div>
                 </div>
 
                 <!-- Main Content Card -->
-                <div style="background: white; border-radius: 24px; padding: 40px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); border: 1px solid rgba(13, 148, 136, 0.1);">
+                <div style="background: white; border-radius: 24px; padding: 40px; box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15); border: 2px solid transparent; background-clip: padding-box;">
                     <div style="text-align: center; margin-bottom: 32px;">
-                        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #dc2626, #ef4444); border-radius: 50%; margin: 0 auto 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(220, 38, 38, 0.3);">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 15V17M12 9V13M5.07183 19H18.9282C20.4678 19 21.4301 17.3333 20.6603 16L13.7321 4C12.9623 2.66667 11.0377 2.66667 10.2679 4L3.33975 16C2.56987 17.3333 3.53223 19 5.07183 19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
+                        <div style="width: 100px; height: 100px; background: linear-gradient(135deg, #ff4757, #ff6b7a); border-radius: 50%; margin: 0 auto 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 32px rgba(255, 71, 87, 0.4); position: relative;">
+                            <div style="position: absolute; inset: 4px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 36px;">🔐</span>
+                            </div>
                         </div>
-                        <h2 style="margin: 0 0 16px 0; color: #1f2937; font-size: 32px; font-weight: 700;">Password Reset Request</h2>
-                        <p style="margin: 0; color: #6b7280; font-size: 18px; line-height: 1.6;">We received a request to reset your password. Click the button below to create a new password.</p>
+                        <h2 style="margin: 0 0 16px 0; color: #1f2937; font-size: 36px; font-weight: 800;">Password Reset</h2>
+                        <p style="margin: 0; color: #6b7280; font-size: 18px; line-height: 1.6;">No worries! We'll help you reset your password and get back to hunting for amazing stuff.</p>
                     </div>
 
                     <!-- Reset Button -->
                     <div style="text-align: center; margin: 40px 0;">
-                        <a href="${resetUrl}" style="display: inline-block; background: linear-gradient(135deg, #0d9488, #10b981); color: white; text-decoration: none; padding: 16px 32px; border-radius: 12px; font-size: 18px; font-weight: 600; box-shadow: 0 8px 24px rgba(13, 148, 136, 0.3); transition: all 0.2s;">
-                            Reset My Password
+                        <a href="${resetUrl}" style="display: inline-block; background: linear-gradient(135deg, #FF6EC7, #DF87F3); color: white; text-decoration: none; padding: 20px 40px; border-radius: 16px; font-size: 20px; font-weight: 700; box-shadow: 0 12px 32px rgba(255, 110, 199, 0.4); transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px;">
+                            🔑 Reset My Password
                         </a>
                     </div>
 
                     <!-- Alternative Link -->
-                    <div style="background: #f9fafb; border-radius: 12px; padding: 24px; margin: 32px 0;">
+                    <div style="background: linear-gradient(135deg, rgba(255, 110, 199, 0.05), rgba(223, 135, 243, 0.05)); border-radius: 16px; padding: 24px; margin: 32px 0; border: 1px solid rgba(255, 110, 199, 0.2);">
                         <p style="margin: 0 0 12px 0; color: #374151; font-size: 14px; font-weight: 600;">Can't click the button? Copy and paste this link:</p>
-                        <div style="background: white; border: 1px solid #d1d5db; border-radius: 8px; padding: 12px; font-family: 'Courier New', monospace; font-size: 12px; color: #0d9488; word-break: break-all;">${resetUrl}</div>
+                        <div style="background: white; border: 2px solid #FF6EC7; border-radius: 12px; padding: 16px; font-family: 'Courier New', monospace; font-size: 12px; color: #FF6EC7; word-break: break-all; font-weight: 600;">${resetUrl}</div>
                     </div>
 
                     <!-- Security Notice -->
-                    <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 12px; padding: 20px; margin: 32px 0;">
-                        <h4 style="margin: 0 0 12px 0; color: #92400e; font-size: 16px; font-weight: 600;">🔒 Security Notice</h4>
-                        <ul style="margin: 0; padding-left: 20px; color: #92400e; font-size: 14px; line-height: 1.6;">
-                            <li>This link will expire in <strong>1 hour</strong></li>
+                    <div style="background: linear-gradient(135deg, rgba(255, 110, 199, 0.1), rgba(223, 135, 243, 0.1)); border: 2px solid #FF6EC7; border-radius: 16px; padding: 24px; margin: 32px 0;">
+                        <h4 style="margin: 0 0 16px 0; background: linear-gradient(135deg, #FF6EC7, #DF87F3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 18px; font-weight: 700;">🔒 Security Notice</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #1f2937; font-size: 14px; line-height: 1.8; font-weight: 500;">
+                            <li>This link will expire in <strong style="color: #FF6EC7;">1 hour</strong></li>
                             <li>If you didn't request this reset, please ignore this email</li>
                             <li>Your password won't change until you create a new one</li>
+                            <li>Keep your account secure for the best shopping experience</li>
                         </ul>
                     </div>
                 </div>
 
                 <!-- Footer -->
-                <div style="text-align: center; margin-top: 40px; padding: 24px; background: rgba(255, 255, 255, 0.5); border-radius: 16px;">
-                    <p style="margin: 0 0 8px 0; color: #6b7280; font-size: 14px;">This email was sent by ValidateX</p>
-                    <p style="margin: 0; color: #9ca3af; font-size: 12px;">Empowering innovation through community validation</p>
+                <div style="text-align: center; margin-top: 40px; padding: 24px; background: rgba(255, 255, 255, 0.9); border-radius: 16px; backdrop-filter: blur(10px);">
+                    <p style="margin: 0 0 8px 0; color: #1f2937; font-size: 16px; font-weight: 600;">This email was sent by StuffHunt</p>
+                    <p style="margin: 0; background: linear-gradient(135deg, #FF6EC7, #DF87F3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 14px; font-weight: 600;">🛍️ Find anything, buy everything!</p>
                 </div>
             </div>
         </body>
@@ -146,76 +145,67 @@ export const registrationSuccessEmailTemplate = (name: string, email: string) =>
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Welcome to ValidateX - Registration Complete!</title>
+            <title>Welcome to StuffHunt - Let's Start Shopping!</title>
         </head>
-        <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%); min-height: 100vh;">
+        <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: linear-gradient(135deg, #FF6EC7 0%, #DF87F3 50%, #000000 100%); min-height: 100vh;">
             <div style="max-width: 600px; margin: 0 auto; padding: 40px 20px;">
                 <!-- Header -->
                 <div style="text-align: center; margin-bottom: 40px;">
-                    <div style="display: inline-flex; align-items: center; gap: 12px; background: white; padding: 16px 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);">
-                        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0d9488, #10b981); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                            <span style="color: white; font-size: 20px; font-weight: bold;">V</span>
+                    <div style="display: inline-flex; align-items: center; gap: 16px; background: white; padding: 20px 32px; border-radius: 20px; box-shadow: 0 8px 32px rgba(255, 110, 199, 0.3);">
+                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #FF6EC7, #DF87F3); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-size: 24px; font-weight: 900;">🛍️</span>
                         </div>
-                        <h1 style="margin: 0; color: #0d9488; font-size: 28px; font-weight: 700;">ValidateX</h1>
+                        <h1 style="margin: 0; background: linear-gradient(135deg, #FF6EC7, #DF87F3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 32px; font-weight: 800;">StuffHunt</h1>
                     </div>
                 </div>
 
                 <!-- Main Content Card -->
-                <div style="background: white; border-radius: 24px; padding: 40px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); border: 1px solid rgba(13, 148, 136, 0.1);">
+                <div style="background: white; border-radius: 24px; padding: 40px; box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15); border: 2px solid transparent; background-clip: padding-box;">
                     <div style="text-align: center; margin-bottom: 32px;">
-                        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #059669, #10b981); border-radius: 50%; margin: 0 auto 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(5, 150, 105, 0.3);">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
+                        <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #FF6EC7, #DF87F3); border-radius: 50%; margin: 0 auto 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 16px 40px rgba(255, 110, 199, 0.4); position: relative;">
+                            <div style="position: absolute; inset: 4px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 48px;">🎉</span>
+                            </div>
                         </div>
-                        <h2 style="margin: 0 0 16px 0; color: #1f2937; font-size: 32px; font-weight: 700;">🎉 Welcome to ValidateX!</h2>
-                        <p style="margin: 0; color: #6b7280; font-size: 18px; line-height: 1.6;">Congratulations! Your account has been successfully created and verified. You're now part of our innovative idea validation community.</p>
+                        <h2 style="margin: 0 0 16px 0; color: #1f2937; font-size: 40px; font-weight: 900;">Welcome, ${name}! 🎊</h2>
+                        <p style="margin: 0; color: #6b7280; font-size: 20px; line-height: 1.6; max-width: 400px; margin: 0 auto;">Your StuffHunt journey starts now! Get ready to discover amazing products with AI-powered search.</p>
                     </div>
 
-                    <!-- Welcome Message -->
-                    <div style="background: linear-gradient(135deg, #f0fdfa, #ccfbf1); border: 2px solid #0d9488; border-radius: 20px; padding: 32px; text-align: center; margin: 32px 0; position: relative; overflow: hidden;">
-                        <div style="position: absolute; top: -20px; right: -20px; width: 60px; height: 60px; background: rgba(13, 148, 136, 0.1); border-radius: 50%;"></div>
-                        <div style="position: absolute; bottom: -30px; left: -30px; width: 80px; height: 80px; background: rgba(16, 185, 129, 0.1); border-radius: 50%;"></div>
-                        <div style="position: relative; z-index: 1;">
-                            <h3 style="margin: 0 0 16px 0; color: #0d9488; font-size: 22px; font-weight: 700;">Hello ${name}! 👋</h3>
-                            <p style="margin: 0; color: #374151; font-size: 16px; line-height: 1.6;">You can now start validating innovative ideas and earning crypto rewards on the Polygon blockchain.</p>
-                        </div>
-                    </div>
-
-                    <!-- Next Steps -->
-                    <div style="margin: 32px 0;">
-                        <h3 style="margin: 0 0 24px 0; color: #1f2937; font-size: 20px; font-weight: 600; text-align: center;">What's Next?</h3>
-                        <div style="display: grid; gap: 16px;">
-                            <!-- Step 1 -->
-                            <div style="display: flex; align-items: start; gap: 16px; background: #f9fafb; border-radius: 12px; padding: 20px;">
-                                <div style="flex-shrink: 0; width: 40px; height: 40px; background: #0d9488; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                    <span style="color: white; font-weight: bold;">1</span>
+                    <!-- Features Section -->
+                    <div style="margin: 40px 0;">
+                        <h3 style="text-align: center; margin: 0 0 32px 0; background: linear-gradient(135deg, #FF6EC7, #DF87F3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 24px; font-weight: 800;">What's waiting for you:</h3>
+                        
+                        <div style="display: grid; gap: 20px;">
+                            <!-- Feature 1 -->
+                            <div style="display: flex; align-items: start; gap: 16px; background: linear-gradient(135deg, rgba(255, 110, 199, 0.05), rgba(223, 135, 243, 0.05)); border-radius: 16px; padding: 24px; border: 1px solid rgba(255, 110, 199, 0.2);">
+                                <div style="flex-shrink: 0; width: 48px; height: 48px; background: linear-gradient(135deg, #FF6EC7, #DF87F3); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <span style="color: white; font-size: 20px;">🔍</span>
                                 </div>
                                 <div style="flex-grow: 1;">
-                                    <h4 style="margin: 0 0 8px 0; color: #1f2937; font-size: 16px; font-weight: 600;">Browse Ideas</h4>
-                                    <p style="margin: 0; color: #6b7280; font-size: 14px; line-height: 1.5;">Explore innovative ideas submitted by our global community of creators, startups, and students.</p>
+                                    <h4 style="margin: 0 0 8px 0; color: #1f2937; font-size: 18px; font-weight: 700;">Smart Search</h4>
+                                    <p style="margin: 0; color: #6b7280; font-size: 14px; line-height: 1.6;">Search by keywords or upload images! Our AI will find exactly what you're looking for.</p>
                                 </div>
                             </div>
 
-                            <!-- Step 2 -->
-                            <div style="display: flex; align-items: start; gap: 16px; background: #f9fafb; border-radius: 12px; padding: 20px;">
-                                <div style="flex-shrink: 0; width: 40px; height: 40px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                    <span style="color: white; font-weight: bold;">2</span>
+                            <!-- Feature 2 -->
+                            <div style="display: flex; align-items: start; gap: 16px; background: linear-gradient(135deg, rgba(255, 110, 199, 0.05), rgba(223, 135, 243, 0.05)); border-radius: 16px; padding: 24px; border: 1px solid rgba(255, 110, 199, 0.2);">
+                                <div style="flex-shrink: 0; width: 48px; height: 48px; background: linear-gradient(135deg, #FF6EC7, #DF87F3); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <span style="color: white; font-size: 20px;">⚖️</span>
                                 </div>
                                 <div style="flex-grow: 1;">
-                                    <h4 style="margin: 0 0 8px 0; color: #1f2937; font-size: 16px; font-weight: 600;">Validate & Earn</h4>
-                                    <p style="margin: 0; color: #6b7280; font-size: 14px; line-height: 1.5;">Provide thoughtful feedback and earn crypto rewards directly to your wallet via Polygon blockchain.</p>
+                                    <h4 style="margin: 0 0 8px 0; color: #1f2937; font-size: 18px; font-weight: 700;">Compare Products</h4>
+                                    <p style="margin: 0; color: #6b7280; font-size: 14px; line-height: 1.6;">Compare up to 4 products side-by-side to make the best purchase decisions.</p>
                                 </div>
                             </div>
 
-                            <!-- Step 3 -->
-                            <div style="display: flex; align-items: start; gap: 16px; background: #f9fafb; border-radius: 12px; padding: 20px;">
-                                <div style="flex-shrink: 0; width: 40px; height: 40px; background: #059669; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                                    <span style="color: white; font-weight: bold;">3</span>
+                            <!-- Feature 3 -->
+                            <div style="display: flex; align-items: start; gap: 16px; background: linear-gradient(135deg, rgba(255, 110, 199, 0.05), rgba(223, 135, 243, 0.05)); border-radius: 16px; padding: 24px; border: 1px solid rgba(255, 110, 199, 0.2);">
+                                <div style="flex-shrink: 0; width: 48px; height: 48px; background: linear-gradient(135deg, #FF6EC7, #DF87F3); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <span style="color: white; font-size: 20px;">💬</span>
                                 </div>
                                 <div style="flex-grow: 1;">
-                                    <h4 style="margin: 0 0 8px 0; color: #1f2937; font-size: 16px; font-weight: 600;">Submit Your Ideas</h4>
-                                    <p style="margin: 0; color: #6b7280; font-size: 14px; line-height: 1.5;">Share your own innovative concepts and get valuable feedback from our diverse validator community.</p>
+                                    <h4 style="margin: 0 0 8px 0; color: #1f2937; font-size: 18px; font-weight: 700;">Direct Seller Contact</h4>
+                                    <p style="margin: 0; color: #6b7280; font-size: 14px; line-height: 1.6;">Connect directly with sellers for custom requests and better deals.</p>
                                 </div>
                             </div>
                         </div>
@@ -223,39 +213,34 @@ export const registrationSuccessEmailTemplate = (name: string, email: string) =>
 
                     <!-- Get Started Button -->
                     <div style="text-align: center; margin: 40px 0;">
-                        <a href="${process.env.NEXTAUTH_URL || 'https://validatex.com'}/dashboard" style="display: inline-block; background: linear-gradient(135deg, #0d9488, #10b981); color: white; text-decoration: none; padding: 16px 32px; border-radius: 12px; font-size: 18px; font-weight: 600; box-shadow: 0 8px 24px rgba(13, 148, 136, 0.3); transition: all 0.2s;">
-                            Start Validating Ideas
+                        <a href="${process.env.NEXTAUTH_URL || 'https://stuffhunt.com'}" style="display: inline-block; background: linear-gradient(135deg, #FF6EC7, #DF87F3); color: white; text-decoration: none; padding: 20px 40px; border-radius: 16px; font-size: 20px; font-weight: 700; box-shadow: 0 12px 32px rgba(255, 110, 199, 0.4); transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px;">
+                            🚀 Start Shopping Now
                         </a>
                     </div>
 
                     <!-- Account Details -->
-                    <div style="background: #f9fafb; border-radius: 12px; padding: 24px; margin: 32px 0;">
-                        <h4 style="margin: 0 0 16px 0; color: #374151; font-size: 16px; font-weight: 600;">📧 Account Details</h4>
-                        <div style="color: #6b7280; font-size: 14px; line-height: 1.6;">
+                    <div style="background: linear-gradient(135deg, rgba(255, 110, 199, 0.05), rgba(223, 135, 243, 0.05)); border-radius: 16px; padding: 24px; margin: 32px 0; border: 1px solid rgba(255, 110, 199, 0.2);">
+                        <h4 style="margin: 0 0 16px 0; background: linear-gradient(135deg, #FF6EC7, #DF87F3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 18px; font-weight: 700;">📧 Your Account Details</h4>
+                        <div style="color: #1f2937; font-size: 14px; line-height: 1.8; font-weight: 500;">
+                            <p style="margin: 0 0 8px 0;"><strong>Name:</strong> ${name}</p>
                             <p style="margin: 0 0 8px 0;"><strong>Email:</strong> ${email}</p>
                             <p style="margin: 0;"><strong>Registration Date:</strong> ${new Date().toLocaleDateString()}</p>
                         </div>
                     </div>
 
                     <!-- Support Info -->
-                    <div style="background: #eff6ff; border: 1px solid #3b82f6; border-radius: 12px; padding: 20px; margin: 32px 0;">
-                        <h4 style="margin: 0 0 12px 0; color: #1e40af; font-size: 16px; font-weight: 600;">💬 Need Help?</h4>
-                        <p style="margin: 0; color: #1e40af; font-size: 14px; line-height: 1.6;">
-                            If you have any questions or need assistance, feel free to reach out to our support team. We're here to help you make the most of your ValidateX experience!
+                    <div style="background: linear-gradient(135deg, rgba(255, 110, 199, 0.1), rgba(223, 135, 243, 0.1)); border: 2px solid #FF6EC7; border-radius: 16px; padding: 24px; margin: 32px 0;">
+                        <h4 style="margin: 0 0 12px 0; background: linear-gradient(135deg, #FF6EC7, #DF87F3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 18px; font-weight: 700;">💬 Need Help?</h4>
+                        <p style="margin: 0; color: #1f2937; font-size: 14px; line-height: 1.6; font-weight: 500;">
+                            Our support team is here to help you make the most of your StuffHunt experience. Happy hunting! 🛍️
                         </p>
                     </div>
                 </div>
 
                 <!-- Footer -->
-                <div style="text-align: center; margin-top: 40px; padding: 24px; background: rgba(255, 255, 255, 0.5); border-radius: 16px;">
-                    <p style="margin: 0 0 8px 0; color: #6b7280; font-size: 14px;">This email was sent by ValidateX</p>
-                    <p style="margin: 0; color: #9ca3af; font-size: 12px;">Empowering innovation through community validation</p>
-                    <div style="margin-top: 16px;">
-                        <p style="margin: 0; color: #9ca3af; font-size: 12px;">
-                            Want to unsubscribe? 
-                            <a href="${process.env.NEXTAUTH_URL || 'https://validatex.com'}/unsubscribe?email=${encodeURIComponent(email)}" style="color: #0d9488; text-decoration: none;">Click here</a>
-                        </p>
-                    </div>
+                <div style="text-align: center; margin-top: 40px; padding: 24px; background: rgba(255, 255, 255, 0.9); border-radius: 16px; backdrop-filter: blur(10px);">
+                    <p style="margin: 0 0 8px 0; color: #1f2937; font-size: 16px; font-weight: 600;">This email was sent by StuffHunt</p>
+                    <p style="margin: 0; background: linear-gradient(135deg, #FF6EC7, #DF87F3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 14px; font-weight: 600;">🛍️ Find anything, buy everything!</p>
                 </div>
             </div>
         </body>
