@@ -5,22 +5,8 @@ import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import {
-    Package,
-    TrendingUp,
-    Users,
-    IndianRupee,
-    Plus,
-    Eye,
-    ShoppingCart,
-    Star,
-    BarChart3,
-    Bell,
-    Settings,
-    LogOut,
-    Store,
-    Calendar,
-    ArrowUpRight,
-    ArrowDownRight
+    Package, IndianRupee, Plus, Eye, ShoppingCart,
+    Star, BarChart3, Bell, Settings, Store, ArrowUpRight
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
