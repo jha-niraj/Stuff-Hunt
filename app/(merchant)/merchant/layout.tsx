@@ -1,14 +1,28 @@
-"use client"
+'use client'
 
 import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { checkOnboardingStatus } from "@/actions/onboarding.action"
+import Sidebar from '@/components/mainsidebar';
+import MainNavbar from '@/components/mainnavbar';
 
-function SellerAuthCheck({ children }: { children: React.ReactNode }) {
+interface LayoutProps {
+	children: React.ReactNode
+}
+
+function MerchantAuthCheck({ children }: { children: React.ReactNode }) {
     const { data: session, status } = useSession()
     const router = useRouter()
     const [isChecking, setIsChecking] = useState(true)
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+
+    useEffect(() => {
+        const savedState = localStorage.getItem('mainSidebarCollapsed');
+        if (savedState !== null) {
+            setSidebarCollapsed(JSON.parse(savedState));
+        }
+    }, []);
 
     useEffect(() => {
         async function checkAccess() {
@@ -43,6 +57,12 @@ function SellerAuthCheck({ children }: { children: React.ReactNode }) {
         checkAccess()
     }, [session, status, router])
 
+    const toggleSidebar = () => {
+        const newState = !sidebarCollapsed;
+        setSidebarCollapsed(newState);
+        localStorage.setItem('mainSidebarCollapsed', JSON.stringify(newState));
+    };
+
     if (status === "loading" || isChecking) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-black via-purple-900/20 to-black flex items-center justify-center">
@@ -56,17 +76,30 @@ function SellerAuthCheck({ children }: { children: React.ReactNode }) {
         )
     }
 
-    return <>{children}</>
-}
-
-export default function SellerLayout({
-    children,
-}: {
-    children: React.ReactNode
-}) {
     return (
-        <SellerAuthCheck>
-            {children}
-        </SellerAuthCheck>
+        <div className="flex h-screen">
+            <Sidebar
+                isCollapsed={sidebarCollapsed}
+                toggleSidebar={toggleSidebar}
+            />
+            <div className="flex flex-col flex-1">
+                <MainNavbar isCollapsed={sidebarCollapsed} />
+                <main className={`backdrop-blur-sm transition-all duration-300 ${sidebarCollapsed ? 'sm:ml-[60px] ml-[0px]' : 'sm:ml-[180px] ml-[0px]'} pt-16`}>
+                    <div className="h-full pb-16 md:pb-0">
+                        {children}
+                    </div>
+                </main>
+            </div>
+        </div>
     )
 }
+
+const Layout = ({ children }: LayoutProps) => {
+    return (
+        <MerchantAuthCheck>
+            {children}
+        </MerchantAuthCheck>
+    );
+};
+
+export default Layout;

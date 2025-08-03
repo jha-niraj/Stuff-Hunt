@@ -252,7 +252,7 @@ export default function SellerDashboard() {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <Button
                                     className="bg-gradient-to-r from-[#FF6EC7] to-[#DF87F3] hover:from-[#FF6EC7]/90 hover:to-[#DF87F3]/90 text-white h-auto p-4 flex-col gap-2"
-                                    onClick={() => router.push('/seller/products/new')}
+                                    onClick={() => router.push('/merchant/products/new')}
                                 >
                                     <Plus className="w-6 h-6" />
                                     <span className="font-semibold">Add New Product</span>
@@ -261,7 +261,7 @@ export default function SellerDashboard() {
                                 <Button
                                     variant="outline"
                                     className="border-[#FF6EC7] text-[#FF6EC7] hover:bg-[#FF6EC7] hover:text-white h-auto p-4 flex-col gap-2"
-                                    onClick={() => router.push('/seller/orders')}
+                                    onClick={() => router.push('/merchant/orders')}
                                 >
                                     <Eye className="w-6 h-6" />
                                     <span className="font-semibold">View Orders</span>
@@ -270,7 +270,7 @@ export default function SellerDashboard() {
                                 <Button
                                     variant="outline"
                                     className="border-[#DF87F3] text-[#DF87F3] hover:bg-[#DF87F3] hover:text-white h-auto p-4 flex-col gap-2"
-                                    onClick={() => router.push('/seller/analytics')}
+                                    onClick={() => router.push('/merchant/analytics')}
                                 >
                                     <BarChart3 className="w-6 h-6" />
                                     <span className="font-semibold">View Analytics</span>
@@ -313,7 +313,7 @@ export default function SellerDashboard() {
                                 <Button 
                                     variant="ghost" 
                                     className="w-full text-[#FF6EC7] hover:bg-[#FF6EC7]/10"
-                                    onClick={() => router.push('/seller/products')}
+                                    onClick={() => router.push('/merchant/products')}
                                 >
                                     View All Products
                                 </Button>
@@ -355,7 +355,7 @@ export default function SellerDashboard() {
                                 <Button 
                                     variant="ghost" 
                                     className="w-full text-[#DF87F3] hover:bg-[#DF87F3]/10"
-                                    onClick={() => router.push('/seller/orders')}
+                                    onClick={() => router.push('/merchant/orders')}
                                 >
                                     View All Orders
                                 </Button>

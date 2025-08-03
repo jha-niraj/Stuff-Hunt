@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 
 // Protected routes that require authentication
 const protectedRoutes = [
-	'/seller',
+	'/merchant',
 	'/admin',
 	'/profile',
 	'/settings',
@@ -16,11 +16,11 @@ const protectedRoutes = [
 
 // Seller-specific routes that require SELLER role
 const sellerRoutes = [
-	'/seller/dashboard',
-	'/seller/products',
-	'/seller/orders',
-	'/seller/analytics',
-	'/seller/settings'
+	'/merchant/dashboard',
+	'/merchant/products',
+	'/merchant/orders',
+	'/merchant/analytics',
+	'/merchant/settings'
 ]
 
 // Admin-specific routes that require ADMIN role
@@ -49,7 +49,7 @@ const publicRoutes = [
 	'/contact',
 	'/privacy',
 	'/terms',
-	'/seller' // Seller landing page is public
+	'/merchantonboard' // Public merchant onboarding page
 ]
 
 // API routes that should be excluded from auth checks
@@ -115,8 +115,8 @@ export default auth((req) => {
 	if (isLoggedIn) {
 		// Check seller route access
 		if (isSellerRoute && userRole !== 'SELLER') {
-			// If not a seller, redirect to seller landing page
-			return NextResponse.redirect(new URL('/seller', nextUrl.origin))
+			// If not a seller, redirect to merchant onboarding page
+			return NextResponse.redirect(new URL('/merchantonboard', nextUrl.origin))
 		}
 
 		// Check admin route access
@@ -129,7 +129,7 @@ export default auth((req) => {
 		if (nextUrl.pathname === '/signin' || nextUrl.pathname === '/signup') {
 			// Redirect based on user role after login
 			if (userRole === 'SELLER') {
-				return NextResponse.redirect(new URL('/seller/dashboard', nextUrl.origin))
+				return NextResponse.redirect(new URL('/merchant/dashboard', nextUrl.origin))
 			} else if (userRole === 'ADMIN') {
 				return NextResponse.redirect(new URL('/admin/dashboard', nextUrl.origin))
 			} else {
@@ -140,7 +140,7 @@ export default auth((req) => {
 		// For the root path, redirect based on role
 		if (nextUrl.pathname === '/' && nextUrl.search === '') {
 			if (userRole === 'SELLER') {
-				return NextResponse.redirect(new URL('/seller/dashboard', nextUrl.origin))
+				return NextResponse.redirect(new URL('/merchant/dashboard', nextUrl.origin))
 			} else if (userRole === 'ADMIN') {
 				return NextResponse.redirect(new URL('/admin/dashboard', nextUrl.origin))
 			}

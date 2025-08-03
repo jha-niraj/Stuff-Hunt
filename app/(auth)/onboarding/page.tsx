@@ -57,7 +57,7 @@ export default function OnboardingPage() {
                 // If already onboarded, redirect based on role
                 if (data.onboardingCompleted) {
                     if (data.role === "SELLER") {
-                        router.push("/seller/dashboard")
+                        router.push("/merchant/dashboard")
                     } else {
                         router.push("/")
                     }
@@ -143,7 +143,7 @@ export default function OnboardingPage() {
             })
 
             toast.success("Onboarding completed successfully!")
-            router.push("/seller/dashboard")
+            router.push("/merchant/dashboard")
         } catch (error) {
             console.error("Error completing onboarding:", error)
             toast.error("Failed to complete onboarding. Please try again.")

@@ -40,7 +40,7 @@ async function sendPasswordResetEmail(email: string, resetToken: string) {
     
     try {
         await resend.emails.send({
-            from: "StuffHunt <noreply@coderz.nirajjha.xyz>",
+            from: "Acme <onboarding@resend.dev>",
             to: email,
             subject: "Reset your password - StuffHunt",
             html: passwordResetEmailTemplate(resetUrl)
@@ -56,7 +56,7 @@ async function sendPasswordResetEmail(email: string, resetToken: string) {
 async function sendRegistrationSuccessEmail(email: string, name: string) {
     try {
         await resend.emails.send({
-            from: "StuffHunt <noreply@coderz.nirajjha.xyz>",
+            from: 'Acme <onboarding@resend.dev>',
             to: email,
             subject: "Welcome to StuffHunt - Registration Complete! 🎉",
             html: registrationSuccessEmailTemplate(name, email)
