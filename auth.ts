@@ -3,7 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "@/lib/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import NextAuth from "next-auth";
-import { Role, UserRole } from '@prisma/client';
+import { Role } from '@prisma/client';
 import bcrypt from "bcryptjs";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
@@ -55,7 +55,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 								role: freshUser.role,
 								roleExplicitlyChosen: freshUser.roleExplicitlyChosen,
 								onboardingCompleted: freshUser.onboardingCompleted,
-								userRole: freshUser.userRole!
 							};
 						} else {
 							throw new Error("Email verification not completed");
@@ -81,7 +80,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 						image: user.image,
 						role: user.role,
 						roleExplicitlyChosen: user.roleExplicitlyChosen,
-						userRole: user.userRole!
 					};
 				} catch (error) {
 					console.error("Authorization error:", error);
@@ -100,7 +98,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 				token.id = user.id!;
 				token.role = user.role;
 				token.roleExplicitlyChosen = user.roleExplicitlyChosen;
-				token.userRole = user.userRole;
 			}
 
 			// Only fetch from database during session updates or when explicitly triggered
@@ -130,7 +127,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 				session.user.id = token.id as string;
 				session.user.role = token.role as Role
 				session.user.roleExplicitlyChosen = Boolean(token.roleExplicitlyChosen);
-				session.user.userRole = token.userRole as UserRole | undefined;
 			}
 			return session;
 		},
