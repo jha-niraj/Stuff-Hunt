@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { completeSellerOnboarding, getUserOnboardingData } from "@/actions/onboarding.action"
 import { toast } from "sonner"
+import { User } from "@/types"
 
 interface FormData {
     companyName: string
@@ -28,7 +29,7 @@ export default function OnboardingPage() {
     const router = useRouter()
     const [loading, setLoading] = useState(true)
     const [submitting, setSubmitting] = useState(false)
-    const [userData, setUserData] = useState<any>(null)
+    const [userData, setUserData] = useState<User | null>(null);
     
     const [formData, setFormData] = useState<FormData>({
         companyName: "",
@@ -52,7 +53,7 @@ export default function OnboardingPage() {
 
             try {
                 const data = await getUserOnboardingData()
-                setUserData(data)
+                setUserData(data as User)
                 
                 // If already onboarded, redirect based on role
                 if (data.onboardingCompleted) {

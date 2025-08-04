@@ -441,7 +441,7 @@ export function HeroSection() {
                     Find Products with AI-Powered Search
                 </h1>
                 <p className="text-muted-foreground text-base md:text-base lg:text-lg font-medium leading-relaxed max-w-lg mx-auto">
-                    Upload an image or describe what you're looking for. Our AI will help you discover the perfect products
+                    Upload an image or describe what you&apos;re looking for. Our AI will help you discover the perfect products
                     instantly.
                 </p>
             </div>

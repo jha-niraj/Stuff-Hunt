@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Upload, Search } from "lucide-react"
 import { AuthDialog } from "@/components/authdialog"
+import Image from "next/image"
 
 export function SearchInterface() {
 	const [prompt, setPrompt] = useState("")
@@ -74,7 +75,13 @@ export function SearchInterface() {
 
 						{imagePreview && (
 							<div className="relative w-16 h-16 rounded-lg overflow-hidden border border-border">
-								<img src={imagePreview || "/placeholder.svg"} alt="Preview" className="w-full h-full object-cover" />
+								<Image 
+									src={imagePreview || "/placeholder.svg"} 
+									alt="Preview" 
+									className="w-full h-full object-cover"
+									height={32}
+									width={32} 
+								/>
 								<button
 									onClick={() => {
 										setSelectedImage(null)

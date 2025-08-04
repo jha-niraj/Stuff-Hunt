@@ -14,6 +14,7 @@ import { signOut, useSession } from "next-auth/react"
 import { toast } from "sonner"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
+import CartIcon from "./cart/CartIcon"
 
 const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
     const { data: session } = useSession();
@@ -109,6 +110,10 @@ const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                                 <Moon className="h-3 w-3 text-gray-700 dark:text-gray-300" />
                             </Button>
                         </div>
+                        
+                        {/* Cart Icon - Only show for logged in users */}
+                        {session?.user && <CartIcon className="mr-2" />}
+                        
                         {
                             session?.user ? (
                                 <DropdownMenu>

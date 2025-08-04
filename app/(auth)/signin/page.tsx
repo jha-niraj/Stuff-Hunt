@@ -118,7 +118,7 @@ function SignInContent() {
 							{role === 'seller' && (
 								<div className="mb-4 p-3 bg-gradient-to-r from-[#FF6EC7]/10 to-[#DF87F3]/10 border border-[#FF6EC7]/20 rounded-2xl">
 									<p className="text-sm font-medium bg-gradient-to-r from-[#FF6EC7] to-[#DF87F3] bg-clip-text text-transparent">
-										🛍️ You're signing in as a Seller
+										🛍️ You&apos;re signing in as a Seller
 									</p>
 									<p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
 										Access your seller dashboard, manage products, and track sales

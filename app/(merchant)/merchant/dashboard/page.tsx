@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
@@ -13,28 +13,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-
-interface DashboardStats {
-    totalProducts: number
-    totalOrders: number
-    totalRevenue: number
-    averageRating: number
-    recentProducts: any[]
-    recentOrders: any[]
-}
+import { useMerchantStore } from "@/stores/useMerchantStore"
+import { format } from "date-fns"
 
 export default function SellerDashboard() {
     const { data: session, status } = useSession()
     const router = useRouter()
-    const [stats, setStats] = useState<DashboardStats>({
-        totalProducts: 0,
-        totalOrders: 0,
-        totalRevenue: 0,
-        averageRating: 0,
-        recentProducts: [],
-        recentOrders: []
-    })
-    const [loading, setLoading] = useState(true)
+    
+    const {
+        dashboardData,
+        dashboardLoading,
+        dashboardError,
+        fetchDashboardData
+    } = useMerchantStore()
 
     useEffect(() => {
         if (status === "loading") return
@@ -49,30 +40,11 @@ export default function SellerDashboard() {
             return
         }
 
-        // TODO: Fetch actual seller stats from API
-        // For now, using mock data
-        setTimeout(() => {
-            setStats({
-                totalProducts: 24,
-                totalOrders: 156,
-                totalRevenue: 45600,
-                averageRating: 4.7,
-                recentProducts: [
-                    { id: 1, name: "Premium Headphones", price: 2499, status: "Active" },
-                    { id: 2, name: "Wireless Earbuds", price: 1599, status: "Active" },
-                    { id: 3, name: "Gaming Mouse", price: 899, status: "Draft" }
-                ],
-                recentOrders: [
-                    { id: 1, customer: "Arjun Kumar", amount: 2499, status: "Delivered", date: "2024-01-15" },
-                    { id: 2, customer: "Priya Sharma", amount: 1599, status: "Shipped", date: "2024-01-14" },
-                    { id: 3, customer: "Rahul Singh", amount: 899, status: "Processing", date: "2024-01-13" }
-                ]
-            })
-            setLoading(false)
-        }, 1000)
-    }, [session, status, router])
+        // Fetch dashboard data
+        fetchDashboardData()
+    }, [session, status, router, fetchDashboardData])
 
-    if (status === "loading" || loading) {
+    if (status === "loading" || dashboardLoading) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-black via-purple-900/20 to-black flex items-center justify-center">
                 <div className="text-center">
@@ -85,13 +57,35 @@ export default function SellerDashboard() {
         )
     }
 
+    if (dashboardError) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-black via-purple-900/20 to-black flex items-center justify-center">
+                <div className="text-center">
+                    <div className="w-16 h-16 bg-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <Store className="w-8 h-8 text-white" />
+                    </div>
+                    <p className="text-white text-lg mb-2">Error loading dashboard</p>
+                    <p className="text-gray-400 mb-4">{dashboardError}</p>
+                    <Button onClick={fetchDashboardData}>Try Again</Button>
+                </div>
+            </div>
+        )
+    }
+
+    if (!dashboardData) {
+        return null
+    }
+
     const getStatusColor = (status: string) => {
         switch (status) {
-            case "Active": return "bg-green-500"
-            case "Draft": return "bg-yellow-500"
-            case "Delivered": return "bg-green-500"
-            case "Shipped": return "bg-blue-500"
-            case "Processing": return "bg-orange-500"
+            case "ACTIVE": return "bg-green-500"
+            case "INACTIVE": return "bg-red-500"
+            case "DRAFT": return "bg-yellow-500"
+            case "DELIVERED": case "COMPLETED": return "bg-green-500"
+            case "SHIPPED": return "bg-blue-500"
+            case "PROCESSING": return "bg-orange-500"
+            case "PENDING": return "bg-yellow-500"
+            case "CONFIRMED": return "bg-blue-500"
             default: return "bg-gray-500"
         }
     }
@@ -164,10 +158,10 @@ export default function SellerDashboard() {
                                 <Package className="h-4 w-4 text-[#FF6EC7]" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold text-white">{stats.totalProducts}</div>
+                                <div className="text-2xl font-bold text-white">{dashboardData.stats.totalProducts}</div>
                                 <p className="text-xs text-gray-400 flex items-center">
                                     <ArrowUpRight className="w-3 h-3 mr-1 text-green-500" />
-                                    +12% from last month
+                                    +{dashboardData.stats.monthlyGrowth.products}% from last month
                                 </p>
                             </CardContent>
                         </Card>
@@ -184,10 +178,10 @@ export default function SellerDashboard() {
                                 <ShoppingCart className="h-4 w-4 text-[#DF87F3]" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold text-white">{stats.totalOrders}</div>
+                                <div className="text-2xl font-bold text-white">{dashboardData.stats.totalOrders}</div>
                                 <p className="text-xs text-gray-400 flex items-center">
                                     <ArrowUpRight className="w-3 h-3 mr-1 text-green-500" />
-                                    +23% from last month
+                                    +{dashboardData.stats.monthlyGrowth.orders}% from last month
                                 </p>
                             </CardContent>
                         </Card>
@@ -204,10 +198,10 @@ export default function SellerDashboard() {
                                 <IndianRupee className="h-4 w-4 text-green-500" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold text-white">₹{stats.totalRevenue.toLocaleString()}</div>
+                                <div className="text-2xl font-bold text-white">₹{dashboardData.stats.totalRevenue.toLocaleString()}</div>
                                 <p className="text-xs text-gray-400 flex items-center">
                                     <ArrowUpRight className="w-3 h-3 mr-1 text-green-500" />
-                                    +18% from last month
+                                    +{dashboardData.stats.monthlyGrowth.revenue}% from last month
                                 </p>
                             </CardContent>
                         </Card>
@@ -224,10 +218,10 @@ export default function SellerDashboard() {
                                 <Star className="h-4 w-4 text-yellow-500" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold text-white">{stats.averageRating}</div>
+                                <div className="text-2xl font-bold text-white">{dashboardData.stats.averageRating.toFixed(1)}</div>
                                 <p className="text-xs text-gray-400 flex items-center">
                                     <ArrowUpRight className="w-3 h-3 mr-1 text-green-500" />
-                                    +0.2 from last month
+                                    +{dashboardData.stats.monthlyGrowth.rating.toFixed(1)} from last month
                                 </p>
                             </CardContent>
                         </Card>
@@ -252,7 +246,7 @@ export default function SellerDashboard() {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <Button
                                     className="bg-gradient-to-r from-[#FF6EC7] to-[#DF87F3] hover:from-[#FF6EC7]/90 hover:to-[#DF87F3]/90 text-white h-auto p-4 flex-col gap-2"
-                                    onClick={() => router.push('/merchant/products/new')}
+                                    onClick={() => router.push('/merchant/products/upload')}
                                 >
                                     <Plus className="w-6 h-6" />
                                     <span className="font-semibold">Add New Product</span>
@@ -299,11 +293,14 @@ export default function SellerDashboard() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
-                                {stats.recentProducts.map((product) => (
+                                {dashboardData.recentProducts.map((product) => (
                                     <div key={product.id} className="flex items-center justify-between p-3 rounded-lg bg-white/5">
                                         <div>
                                             <p className="font-medium text-white">{product.name}</p>
-                                            <p className="text-sm text-gray-400">₹{product.price}</p>
+                                            <p className="text-sm text-gray-400">₹{product.price.toLocaleString()}</p>
+                                            <p className="text-xs text-gray-500">
+                                                {product.viewCount} views • {product.orderCount} orders
+                                            </p>
                                         </div>
                                         <Badge className={`${getStatusColor(product.status)} text-white`}>
                                             {product.status}
@@ -338,14 +335,14 @@ export default function SellerDashboard() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
-                                {stats.recentOrders.map((order) => (
+                                {dashboardData.recentOrders.map((order) => (
                                     <div key={order.id} className="flex items-center justify-between p-3 rounded-lg bg-white/5">
                                         <div>
-                                            <p className="font-medium text-white">{order.customer}</p>
-                                            <p className="text-sm text-gray-400">{order.date}</p>
+                                            <p className="font-medium text-white">{order.customerName}</p>
+                                            <p className="text-sm text-gray-400">{format(new Date(order.createdAt), 'MMM d, yyyy')}</p>
                                         </div>
                                         <div className="text-right">
-                                            <p className="font-medium text-white">₹{order.amount}</p>
+                                            <p className="font-medium text-white">₹{order.amount.toLocaleString()}</p>
                                             <Badge className={`${getStatusColor(order.status)} text-white text-xs`}>
                                                 {order.status}
                                             </Badge>

@@ -25,6 +25,12 @@ model User {
     onboardingCompleted  Boolean   @default(false)
 	createdAt            DateTime  @default(now())
 
+    // Profile fields
+    bio                  String?
+    location             String?
+    website              String?
+    interests            String[] @default([])
+
     // Email verification
     verificationToken    String?   @unique
     verificationTokenExpiry DateTime?
@@ -84,6 +90,10 @@ model Product {
     images              String[]  // Array of Cloudinary URLs
     viewCount           Int       @default(0)
     isActive            Boolean   @default(true)
+    
+    // AI-generated metadata for search optimization
+    aiMetadata          Json?     // Stores AI-generated product analysis and search metadata
+    
     createdAt           DateTime  @default(now())
     updatedAt           DateTime  @updatedAt
 

@@ -108,7 +108,7 @@ export function MerchantCTASection() {
 					</h2>
 					<p className="text-muted-foreground text-sm md:text-base font-medium leading-[18.20px] md:leading-relaxed break-words max-w-2xl">
 						Join thousands of successful sellers who are already growing their businesses and reaching millions of
-						customers with StuffHunt's AI-powered marketplace
+						customers with StuffHunt&apos;s AI-powered marketplace
 					</p>
 				</div>
 				<Link href="/seller/signup">
