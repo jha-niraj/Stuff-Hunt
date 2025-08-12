@@ -5,12 +5,11 @@ import { useSearchParams } from "next/navigation"
 import { ProductGrid } from "@/components/product/product-grid"
 import { ProductFilters } from "@/components/product/product-filters"
 import { getProducts, searchProductsWithFilters, type ProductWithDetails } from "@/actions/product.action"
-import { searchParamsToFilters } from "@/actions/search.action"
-import { type SearchFilters } from "@/types"
 import { Badge } from "@/components/ui/badge"
 import { Sparkles, X, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
+import { searchParamsToFilters } from "@/lib/search"
 
 export function ProductsClient() {
 	const sp = useSearchParams()
@@ -172,7 +171,7 @@ export function ProductsClient() {
 						`${totalProducts} product${totalProducts === 1 ? "" : "s"} found`
 					)}
 					{originalQuery && (
-						<span> for "{originalQuery}"</span>
+						<span> for &quot;{originalQuery}&quot;</span>
 					)}
 				</div>
 			</div>

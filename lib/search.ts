@@ -43,23 +43,28 @@ export function filtersToSearchParams(filters: SearchFilters): URLSearchParams {
 	return params
 }
 
-// Helper function to parse search params back to filters
+// Helper function to convert search params to filters
 export function searchParamsToFilters(searchParams: URLSearchParams): SearchFilters | null {
-	if (!searchParams.get("aiProcessed")) {
+	const categories = searchParams.get("categories")?.split(",") || []
+	const attributes = searchParams.get("attributes")?.split(",") || []
+	const colors = searchParams.get("colors")?.split(",") || []
+	const sizes = searchParams.get("sizes")?.split(",") || []
+	const brands = searchParams.get("brands")?.split(",") || []
+	const minPrice = searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : undefined
+	const maxPrice = searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined
+	const confidence = Number(searchParams.get("confidence")) || 0
+
+	if (categories.length === 0 && attributes.length === 0 && colors.length === 0 && sizes.length === 0 && brands.length === 0 && !minPrice && !maxPrice) {
 		return null
 	}
 
 	return {
-		categories: searchParams.get("categories")?.split(",") || [],
-		attributes: searchParams.get("attributes")?.split(",") || [],
-		colors: searchParams.get("colors")?.split(",") || [],
-		sizes: searchParams.get("sizes")?.split(",") || [],
-		brands: searchParams.get("brands")?.split(",") || [],
-		priceRange: {
-			min: searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : undefined,
-			max: searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined,
-		},
-		intent: searchParams.get("intent") || undefined,
-		confidence: Number(searchParams.get("confidence")) || 0,
+		categories,
+		attributes,
+		colors,
+		sizes,
+		brands,
+		priceRange: minPrice || maxPrice ? { min: minPrice, max: maxPrice } : undefined,
+		confidence
 	}
 }

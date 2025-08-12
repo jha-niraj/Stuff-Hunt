@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Heart, ShieldCheck, Truck } from "lucide-react"
+import { Heart, ShieldCheck, Truck, Star } from "lucide-react"
 import { getProductBySlug, getRelatedProducts } from "@/actions/product.action"
 import { formatCurrency } from "@/lib/format"
 import { ProductGrid } from "@/components/product/product-grid"
@@ -13,27 +13,26 @@ import { AddToCart } from "@/components/product/add-to-cart"
 import { ProductGallery } from "@/components/product/product-gallery"
 import Link from "next/link"
 
-export default function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-	async function load() {
-		const { slug } = await params
-		const product = getProductBySlug(slug)
-		return { product }
+export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+	const { slug } = await params
+	const result = await getProductBySlug(slug)
+	
+	if (!result.success || !result.product) {
+		return notFound()
 	}
 
-	const Content = async () => {
-		const { product } = await load()
-		if (!product) return notFound()
+	const product = result.product
+	const categoryIds = product.categories.map(cat => cat.id)
+	const relatedProducts = await getRelatedProducts(product.id, categoryIds, 4)
 
-		const rel = relatedProducts(product.category || "", product.slug)
-
-		return (
-			<>
+	return (
+		<div className="min-h-dvh flex flex-col">
+			<main className="flex-1">
 				<section className="container mx-auto px-4 py-8 md:py-12">
 					<div className="grid lg:grid-cols-2 gap-8">
 						<ProductGallery images={product.images} alt={product.name} />
 						<div className="lg:pl-4">
 							<div className="flex items-center gap-3">
-								{product.badge && <Badge variant="secondary">{product.badge}</Badge>}
 								{product.inStock ? (
 									<Badge className="bg-green-600 text-white hover:bg-green-600/90">In stock</Badge>
 								) : (
@@ -43,8 +42,33 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 							<h1 className="text-3xl md:text-4xl font-semibold tracking-tight mt-3">{product.name}</h1>
 							<p className="text-muted-foreground mt-2">{product.shortDescription}</p>
 
+							<div className="flex items-center gap-2 mt-4">
+								<div className="flex items-center">
+									{Array.from({ length: 5 }).map((_, i) => (
+										<Star 
+											key={i} 
+											className={`w-4 h-4 ${
+												i < Math.floor(product.averageRating || 0) 
+													? 'fill-yellow-400 text-yellow-400' 
+													: 'text-gray-300'
+											}`}
+										/>
+									))}
+								</div>
+								<span className="text-sm text-muted-foreground">
+									({product._count?.reviews || 0} reviews)
+								</span>
+							</div>
+
 							<div className="flex items-center justify-between mt-6">
-								<div className="text-3xl font-semibold">{formatCurrency(product.price)}</div>
+								<div className="flex items-center gap-3">
+									<div className="text-3xl font-semibold">{formatCurrency(product.price)}</div>
+									{product.originalPrice && product.originalPrice > product.price && (
+										<div className="text-lg text-muted-foreground line-through">
+											{formatCurrency(product.originalPrice)}
+										</div>
+									)}
+								</div>
 								<button
 									className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground"
 									aria-label="Save to wishlist"
@@ -59,13 +83,13 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 									<div className="space-y-2">
 										<Label>Color</Label>
 										<div className="flex flex-wrap gap-2">
-											{product.colors.map((c) => (
+											{product.colors.map((color: string) => (
 												<button
-													key={c}
+													key={color}
 													className="h-9 px-3 rounded-md border text-sm hover:bg-accent"
-													aria-label={`Choose ${c}`}
+													aria-label={`Choose ${color}`}
 												>
-													{c}
+													{color}
 												</button>
 											))}
 										</div>
@@ -75,13 +99,13 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 									<div className="space-y-2">
 										<Label>Size</Label>
 										<div className="flex flex-wrap gap-2">
-											{product.sizes.map((s) => (
+											{product.sizes.map((size: string) => (
 												<button
-													key={s}
+													key={size}
 													className="h-9 px-3 rounded-md border text-sm hover:bg-accent"
-													aria-label={`Choose size ${s}`}
+													aria-label={`Choose size ${size}`}
 												>
-													{s}
+													{size}
 												</button>
 											))}
 										</div>
@@ -105,6 +129,14 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 									<ShieldCheck className="w-4 h-4" />
 									Secure checkout
 								</div>
+								<div className="text-sm text-muted-foreground">
+									Sold by {product.seller.name}
+									{product.seller.verificationBadge && (
+										<Badge variant="secondary" className="ml-2 text-xs">
+											Verified
+										</Badge>
+									)}
+								</div>
 							</div>
 
 							<Tabs defaultValue="details" className="mt-10">
@@ -114,7 +146,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 									<TabsTrigger value="shipping">Shipping</TabsTrigger>
 								</TabsList>
 								<TabsContent value="details" className="text-sm text-muted-foreground">
-									{product.description}
+									<div className="prose prose-sm max-w-none">
+										<p>{product.detailedDescription || product.shortDescription}</p>
+									</div>
 								</TabsContent>
 								<TabsContent value="care" className="text-sm text-muted-foreground">
 									Machine wash cold. Do not bleach. Tumble dry low. Cool iron if needed.
@@ -139,23 +173,17 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 					</div>
 				</section>
 
-				<section className="container mx-auto px-4 pb-12">
-					<div className="flex items-center justify-between mb-6">
-						<h2 className="text-xl md:text-2xl font-semibold tracking-tight">You might also like</h2>
-						<Button variant="ghost" asChild>
-							<Link href="/products">View all</Link>
-						</Button>
-					</div>
-					<ProductGrid products={rel} />
-				</section>
-			</>
-		)
-	}
-
-	return (
-		<div className="min-h-dvh flex flex-col">
-			<main className="flex-1">
-				<Content />
+				{relatedProducts.length > 0 && (
+					<section className="container mx-auto px-4 pb-12">
+						<div className="flex items-center justify-between mb-6">
+							<h2 className="text-xl md:text-2xl font-semibold tracking-tight">You might also like</h2>
+							<Button variant="ghost" asChild>
+								<Link href="/products">View all</Link>
+							</Button>
+						</div>
+						<ProductGrid products={relatedProducts} />
+					</section>
+				)}
 			</main>
 		</div>
 	)
