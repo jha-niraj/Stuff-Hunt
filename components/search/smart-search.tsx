@@ -97,15 +97,13 @@ export function SmartSearch({
 					className="pl-8 pr-12"
 					disabled={isPending}
 				/>
-
-				{/* AI Indicator */}
-				{showAIIndicator && query.length > 2 && (
-					<div className="absolute right-8 top-1/2 -translate-y-1/2">
-						<Sparkles className="w-4 h-4 text-blue-500 animate-pulse" />
-					</div>
-				)}
-
-				{/* Loading/Search Button */}
+				{
+					showAIIndicator && query.length > 2 && (
+						<div className="absolute right-8 top-1/2 -translate-y-1/2">
+							<Sparkles className="w-4 h-4 text-blue-500 animate-pulse" />
+						</div>
+					)
+				}
 				<Button
 					onClick={handleSearch}
 					disabled={!query.trim() || isPending}
@@ -113,27 +111,31 @@ export function SmartSearch({
 					className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
 					variant="ghost"
 				>
-					{isPending ? (
-						<Loader2 className="w-4 h-4 animate-spin" />
-					) : (
-						<Search className="w-4 h-4" />
-					)}
+					{
+						isPending ? (
+							<Loader2 className="w-4 h-4 animate-spin" />
+						) : (
+							<Search className="w-4 h-4" />
+						)
+					}
 				</Button>
 			</div>
-
-			{/* Search Suggestions (optional enhancement) */}
-			{query.length > 0 && !isPending && (
-				<div className="absolute top-full left-0 right-0 mt-1 text-xs text-muted-foreground px-3 py-1">
-					{query.length > 2 ? (
-						<span className="flex items-center gap-1">
-							<Sparkles className="w-3 h-3 text-blue-500" />
-							AI will enhance this search
-						</span>
-					) : (
-						<span>Type more for AI-enhanced search</span>
-					)}
-				</div>
-			)}
+			{
+				query.length > 0 && !isPending && (
+					<div className="absolute top-full left-0 right-0 mt-1 text-xs text-muted-foreground px-3 py-1">
+						{
+							query.length > 2 ? (
+								<span className="flex items-center gap-1">
+									<Sparkles className="w-3 h-3 text-blue-500" />
+									AI will enhance this search
+								</span>
+							) : (
+								<span>Type more for AI-enhanced search</span>
+							)
+						}
+					</div>
+				)
+			}
 		</div>
 	)
 }

@@ -11,13 +11,8 @@ import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { searchParamsToFilters } from "@/lib/search"
 import {
-	Pagination,
-	PaginationContent,
-	PaginationEllipsis,
-	PaginationItem,
-	PaginationLink,
-	PaginationNext,
-	PaginationPrevious,
+	Pagination, PaginationContent, PaginationEllipsis,
+	PaginationItem, PaginationLink, PaginationNext, PaginationPrevious
 } from "@/components/ui/pagination"
 
 export function ProductsClient() {
@@ -120,7 +115,7 @@ export function ProductsClient() {
 	const generatePaginationItems = () => {
 		const items = []
 		const maxVisiblePages = 5
-		
+
 		if (totalPages <= maxVisiblePages) {
 			// Show all pages if total pages is small
 			for (let i = 1; i <= totalPages; i++) {
@@ -129,29 +124,29 @@ export function ProductsClient() {
 		} else {
 			// Show first page
 			items.push(1)
-			
+
 			if (currentPage > 3) {
 				items.push('ellipsis1')
 			}
-			
+
 			// Show pages around current page
 			const start = Math.max(2, currentPage - 1)
 			const end = Math.min(totalPages - 1, currentPage + 1)
-			
+
 			for (let i = start; i <= end; i++) {
 				items.push(i)
 			}
-			
+
 			if (currentPage < totalPages - 2) {
 				items.push('ellipsis2')
 			}
-			
+
 			// Show last page
 			if (totalPages > 1) {
 				items.push(totalPages)
 			}
 		}
-		
+
 		return items
 	}
 
@@ -168,158 +163,171 @@ export function ProductsClient() {
 
 	return (
 		<div className="space-y-6">
-			{/* AI Search Results Header */}
-			{isAIProcessed && aiFilters && (
-				<div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
-					<div className="flex items-start justify-between gap-4">
-						<div className="flex-1">
-							<div className="flex items-center gap-2 mb-2">
-								<Sparkles className="w-5 h-5 text-blue-600" />
-								<h3 className="font-semibold text-blue-900 dark:text-blue-100">
-									AI Enhanced Search Results
-								</h3>
-								<Badge variant="secondary" className="text-xs">
-									{Math.round(confidence * 100)}% confidence
-								</Badge>
+			{
+				isAIProcessed && aiFilters && (
+					<div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+						<div className="flex items-start justify-between gap-4">
+							<div className="flex-1">
+								<div className="flex items-center gap-2 mb-2">
+									<Sparkles className="w-5 h-5 text-blue-600" />
+									<h3 className="font-semibold text-blue-900 dark:text-blue-100">
+										AI Enhanced Search Results
+									</h3>
+									<Badge variant="secondary" className="text-xs">
+										{Math.round(confidence * 100)}% confidence
+									</Badge>
+								</div>
+								<p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
+									{originalQuery ? `Showing results for "${originalQuery}"` : "AI processed your search"}
+								</p>
+								<div className="flex flex-wrap gap-2">
+									{
+										aiFilters.categories.map((category: string) => (
+											<Badge key={category} variant="outline" className="text-xs">
+												{category}
+											</Badge>
+										))
+									}
+									{
+										aiFilters.attributes.map((attr: string) => (
+											<Badge key={attr} variant="outline" className="text-xs">
+												{attr}
+											</Badge>
+										))
+									}
+									{
+										aiFilters.colors?.map((color: string) => (
+											<Badge key={color} variant="outline" className="text-xs">
+												{color}
+											</Badge>
+										))
+									}
+									{
+										aiFilters.priceRange?.max && (
+											<Badge variant="outline" className="text-xs">
+												Under ${aiFilters.priceRange.max}
+											</Badge>
+										)
+									}
+								</div>
 							</div>
-
-							<p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
-								{originalQuery ? `Showing results for "${originalQuery}"` : "AI processed your search"}
-							</p>
-
-							<div className="flex flex-wrap gap-2">
-								{aiFilters.categories.map((category: string) => (
-									<Badge key={category} variant="outline" className="text-xs">
-										{category}
-									</Badge>
-								))}
-								{aiFilters.attributes.map((attr: string) => (
-									<Badge key={attr} variant="outline" className="text-xs">
-										{attr}
-									</Badge>
-								))}
-								{aiFilters.colors?.map((color: string) => (
-									<Badge key={color} variant="outline" className="text-xs">
-										{color}
-									</Badge>
-								))}
-								{aiFilters.priceRange?.max && (
-									<Badge variant="outline" className="text-xs">
-										Under ${aiFilters.priceRange.max}
-									</Badge>
-								)}
-							</div>
+							<Button
+								variant="ghost"
+								size="sm"
+								onClick={clearAIFilters}
+								className="text-blue-600 hover:text-blue-800"
+							>
+								<X className="w-4 h-4 mr-1" />
+								Clear AI filters
+							</Button>
 						</div>
-
-						<Button
-							variant="ghost"
-							size="sm"
-							onClick={clearAIFilters}
-							className="text-blue-600 hover:text-blue-800"
-						>
-							<X className="w-4 h-4 mr-1" />
-							Clear AI filters
-						</Button>
 					</div>
-				</div>
-			)}
-
-			{/* Search Results Count */}
+				)
+			}
 			<div className="flex items-center justify-between">
 				<div className="text-sm text-muted-foreground">
-					{totalProducts === 0 ? (
-						"No products found"
-					) : (
-						`${totalProducts} product${totalProducts === 1 ? "" : "s"} found`
-					)}
-					{originalQuery && (
-						<span> for &quot;{originalQuery}&quot;</span>
-					)}
+					{
+						totalProducts === 0 ? (
+							"No products found"
+						) : (
+							`${totalProducts} product${totalProducts === 1 ? "" : "s"} found`
+						)
+					}
+					{
+						originalQuery && (
+							<span> for &quot;{originalQuery}&quot;</span>
+						)
+					}
 				</div>
 			</div>
-
-			{/* Products Grid with Filters */}
 			<div className="grid lg:grid-cols-[280px_1fr] gap-6 md:gap-8">
 				<aside className="lg:sticky top-24 h-max">
 					<ProductFilters />
 				</aside>
 				<div className="space-y-6">
 					<ProductGrid products={products} />
-					
-					{products.length === 0 && !loading && (
-						<div className="rounded-xl border p-8 text-center">
-							<div className="text-muted-foreground mb-4">
-								<h3 className="font-semibold mb-2">No products found</h3>
-								<p className="text-sm">
-									{isAIProcessed ? (
-										"Try clearing AI filters or adjusting your search terms."
-									) : (
-										"Try adjusting your search or category filters."
-									)}
-								</p>
-							</div>
-							{isAIProcessed && (
-								<Button variant="outline" onClick={clearAIFilters}>
-									<X className="w-4 h-4 mr-2" />
-									Clear AI filters
-								</Button>
-							)}
-						</div>
-					)}
-
-					{/* Pagination */}
-					{totalPages > 1 && products.length > 0 && (
-						<div className="flex flex-col items-center gap-4">
-							<div className="text-sm text-muted-foreground">
-								Showing {((currentPage - 1) * 12) + 1} to {Math.min(currentPage * 12, totalProducts)} of {totalProducts} products
-							</div>
-							<Pagination>
-								<PaginationContent>
-									<PaginationItem>
-										<PaginationPrevious 
-											href="#"
-											onClick={(e) => {
-												e.preventDefault()
-												if (currentPage > 1) handlePageChange(currentPage - 1)
-											}}
-											className={currentPage <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-										/>
-									</PaginationItem>
-									
-									{generatePaginationItems().map((item, index) => (
-										<PaginationItem key={index}>
-											{typeof item === 'number' ? (
-												<PaginationLink
-													href="#"
-													onClick={(e) => {
-														e.preventDefault()
-														handlePageChange(item)
-													}}
-													isActive={currentPage === item}
-													className="cursor-pointer"
-												>
-													{item}
-												</PaginationLink>
+					{
+						products.length === 0 && !loading && (
+							<div className="rounded-xl border p-8 text-center">
+								<div className="text-muted-foreground mb-4">
+									<h3 className="font-semibold mb-2">No products found</h3>
+									<p className="text-sm">
+										{
+											isAIProcessed ? (
+												"Try clearing AI filters or adjusting your search terms."
 											) : (
-												<PaginationEllipsis />
-											)}
+												"Try adjusting your search or category filters."
+											)
+										}
+									</p>
+								</div>
+								{
+									isAIProcessed && (
+										<Button variant="outline" onClick={clearAIFilters}>
+											<X className="w-4 h-4 mr-2" />
+											Clear AI filters
+										</Button>
+									)
+								}
+							</div>
+						)
+					}
+					{
+						totalPages > 1 && products.length > 0 && (
+							<div className="flex flex-col items-center gap-4">
+								<div className="text-sm text-muted-foreground">
+									Showing {((currentPage - 1) * 12) + 1} to {Math.min(currentPage * 12, totalProducts)} of {totalProducts} products
+								</div>
+								<Pagination>
+									<PaginationContent>
+										<PaginationItem>
+											<PaginationPrevious
+												href="#"
+												onClick={(e) => {
+													e.preventDefault()
+													if (currentPage > 1) handlePageChange(currentPage - 1)
+												}}
+												className={currentPage <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+											/>
 										</PaginationItem>
-									))}
-									
-									<PaginationItem>
-										<PaginationNext 
-											href="#"
-											onClick={(e) => {
-												e.preventDefault()
-												if (currentPage < totalPages) handlePageChange(currentPage + 1)
-											}}
-											className={currentPage >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-										/>
-									</PaginationItem>
-								</PaginationContent>
-							</Pagination>
-						</div>
-					)}
+										{
+											generatePaginationItems().map((item, index) => (
+												<PaginationItem key={index}>
+													{
+														typeof item === 'number' ? (
+															<PaginationLink
+																href="#"
+																onClick={(e) => {
+																	e.preventDefault()
+																	handlePageChange(item)
+																}}
+																isActive={currentPage === item}
+																className="cursor-pointer"
+															>
+																{item}
+															</PaginationLink>
+														) : (
+															<PaginationEllipsis />
+														)
+													}
+												</PaginationItem>
+											))
+										}
+										<PaginationItem>
+											<PaginationNext
+												href="#"
+												onClick={(e) => {
+													e.preventDefault()
+													if (currentPage < totalPages) handlePageChange(currentPage + 1)
+												}}
+												className={currentPage >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+											/>
+										</PaginationItem>
+									</PaginationContent>
+								</Pagination>
+							</div>
+						)
+					}
 				</div>
 			</div>
 		</div>

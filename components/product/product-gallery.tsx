@@ -41,24 +41,25 @@ export function ProductGallery({ images = ["/placeholder.svg?height=900&width=90
 				/>
 			</button>
 			<div className="grid grid-cols-4 gap-3">
-				{imgs.slice(0, 4).map((img, i) => (
-					<button
-						key={i}
-						className={cn("relative overflow-hidden rounded-lg border", i === idx && "ring-2 ring-primary")}
-						onClick={() => setIdx(i)}
-						aria-label={`View image ${i + 1}`}
-					>
-						<Image
-							src={img || "/placeholder.svg"}
-							alt={`${alt} ${i + 1}`}
-							width={300}
-							height={300}
-							className="aspect-square object-cover"
-						/>
-					</button>
-				))}
+				{
+					imgs.slice(0, 4).map((img, i) => (
+						<button
+							key={i}
+							className={cn("relative overflow-hidden rounded-lg border", i === idx && "ring-2 ring-primary")}
+							onClick={() => setIdx(i)}
+							aria-label={`View image ${i + 1}`}
+						>
+							<Image
+								src={img || "/placeholder.svg"}
+								alt={`${alt} ${i + 1}`}
+								width={300}
+								height={300}
+								className="aspect-square object-cover"
+							/>
+						</button>
+					))
+				}
 			</div>
-
 			<Dialog open={open} onOpenChange={setOpen}>
 				<DialogContent className="max-w-[min(1800px,98vw)] w-full h-[95vh] p-0 overflow-hidden">
 					<div className="relative w-full h-full bg-black">
@@ -99,25 +100,27 @@ export function ProductGallery({ images = ["/placeholder.svg?height=900&width=90
 						</div>
 						<div className="absolute inset-x-0 bottom-0 bg-black/60 p-3">
 							<div className="mx-auto grid gap-2 grid-cols-4 sm:grid-cols-6 md:grid-cols-8 max-w-6xl">
-								{imgs.map((img, i) => (
-									<button
-										key={i}
-										className={cn(
-											"relative overflow-hidden rounded-md border border-white/10 focus:outline-none",
-											i === idx ? "ring-2 ring-white" : "",
-										)}
-										onClick={() => setIdx(i)}
-										aria-label={`Select image ${i + 1}`}
-									>
-										<Image
-											src={img || "/placeholder.svg"}
-											alt={`${alt} ${i + 1}`}
-											width={220}
-											height={220}
-											className="aspect-square object-cover"
-										/>
-									</button>
-								))}
+								{
+									imgs.map((img, i) => (
+										<button
+											key={i}
+											className={cn(
+												"relative overflow-hidden rounded-md border border-white/10 focus:outline-none",
+												i === idx ? "ring-2 ring-white" : "",
+											)}
+											onClick={() => setIdx(i)}
+											aria-label={`Select image ${i + 1}`}
+										>
+											<Image
+												src={img || "/placeholder.svg"}
+												alt={`${alt} ${i + 1}`}
+												width={220}
+												height={220}
+												className="aspect-square object-cover"
+											/>
+										</button>
+									))
+								}
 							</div>
 						</div>
 					</div>

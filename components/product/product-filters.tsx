@@ -16,7 +16,7 @@ export function ProductFilters() {
 	const [sort, setSort] = useState(sp.get("sort") || "newest")
 	const [minPrice, setMinPrice] = useState(sp.get("minPrice") || "")
 	const [maxPrice, setMaxPrice] = useState(sp.get("maxPrice") || "")
-	const [categories, setCategories] = useState<Array<{id: string, name: string, _count: {products: number}}>>([])
+	const [categories, setCategories] = useState<Array<{ id: string, name: string, _count: { products: number } }>>([])
 
 	// Load categories from database
 	useEffect(() => {
@@ -51,7 +51,6 @@ export function ProductFilters() {
 					onKeyDown={(e) => e.key === "Enter" && apply()}
 				/>
 			</div>
-			
 			<div className="grid gap-2">
 				<Label>Category</Label>
 				<Select value={category} onValueChange={setCategory}>
@@ -60,15 +59,16 @@ export function ProductFilters() {
 					</SelectTrigger>
 					<SelectContent>
 						<SelectItem value="All">All Categories</SelectItem>
-						{categories.map((c) => (
-							<SelectItem key={c.id} value={c.name}>
-								{c.name} ({c._count.products})
-							</SelectItem>
-						))}
+						{
+							categories.map((c) => (
+								<SelectItem key={c.id} value={c.name}>
+									{c.name} ({c._count.products})
+								</SelectItem>
+							))
+						}
 					</SelectContent>
 				</Select>
 			</div>
-
 			<div className="grid gap-2">
 				<Label>Price Range</Label>
 				<div className="grid grid-cols-2 gap-2">
@@ -86,7 +86,6 @@ export function ProductFilters() {
 					/>
 				</div>
 			</div>
-			
 			<div className="grid gap-2">
 				<Label>Sort By</Label>
 				<Select value={sort} onValueChange={setSort}>

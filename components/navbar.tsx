@@ -76,8 +76,8 @@ export function Navbar() {
                                 <Avatar className="h-8 w-8">
                                     <AvatarImage src={session.user.image || undefined} alt={session.user.name || "User"} />
                                     <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-600 text-white text-sm">
-                                        {session.user.name?.split(" ").map((n: string) => n[0]).join("") || 
-                                         session.user.email?.[0].toUpperCase() || "U"}
+                                        {session.user.name?.split(" ").map((n: string) => n[0]).join("") ||
+                                            session.user.email?.[0].toUpperCase() || "U"}
                                     </AvatarFallback>
                                 </Avatar>
                             </Button>
@@ -86,11 +86,13 @@ export function Navbar() {
                             <div className="flex items-center justify-start gap-2 p-2">
                                 <div className="flex flex-col space-y-1 leading-none">
                                     {session.user.name && <p className="font-medium">{session.user.name}</p>}
-                                    {session.user.email && (
-                                        <p className="w-[200px] truncate text-sm text-muted-foreground">
-                                            {session.user.email}
-                                        </p>
-                                    )}
+                                    {
+                                        session.user.email && (
+                                            <p className="w-[200px] truncate text-sm text-muted-foreground">
+                                                {session.user.email}
+                                            </p>
+                                        )
+                                    }
                                 </div>
                             </div>
                             <DropdownMenuSeparator />
@@ -150,8 +152,8 @@ export function Navbar() {
                         <Avatar className="h-10 w-10">
                             <AvatarImage src={session.user.image || undefined} alt={session.user.name || "User"} />
                             <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-                                {session.user.name?.split(" ").map((n: string) => n[0]).join("") || 
-                                 session.user.email?.[0].toUpperCase() || "U"}
+                                {session.user.name?.split(" ").map((n: string) => n[0]).join("") ||
+                                    session.user.email?.[0].toUpperCase() || "U"}
                             </AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col">
@@ -173,10 +175,10 @@ export function Navbar() {
                                 <Link href="/orders">Orders</Link>
                             </Button>
                         </SheetClose>
-                        <Button 
-                            onClick={handleSignOut} 
-                            variant="outline" 
-                            size="sm" 
+                        <Button
+                            onClick={handleSignOut}
+                            variant="outline"
+                            size="sm"
                             className="w-full justify-start text-red-600 hover:text-red-700"
                         >
                             <LogOut className="mr-2 h-4 w-4" />
@@ -219,7 +221,6 @@ export function Navbar() {
                 isScrolled && 'bg-background/50 max-w-4xl rounded-2xl border backdrop-blur-lg lg:px-5'
             )}>
                 <div className="flex items-center justify-between py-2">
-                    {/* Left Side - Logo + Navigation */}
                     <div className="flex items-center gap-8">
                         <Link href="/" aria-label="home" className="flex gap-2 items-center">
                             <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
@@ -229,59 +230,55 @@ export function Navbar() {
                                 StuffHunt
                             </p>
                         </Link>
-
-                        {/* Desktop Navigation */}
                         <div className="hidden lg:flex items-center gap-6">
-                            {navItems.map((item, index) => (
-                                <Link
-                                    key={index}
-                                    href={item.href}
-                                    className={cn(
-                                        "text-sm duration-150",
-                                        pathname === item.href 
-                                            ? "text-foreground font-medium" 
-                                            : "text-muted-foreground hover:text-accent-foreground"
-                                    )}
-                                >
-                                    {item.label}
-                                </Link>
-                            ))}
-                            {session?.user && protectedNavItems.map((item, index) => (
-                                <Link
-                                    key={`protected-${index}`}
-                                    href={item.href}
-                                    className={cn(
-                                        "text-sm duration-150",
-                                        pathname === item.href 
-                                            ? "text-foreground font-medium" 
-                                            : "text-muted-foreground hover:text-accent-foreground"
-                                    )}
-                                >
-                                    {item.label}
-                                </Link>
-                            ))}
+                            {
+                                navItems.map((item, index) => (
+                                    <Link
+                                        key={index}
+                                        href={item.href}
+                                        className={cn(
+                                            "text-sm duration-150",
+                                            pathname === item.href
+                                                ? "text-foreground font-medium"
+                                                : "text-muted-foreground hover:text-accent-foreground"
+                                        )}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                ))
+                            }
+                            {
+                                session?.user && protectedNavItems.map((item, index) => (
+                                    <Link
+                                        key={`protected-${index}`}
+                                        href={item.href}
+                                        className={cn(
+                                            "text-sm duration-150",
+                                            pathname === item.href
+                                                ? "text-foreground font-medium"
+                                                : "text-muted-foreground hover:text-accent-foreground"
+                                        )}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                ))
+                            }
                         </div>
                     </div>
-
-                    {/* Right Side - Search, Theme, Cart, Auth */}
                     <div className="flex items-center gap-4">
-                        {/* Search - Desktop Only */}
                         <div className="hidden lg:block">
-                            <SmartSearch 
+                            <SmartSearch
                                 placeholder="Search products..."
                                 className="w-[240px]"
                                 showAIIndicator={true}
                             />
                         </div>
-
-                        {/* Theme Toggle - Desktop Only */}
                         <div className="hidden lg:flex items-center bg-stone-100/50 dark:bg-stone-800/50 rounded-xl p-1 border border-stone-200/50 dark:border-stone-700/50">
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className={`h-7 w-7 p-0 rounded-lg transition-all cursor-pointer ${
-                                    theme === 'light' ? 'bg-white shadow-sm' : 'hover:bg-stone-700'
-                                }`}
+                                className={`h-7 w-7 p-0 rounded-lg transition-all cursor-pointer ${theme === 'light' ? 'bg-white shadow-sm' : 'hover:bg-stone-700'
+                                    }`}
                                 onClick={() => setTheme('light')}
                             >
                                 <Sun className="h-3 w-3 text-amber-500" />
@@ -289,32 +286,29 @@ export function Navbar() {
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className={`h-7 w-7 p-0 rounded-lg transition-all cursor-pointer ${
-                                    theme === 'dark' ? 'bg-stone-700 shadow-sm' : 'hover:bg-stone-100'
-                                }`}
+                                className={`h-7 w-7 p-0 rounded-lg transition-all cursor-pointer ${theme === 'dark' ? 'bg-stone-700 shadow-sm' : 'hover:bg-stone-100'
+                                    }`}
                                 onClick={() => setTheme('dark')}
                             >
                                 <Moon className="h-3 w-3 text-blue-500" />
                             </Button>
                         </div>
-
-                        {/* Cart - Desktop Only */}
                         <Button asChild variant="outline" className="hidden lg:flex gap-2 bg-transparent">
                             <Link href="/cart" aria-label="Open cart">
                                 <ShoppingBag className="w-4 h-4" />
                                 <span className="sr-only">Cart</span>
-                                {itemCount > 0 && (
-                                    <span className="text-xs rounded-full bg-primary text-primary-foreground px-2 py-0.5 ml-1">
-                                        {itemCount}
-                                    </span>
-                                )}
+                                {
+                                    itemCount > 0 && (
+                                        <span className="text-xs rounded-full bg-primary text-primary-foreground px-2 py-0.5 ml-1">
+                                            {itemCount}
+                                        </span>
+                                    )
+                                }
                             </Link>
                         </Button>
 
-                        {/* Auth Buttons - Desktop Only */}
                         {renderAuthButtons()}
 
-                        {/* Mobile Menu Button */}
                         <Sheet open={open} onOpenChange={setOpen}>
                             <SheetTrigger asChild>
                                 <Button variant="ghost" size="sm" className="lg:hidden p-2">
@@ -327,46 +321,45 @@ export function Navbar() {
                                     <SheetTitle className="text-left">Menu</SheetTitle>
                                 </SheetHeader>
                                 <div className="flex flex-col space-y-6 mt-8">
-                                    {navItems.map((item, index) => (
-                                        <SheetClose asChild key={index}>
-                                            <Link
-                                                href={item.href}
-                                                className={cn(
-                                                    "text-lg font-medium transition-colors",
-                                                    pathname === item.href 
-                                                        ? "text-foreground" 
-                                                        : "text-muted-foreground hover:text-accent-foreground"
-                                                )}
-                                            >
-                                                {item.label}
-                                            </Link>
-                                        </SheetClose>
-                                    ))}
-                                    
-                                    {session?.user && protectedNavItems.map((item, index) => (
-                                        <SheetClose asChild key={`protected-${index}`}>
-                                            <Link
-                                                href={item.href}
-                                                className={cn(
-                                                    "text-lg font-medium transition-colors",
-                                                    pathname === item.href 
-                                                        ? "text-foreground" 
-                                                        : "text-muted-foreground hover:text-accent-foreground"
-                                                )}
-                                            >
-                                                {item.label}
-                                            </Link>
-                                        </SheetClose>
-                                    ))}
-
-                                    {/* Search bar for mobile */}
-                                    <SmartSearch 
+                                    {
+                                        navItems.map((item, index) => (
+                                            <SheetClose asChild key={index}>
+                                                <Link
+                                                    href={item.href}
+                                                    className={cn(
+                                                        "text-lg font-medium transition-colors",
+                                                        pathname === item.href
+                                                            ? "text-foreground"
+                                                            : "text-muted-foreground hover:text-accent-foreground"
+                                                    )}
+                                                >
+                                                    {item.label}
+                                                </Link>
+                                            </SheetClose>
+                                        ))
+                                    }
+                                    {
+                                        session?.user && protectedNavItems.map((item, index) => (
+                                            <SheetClose asChild key={`protected-${index}`}>
+                                                <Link
+                                                    href={item.href}
+                                                    className={cn(
+                                                        "text-lg font-medium transition-colors",
+                                                        pathname === item.href
+                                                            ? "text-foreground"
+                                                            : "text-muted-foreground hover:text-accent-foreground"
+                                                    )}
+                                                >
+                                                    {item.label}
+                                                </Link>
+                                            </SheetClose>
+                                        ))
+                                    }
+                                    <SmartSearch
                                         placeholder="Search products..."
                                         onSearch={() => setOpen(false)}
                                         showAIIndicator={true}
                                     />
-
-                                    {/* Cart button for mobile */}
                                     <SheetClose asChild>
                                         <Button asChild variant="outline" className="gap-2 bg-transparent">
                                             <Link href="/cart" aria-label="Open cart">
@@ -380,17 +373,14 @@ export function Navbar() {
                                             </Link>
                                         </Button>
                                     </SheetClose>
-
-                                    {/* Theme toggle for mobile */}
                                     <div className="flex items-center gap-2 pt-4 border-t">
                                         <span className="text-sm text-muted-foreground">Theme:</span>
                                         <div className="flex items-center bg-stone-100/50 dark:bg-stone-800/50 rounded-xl p-1 border border-stone-200/50 dark:border-stone-700/50">
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
-                                                className={`h-7 w-7 p-0 rounded-lg transition-all cursor-pointer ${
-                                                    theme === 'light' ? 'bg-white shadow-sm' : 'hover:bg-stone-700'
-                                                }`}
+                                                className={`h-7 w-7 p-0 rounded-lg transition-all cursor-pointer ${theme === 'light' ? 'bg-white shadow-sm' : 'hover:bg-stone-700'
+                                                    }`}
                                                 onClick={() => setTheme('light')}
                                             >
                                                 <Sun className="h-3 w-3 text-amber-500" />
@@ -398,9 +388,8 @@ export function Navbar() {
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
-                                                className={`h-7 w-7 p-0 rounded-lg transition-all cursor-pointer ${
-                                                    theme === 'dark' ? 'bg-stone-700 shadow-sm' : 'hover:bg-stone-100'
-                                                }`}
+                                                className={`h-7 w-7 p-0 rounded-lg transition-all cursor-pointer ${theme === 'dark' ? 'bg-stone-700 shadow-sm' : 'hover:bg-stone-100'
+                                                    }`}
                                                 onClick={() => setTheme('dark')}
                                             >
                                                 <Moon className="h-3 w-3 text-blue-500" />
@@ -416,7 +405,6 @@ export function Navbar() {
                 </div>
             </nav>
 
-            {/* Global auth dialog */}
             <Suspense fallback={null}>
                 <AuthDialog />
             </Suspense>

@@ -110,10 +110,7 @@ const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                                 <Moon className="h-3 w-3 text-gray-700 dark:text-gray-300" />
                             </Button>
                         </div>
-                        
-                        {/* Cart Icon - Only show for logged in users */}
                         {session?.user && <CartIcon className="mr-2" />}
-                        
                         {
                             session?.user ? (
                                 <DropdownMenu>

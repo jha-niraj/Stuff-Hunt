@@ -84,25 +84,22 @@ export function AuthDialog() {
 	return (
 		<Dialog open={open} onOpenChange={(o) => (o ? openAuth({ callbackUrl: resolvedCallback }) : dismissFromUrl())}>
 			<DialogContent
-				// Glass morphism styles
 				className="max-w-[min(560px,96vw)] p-0 overflow-hidden border border-white/20 bg-white/10 backdrop-blur-xl dark:bg-black/20 shadow-2xl"
 			>
 				<div className="relative">
-					{/* Decorative gradient backdrop */}
 					<div className="pointer-events-none absolute -inset-1 rounded-lg bg-[radial-gradient(90%_60%_at_50%_0%,rgba(255,255,255,.35),transparent)]" />
 					<div className="relative p-6 sm:p-7">
 						<DialogHeader className="mb-4">
 							<DialogTitle className="text-xl sm:text-2xl">Create your account</DialogTitle>
 							<DialogDescription>Welcome! Please fill in the details to get started.</DialogDescription>
 						</DialogHeader>
-
-						{error ? (
-							<div className="mb-3 inline-flex items-center gap-2 text-red-600 text-sm">
-								<XCircle className="w-4 h-4" />
-								{error}
-							</div>
-						) : null}
-
+						{
+							error ? (
+								<div className="mb-3 inline-flex items-center gap-2 text-red-600 text-sm">
+									<XCircle className="w-4 h-4" />
+									{error}
+								</div>
+							) : null}
 						<div className="grid gap-3">
 							<Button
 								type="button"
@@ -116,35 +113,33 @@ export function AuthDialog() {
 									<path
 										fill="#FFC107"
 										d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12
-                      c0-6.627,5.373-12,12-12c3.059,0,5.842,1.153,7.961,3.039l5.657-5.657C33.642,6.053,29.083,4,24,4C12.955,4,4,12.955,4,24
-                      c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+                      						c0-6.627,5.373-12,12-12c3.059,0,5.842,1.153,7.961,3.039l5.657-5.657C33.642,6.053,29.083,4,24,4C12.955,4,4,12.955,4,24
+                      						c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
 									/>
 									<path
 										fill="#FF3D00"
 										d="M6.306,14.691l6.571,4.819C14.655,16.108,18.961,14,24,14c3.059,0,5.842,1.153,7.961,3.039l5.657-5.657
-                      C33.642,6.053,29.083,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+                      						C33.642,6.053,29.083,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
 									/>
 									<path
 										fill="#4CAF50"
 										d="M24,44c5.176,0,9.86-1.977,13.409-5.197l-6.197-5.238C29.201,35.091,26.715,36,24,36
-                      c-5.197,0-9.607-3.317-11.287-7.946l-6.532,5.036C9.505,39.556,16.227,44,24,44z"
+                      						c-5.197,0-9.607-3.317-11.287-7.946l-6.532,5.036C9.505,39.556,16.227,44,24,44z"
 									/>
 									<path
 										fill="#1976D2"
 										d="M43.611,20.083H42V20H24v8h11.303c-0.793,2.237-2.231,4.166-4.094,5.566c0.001-0.001,0.002-0.001,0.003-0.002
-                      l6.197,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+                      						l6.197,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
 									/>
 								</svg>
 								Continue with Google
 							</Button>
-
 							<div className="relative my-2">
 								<Separator />
 								<span className="absolute left-1/2 -translate-x-1/2 -top-3 bg-background/30 backdrop-blur px-2 text-xs text-muted-foreground">
 									or
 								</span>
 							</div>
-
 							<form onSubmit={onCredentialsSignIn} className="grid gap-3">
 								<div className="grid gap-2">
 									<label htmlFor="email" className="text-sm font-medium">
@@ -176,14 +171,14 @@ export function AuthDialog() {
 											placeholder="Enter your password"
 											required
 										/>
-										<button
+										<Button
 											type="button"
 											className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
 											onClick={() => setShowPw((v) => !v)}
 											aria-label={showPw ? "Hide password" : "Show password"}
 										>
 											{showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-										</button>
+										</Button>
 									</div>
 								</div>
 								<Button type="submit" disabled={submitting} className="mt-1">
@@ -191,7 +186,6 @@ export function AuthDialog() {
 									Continue
 								</Button>
 							</form>
-
 							<div className="mt-4 text-xs text-muted-foreground flex items-center gap-2">
 								<CircleHelp className="w-3.5 h-3.5" />
 								Already have an account? Use your email and password or continue with Google.
