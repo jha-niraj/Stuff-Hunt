@@ -1,17 +1,19 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useRef, useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ImageUp, Sparkles } from "lucide-react"
+import { ImageUp, Sparkles, Loader2 } from "lucide-react"
+import { processSearchQuery, filtersToSearchParams } from "@/actions/search.action"
+import { toast } from "sonner"
 
 export function Hero({
-	title = "Find perfectly‑stitched gear with StuffHunt",
-	subtitle, // We’ll hide subtitle on small screens if provided.
-	placeholder = "Describe what you’re looking for (e.g. navy polo with left‑chest logo)…",
+	title = "Find Products with AI‑Powered Search",
+	subtitle = "Upload an image or describe what you're looking for. Our AI will help you discover the perfect products instantly.",
+	placeholder = "Describe what you’re looking for (e.g. blue jeans for work, under $50)…",
 }: {
 	title?: string
 	subtitle?: string
@@ -20,13 +22,59 @@ export function Hero({
 	const router = useRouter()
 	const fileRef = useRef<HTMLInputElement | null>(null)
 	const [q, setQ] = useState("")
+	const [isPending, startTransition] = useTransition()
 
-	function goToProducts(extra: Record<string, string> = {}) {
+	async function handleAISearch() {
+		if (!q.trim()) return
+
+		startTransition(async () => {
+			try {
+				const result = await processSearchQuery(q.trim())
+				
+				if (result.success && result.filters) {
+					// AI processing successful
+					const searchParams = filtersToSearchParams(result.filters)
+					searchParams.set("q", q.trim())
+					searchParams.set("source", "hero")
+					
+					if (result.filters.confidence > 0.7) {
+						toast.success("AI enhanced your search!", {
+							description: `Found ${result.filters.categories.length} categories and ${result.filters.attributes.length} attributes`,
+							duration: 3000,
+						})
+					}
+					
+					router.push(`/products?${searchParams.toString()}`)
+				} else {
+					// Fallback to text search
+					const params = new URLSearchParams()
+					params.set("q", q.trim())
+					params.set("source", "hero")
+					router.push(`/products?${params.toString()}`)
+				}
+			} catch (error) {
+				console.error("Search error:", error)
+				// Fallback to simple search
+				const params = new URLSearchParams()
+				params.set("q", q.trim())
+				params.set("source", "hero")
+				router.push(`/products?${params.toString()}`)
+			}
+		})
+	}
+
+	function handleImageUpload(file: File) {
+		// For now, redirect to products with image indicator
+		// In the future, this could use image recognition AI
 		const params = new URLSearchParams()
-		if (q.trim()) params.set("query", q.trim())
-		Object.entries(extra).forEach(([k, v]) => params.set(k, v))
+		params.set("image", "1")
+		params.set("filename", file.name)
 		params.set("source", "hero")
-			; (router as any).push(`/products?${params.toString()}`)
+		router.push(`/products?${params.toString()}`)
+		
+		toast.info("Image search coming soon!", {
+			description: "For now, showing all products. Visual search will be available soon.",
+		})
 	}
 
 	return (
@@ -49,7 +97,7 @@ export function Hero({
 						className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center"
 						onSubmit={(e) => {
 							e.preventDefault()
-							goToProducts()
+							handleAISearch()
 						}}
 					>
 						<div className="relative w-full sm:max-w-xl">
@@ -62,9 +110,15 @@ export function Hero({
 								onChange={(e) => setQ(e.target.value)}
 								placeholder={placeholder}
 								className="h-12 pr-28"
+								disabled={isPending}
 							/>
+							{q.length > 2 && (
+								<div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+									<Sparkles className="w-4 h-4 text-blue-500 animate-pulse" />
+								</div>
+							)}
 							<div className="absolute right-1 top-1 bottom-1 flex items-center gap-1">
-								<input
+								<Input
 									ref={fileRef}
 									type="file"
 									accept="image/*"
@@ -72,7 +126,7 @@ export function Hero({
 									onChange={(e) => {
 										const f = e.target.files?.[0]
 										if (f) {
-											goToProducts({ image: "1", filename: f.name })
+											handleImageUpload(f)
 										}
 									}}
 								/>
@@ -88,8 +142,18 @@ export function Hero({
 								</Button>
 							</div>
 						</div>
-						<Button type="submit" className="h-12">
-							Search
+						<Button type="submit" className="h-12" disabled={isPending || !q.trim()}>
+							{isPending ? (
+								<>
+									<Loader2 className="w-4 h-4 mr-2 animate-spin" />
+									Processing...
+								</>
+							) : (
+								<>
+									<Sparkles className="w-4 h-4 mr-2" />
+									AI Search
+								</>
+							)}
 						</Button>
 					</form>
 				</motion.div>

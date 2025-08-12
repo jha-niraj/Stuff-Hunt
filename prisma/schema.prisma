@@ -23,42 +23,42 @@ model User {
     role                 Role      @default(USER)
     roleExplicitlyChosen Boolean   @default(false)
     onboardingCompleted  Boolean   @default(false)
-	createdAt            DateTime  @default(now())
+    createdAt            DateTime  @default(now())
 
     // Profile fields
-    bio                  String?
-    location             String?
-    website              String?
-    interests            String[] @default([])
+    bio       String?
+    location  String?
+    website   String?
+    interests String[] @default([])
 
     // Email verification
-    verificationToken    String?   @unique
+    verificationToken       String?   @unique
     verificationTokenExpiry DateTime?
 
     // Password reset
-    resetToken           String?   @unique
-    resetTokenExpiry     DateTime?
+    resetToken       String?   @unique
+    resetTokenExpiry DateTime?
 
     // Seller specific fields
-    companyName          String?
-    businessType         String?
-    gstNumber            String?
-    panNumber            String?
-    businessAddress      String?
-    phoneNumber          String?
-    kycStatus           String    @default("PENDING") // PENDING, APPROVED, REJECTED
-    verificationBadge   Boolean   @default(false)
+    companyName       String?
+    businessType      String?
+    gstNumber         String?
+    panNumber         String?
+    businessAddress   String?
+    phoneNumber       String?
+    kycStatus         String  @default("PENDING") // PENDING, APPROVED, REJECTED
+    verificationBadge Boolean @default(false)
 
     // Shipping addresses
-    addresses            Address[]
+    addresses Address[]
 
-    accounts              Account[]
-    products              Product[] @relation("SellerProducts")
-    orders                Order[]   @relation("BuyerOrders")
-    reviews               Review[]
-    cartItems             CartItem[]
-    wishlistItems         WishlistItem[]
-    productLikes          ProductLike[]
+    accounts      Account[]
+    products      Product[]      @relation("SellerProducts")
+    orders        Order[]        @relation("BuyerOrders")
+    reviews       Review[]
+    cartItems     CartItem[]
+    wishlistItems WishlistItem[]
+    productLikes  ProductLike[]
 
     @@index([email])
     @@index([role])
@@ -88,64 +88,64 @@ model Account {
 }
 
 model Product {
-    id                  String    @id @default(cuid())
+    id                  String   @id @default(cuid())
     name                String
-    slug                String    @unique
+    slug                String   @unique
     price               Float
-    originalPrice       Float?    // For showing discounts
+    originalPrice       Float? // For showing discounts
     shortDescription    String?
     detailedDescription String?
-    images              String[]  // Array of Cloudinary URLs
-    viewCount           Int       @default(0)
-    isActive            Boolean   @default(true)
-    inStock             Boolean   @default(true)
-    stockQuantity       Int       @default(0)
-    
+    images              String[] // Array of Cloudinary URLs
+    viewCount           Int      @default(0)
+    isActive            Boolean  @default(true)
+    inStock             Boolean  @default(true)
+    stockQuantity       Int      @default(0)
+
     // Product variants
-    colors              String[]  @default([])
-    sizes               String[]  @default([])
-    variants            Json?     // Store complex variant data
-    
+    colors   String[] @default([])
+    sizes    String[] @default([])
+    variants Json? // Store complex variant data
+
     // SEO and metadata
-    metaTitle           String?
-    metaDescription     String?
-    tags                String[]  @default([])
-    
+    metaTitle       String?
+    metaDescription String?
+    tags            String[] @default([])
+
     // Pricing and discounts
-    discountPercentage  Float?
-    discountStartDate   DateTime?
-    discountEndDate     DateTime?
-    
+    discountPercentage Float?
+    discountStartDate  DateTime?
+    discountEndDate    DateTime?
+
     // Product specifications
-    weight              Float?
-    dimensions          String?   // e.g., "10x5x2 cm"
-    material            String?
-    brand               String?
-    sku                 String?   @unique
-    
+    weight     Float?
+    dimensions String? // e.g., "10x5x2 cm"
+    material   String?
+    brand      String?
+    sku        String? @unique
+
     // AI-generated metadata for search optimization
-    aiMetadata          Json?     // Stores AI-generated product analysis and search metadata
-    
+    aiMetadata Json? // Stores AI-generated product analysis and search metadata
+
     // Engagement metrics
-    likeCount           Int       @default(0)
-    shareCount          Int       @default(0)
-    
-    createdAt           DateTime  @default(now())
-    updatedAt           DateTime  @updatedAt
+    likeCount  Int @default(0)
+    shareCount Int @default(0)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     // Seller relationship
-    sellerId            String
-    seller              User      @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
+    sellerId String
+    seller   User   @relation("SellerProducts", fields: [sellerId], references: [id], onDelete: Cascade)
 
     // Many-to-many relationship with categories
-    categories          Category[] @relation("ProductCategories")
-    
+    categories Category[] @relation("ProductCategories")
+
     // One-to-many relationships
-    orderItems          OrderItem[]
-    reviews             Review[]
-    likes               ProductLike[]
-    cartItems           CartItem[]
-    wishlistItems       WishlistItem[]
+    orderItems    OrderItem[]
+    reviews       Review[]
+    likes         ProductLike[]
+    cartItems     CartItem[]
+    wishlistItems WishlistItem[]
 
     @@index([sellerId])
     @@index([isActive])
@@ -161,53 +161,53 @@ model Category {
     parentId    String?
     parent      Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
     children    Category[] @relation("CategoryHierarchy")
-    
+
     // Many-to-many relationship with products
-    products    Product[]  @relation("ProductCategories")
-    
-    createdAt   DateTime   @default(now())
+    products Product[] @relation("ProductCategories")
+
+    createdAt DateTime @default(now())
 
     @@index([parentId])
 }
 
 model Order {
-    id              String      @id @default(cuid())
-    orderNumber     String      @unique
-    status          OrderStatus @default(PENDING)
-    subtotal        Float
-    shippingCost    Float       @default(0)
-    taxAmount       Float       @default(0)
-    discountAmount  Float       @default(0)
-    total           Float
-    
+    id             String      @id @default(cuid())
+    orderNumber    String      @unique
+    status         OrderStatus @default(PENDING)
+    subtotal       Float
+    shippingCost   Float       @default(0)
+    taxAmount      Float       @default(0)
+    discountAmount Float       @default(0)
+    total          Float
+
     // Payment information
-    paymentStatus   PaymentStatus @default(PENDING)
-    paymentMethod   String?
-    paymentId       String?
-    
+    paymentStatus PaymentStatus @default(PENDING)
+    paymentMethod String?
+    paymentId     String?
+
     // Shipping information
-    shippingAddress Json        // Store shipping address as JSON
-    billingAddress  Json?       // Store billing address as JSON
-    trackingNumber  String?
+    shippingAddress   Json // Store shipping address as JSON
+    billingAddress    Json? // Store billing address as JSON
+    trackingNumber    String?
     estimatedDelivery DateTime?
-    deliveredAt     DateTime?
-    
+    deliveredAt       DateTime?
+
     // Order notes and metadata
-    notes           String?
-    metadata        Json?
-    
-    createdAt       DateTime    @default(now())
-    updatedAt       DateTime    @updatedAt
+    notes    String?
+    metadata Json?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     // Buyer relationship
-    buyerId         String
-    buyer           User        @relation("BuyerOrders", fields: [buyerId], references: [id], onDelete: Cascade)
+    buyerId String
+    buyer   User   @relation("BuyerOrders", fields: [buyerId], references: [id], onDelete: Cascade)
 
     // Order items
-    items           OrderItem[]
-    
+    items OrderItem[]
+
     // Coupons used
-    couponsUsed     OrderCoupon[]
+    couponsUsed OrderCoupon[]
 
     @@index([buyerId])
     @@index([status])
@@ -217,17 +217,17 @@ model Order {
 
 model Review {
     id        String   @id @default(cuid())
-    rating    Int      // 1-5 stars
+    rating    Int // 1-5 stars
     comment   String?
     createdAt DateTime @default(now())
 
     // User relationship
-    userId    String
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     // Product relationship
     productId String
-    product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+    product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
     @@index([userId])
     @@index([productId])
@@ -254,20 +254,20 @@ enum PaymentStatus {
 
 // Cart items stored in database for logged-in users
 model CartItem {
-    id          String   @id @default(cuid())
-    quantity    Int      @default(1)
-    variantKey  String?  // e.g., "Black|L" for color and size
-    metadata    Json?    // Store additional variant data
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+    id         String   @id @default(cuid())
+    quantity   Int      @default(1)
+    variantKey String? // e.g., "Black|L" for color and size
+    metadata   Json? // Store additional variant data
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
 
     // User relationship
-    userId      String
-    user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     // Product relationship
-    productId   String
-    product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+    productId String
+    product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
     @@unique([userId, productId, variantKey])
     @@index([userId])
@@ -276,22 +276,22 @@ model CartItem {
 
 // Order items - individual products in an order
 model OrderItem {
-    id          String   @id @default(cuid())
-    quantity    Int
-    unitPrice   Float    // Price at time of order
-    totalPrice  Float    // unitPrice * quantity
-    variantKey  String?  // Product variant selected
-    metadata    Json?    // Store variant details at time of order
-    
-    createdAt   DateTime @default(now())
+    id         String  @id @default(cuid())
+    quantity   Int
+    unitPrice  Float // Price at time of order
+    totalPrice Float // unitPrice * quantity
+    variantKey String? // Product variant selected
+    metadata   Json? // Store variant details at time of order
+
+    createdAt DateTime @default(now())
 
     // Order relationship
-    orderId     String
-    order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+    orderId String
+    order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
     // Product relationship
-    productId   String
-    product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+    productId String
+    product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
     @@index([orderId])
     @@index([productId])
@@ -303,12 +303,12 @@ model WishlistItem {
     createdAt DateTime @default(now())
 
     // User relationship
-    userId    String
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     // Product relationship
     productId String
-    product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+    product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
     @@unique([userId, productId])
     @@index([userId])
@@ -321,12 +321,12 @@ model ProductLike {
     createdAt DateTime @default(now())
 
     // User relationship
-    userId    String
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     // Product relationship
     productId String
-    product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+    product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
     @@unique([userId, productId])
     @@index([userId])
@@ -335,26 +335,26 @@ model ProductLike {
 
 // User addresses for shipping
 model Address {
-    id          String  @id @default(cuid())
-    type        String  @default("SHIPPING") // SHIPPING, BILLING
-    firstName   String
-    lastName    String
-    company     String?
-    address1    String
-    address2    String?
-    city        String
-    state       String
-    postalCode  String
-    country     String  @default("US")
-    phone       String?
-    isDefault   Boolean @default(false)
-    
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+    id         String  @id @default(cuid())
+    type       String  @default("SHIPPING") // SHIPPING, BILLING
+    firstName  String
+    lastName   String
+    company    String?
+    address1   String
+    address2   String?
+    city       String
+    state      String
+    postalCode String
+    country    String  @default("US")
+    phone      String?
+    isDefault  Boolean @default(false)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     // User relationship
-    userId      String
-    user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@index([userId])
     @@index([isDefault])
@@ -366,22 +366,22 @@ model Coupon {
     code            String    @unique
     name            String
     description     String?
-    type            String    // PERCENTAGE, FIXED_AMOUNT, FREE_SHIPPING
-    value           Float     // Percentage (0-100) or fixed amount
-    minimumAmount   Float?    // Minimum order amount to use coupon
-    maximumDiscount Float?    // Maximum discount amount for percentage coupons
-    usageLimit      Int?      // Total usage limit
+    type            String // PERCENTAGE, FIXED_AMOUNT, FREE_SHIPPING
+    value           Float // Percentage (0-100) or fixed amount
+    minimumAmount   Float? // Minimum order amount to use coupon
+    maximumDiscount Float? // Maximum discount amount for percentage coupons
+    usageLimit      Int? // Total usage limit
     usageCount      Int       @default(0)
-    userLimit       Int?      // Per-user usage limit
+    userLimit       Int? // Per-user usage limit
     isActive        Boolean   @default(true)
     startsAt        DateTime?
     expiresAt       DateTime?
-    
-    createdAt       DateTime  @default(now())
-    updatedAt       DateTime  @updatedAt
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     // Track coupon usage
-    orderCoupons    OrderCoupon[]
+    orderCoupons OrderCoupon[]
 
     @@index([code])
     @@index([isActive])
@@ -390,17 +390,83 @@ model Coupon {
 
 // Track coupon usage in orders
 model OrderCoupon {
-    id            String @id @default(cuid())
+    id             String @id @default(cuid())
     discountAmount Float
-    
+
     // Order relationship
-    orderId       String
-    order         Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+    orderId String
+    order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
     // Coupon relationship
-    couponId      String
-    coupon        Coupon @relation(fields: [couponId], references: [id], onDelete: Cascade)
+    couponId String
+    coupon   Coupon @relation(fields: [couponId], references: [id], onDelete: Cascade)
 
     @@index([orderId])
     @@index([couponId])
+}
+
+// Contact form submissions for bulk orders
+model ContactSubmission {
+    id String @id @default(cuid())
+
+    // Contact Information
+    firstName String
+    lastName  String
+    email     String
+    phone     String?
+    company   String
+    jobTitle  String?
+    website   String?
+
+    // Business Information
+    businessType String // e.g., "Retail", "Corporate", "Non-profit", "Educational"
+    industryType String? // e.g., "Technology", "Healthcare", "Education"
+    companySize  String // e.g., "1-10", "11-50", "51-200", "200+"
+
+    // Order Information
+    productTypes      String[] @default([]) // Types of products interested in
+    estimatedQuantity String // e.g., "100-500", "500-1000", "1000+"
+    estimatedBudget   String? // e.g., "$1,000-$5,000", "$5,000-$10,000"
+    timeline          String? // e.g., "ASAP", "1-2 weeks", "1 month", "3+ months"
+
+    // Project Details
+    projectDescription  String
+    customizationNeeds  String? // Branding, logos, custom designs
+    specialRequirements String? // Packaging, shipping, etc.
+
+    // Additional Information
+    hearAboutUs        String? // How they heard about us
+    previousExperience Boolean @default(false) // Have they ordered bulk before
+
+    // Status and Follow-up
+    status       ContactStatus   @default(NEW)
+    priority     ContactPriority @default(MEDIUM)
+    assignedTo   String? // Staff member assigned
+    notes        String? // Internal notes
+    followUpDate DateTime?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([status])
+    @@index([priority])
+    @@index([createdAt])
+    @@index([email])
+}
+
+enum ContactStatus {
+    NEW
+    CONTACTED
+    IN_PROGRESS
+    QUOTED
+    CONVERTED
+    CLOSED
+    SPAM
+}
+
+enum ContactPriority {
+    LOW
+    MEDIUM
+    HIGH
+    URGENT
 }

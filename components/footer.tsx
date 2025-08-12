@@ -2,8 +2,8 @@ import Link from "next/link"
 
 export function Footer() {
     return (
-        <footer className="border-t">
-            <div className="container mx-auto px-4 py-10 grid md:grid-cols-4 gap-8">
+        <footer className="border-t w-full">
+            <div className="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-8">
                 <div>
                     <div className="font-semibold text-lg">StuffHunt</div>
                     <p className="text-sm text-muted-foreground mt-2">
@@ -61,8 +61,8 @@ export function Footer() {
                     </ul>
                 </div>
             </div>
-            <div className="border-t">
-                <div className="container mx-auto px-4 py-6 text-xs text-muted-foreground">
+            <div className="border-t w-full">
+                <div className="max-w-7xl mx-auto flex items-center justify-center px-4 py-6 text-xs text-muted-foreground">
                     © {new Date().getFullYear()} StuffHunt. All rights reserved.
                 </div>
             </div>

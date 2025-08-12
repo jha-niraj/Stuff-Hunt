@@ -23,3 +23,17 @@ export interface BaseEntity {
 	createdAt: Date
 	updatedAt?: Date
 }
+
+export type SearchFilters = {
+	categories: string[]
+	attributes: string[]
+	priceRange?: {
+		min?: number
+		max?: number
+	}
+	colors?: string[]
+	sizes?: string[]
+	brands?: string[]
+	intent?: string
+	confidence: number
+}
