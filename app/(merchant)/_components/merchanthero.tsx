@@ -8,7 +8,6 @@ export function MerchantHeroSection() {
 			className="flex flex-col items-center text-center relative mx-auto rounded-2xl overflow-hidden my-6 py-0 px-4
          w-full h-[400px] md:w-[1220px] md:h-[600px] lg:h-[810px] md:px-0"
 		>
-			{/* SVG Background */}
 			<div className="absolute inset-0 z-0">
 				<svg
 					width="100%"
@@ -31,231 +30,231 @@ export function MerchantHeroSection() {
 							<rect x="10" y="-0.84668" width="1200" height="811.693" fill="url(#paint0_linear_186_1134)" />
 						</mask>
 						<g mask="url(#mask0_186_1134)">
-							{/* Grid Rectangles */}
-							{[...Array(35)].map((_, i) => (
-								<React.Fragment key={`row1-${i}`}>
-									<rect
-										x={-20.0891 + i * 36}
-										y="9.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="45.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="81.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="117.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="153.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="189.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="225.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="261.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="297.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="333.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="369.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="405.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="441.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="477.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="513.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="549.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="585.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="621.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="657.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="693.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="729.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-									<rect
-										x={-20.0891 + i * 36}
-										y="765.2"
-										width="35.6"
-										height="35.6"
-										stroke="hsl(var(--foreground))"
-										strokeOpacity="0.11"
-										strokeWidth="0.4"
-										strokeDasharray="2 2"
-									/>
-								</React.Fragment>
-							))}
+							{
+								[...Array(35)].map((_, i) => (
+									<React.Fragment key={`row1-${i}`}>
+										<rect
+											x={-20.0891 + i * 36}
+											y="9.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="45.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="81.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="117.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="153.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="189.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="225.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="261.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="297.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="333.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="369.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="405.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="441.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="477.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="513.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="549.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="585.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="621.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="657.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="693.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="729.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+										<rect
+											x={-20.0891 + i * 36}
+											y="765.2"
+											width="35.6"
+											height="35.6"
+											stroke="hsl(var(--foreground))"
+											strokeOpacity="0.11"
+											strokeWidth="0.4"
+											strokeDasharray="2 2"
+										/>
+									</React.Fragment>
+								))}
 							{/* Specific Rectangles with fill */}
 							<rect x="699.711" y="81" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.08" />
 							<rect x="195.711" y="153" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.09" />

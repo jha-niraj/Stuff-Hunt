@@ -28,7 +28,7 @@ export default function CheckoutPage() {
 
 		try {
 			const formData = new FormData(e.currentTarget)
-			
+
 			const orderData: CreateOrderData = {
 				items: items.map(item => ({
 					productId: item.product.id,
@@ -54,7 +54,7 @@ export default function CheckoutPage() {
 			}
 
 			const result = await createOrder(orderData)
-			
+
 			if (result.success && result.order) {
 				await clear()
 				toast.success("Order placed successfully!")
@@ -185,23 +185,23 @@ export default function CheckoutPage() {
 						<aside className="rounded-xl border p-6 h-max">
 							<h2 className="font-semibold">Order summary</h2>
 							<div className="divide-y mt-4">
-								{items.map((i) => (
-									<div
-										key={`${i.product.slug}-${i.variantKey ?? "default"}`}
-										className="py-3 flex items-center justify-between"
-									>
-										<div className="text-sm">
-											<div className="font-medium">{i.product.name}</div>
-											<div className="text-muted-foreground">
-												{i.variantKey && `${i.variantKey} • `}Qty {i.quantity}
+								{
+									items.map((i) => (
+										<div
+											key={`${i.product.slug}-${i.variantKey ?? "default"}`}
+											className="py-3 flex items-center justify-between"
+										>
+											<div className="text-sm">
+												<div className="font-medium">{i.product.name}</div>
+												<div className="text-muted-foreground">
+													{i.variantKey && `${i.variantKey} • `}Qty {i.quantity}
+												</div>
 											</div>
+											<div className="text-sm font-medium">{formatCurrency(i.product.price * i.quantity)}</div>
 										</div>
-										<div className="text-sm font-medium">{formatCurrency(i.product.price * i.quantity)}</div>
-									</div>
-								))}
+									))
+								}
 							</div>
-							
-							{/* Coupon section */}
 							<div className="mt-4 pt-4 border-t">
 								<div className="flex gap-2">
 									<Input
@@ -210,32 +210,33 @@ export default function CheckoutPage() {
 										onChange={(e) => setCouponCode(e.target.value)}
 										disabled={!!appliedCoupon}
 									/>
-									<Button 
-										type="button" 
-										variant="outline" 
+									<Button
+										type="button"
+										variant="outline"
 										onClick={applyCoupon}
 										disabled={!couponCode || !!appliedCoupon}
 									>
 										Apply
 									</Button>
 								</div>
-								{appliedCoupon && (
-									<div className="flex items-center justify-between mt-2 text-sm text-green-600">
-										<span>Coupon: {appliedCoupon.code}</span>
-										<button
-											type="button"
-											onClick={() => {
-												setAppliedCoupon(null)
-												setCouponCode("")
-											}}
-											className="text-red-500 hover:text-red-700"
-										>
-											Remove
-										</button>
-									</div>
-								)}
+								{
+									appliedCoupon && (
+										<div className="flex items-center justify-between mt-2 text-sm text-green-600">
+											<span>Coupon: {appliedCoupon.code}</span>
+											<button
+												type="button"
+												onClick={() => {
+													setAppliedCoupon(null)
+													setCouponCode("")
+												}}
+												className="text-red-500 hover:text-red-700"
+											>
+												Remove
+											</button>
+										</div>
+									)
+								}
 							</div>
-
 							<div className="mt-4 pt-4 border-t space-y-2">
 								<div className="flex items-center justify-between">
 									<div className="text-muted-foreground">Subtotal</div>
@@ -245,12 +246,14 @@ export default function CheckoutPage() {
 									<div className="text-muted-foreground">Shipping</div>
 									<div className="font-medium">{formatCurrency(shippingCost)}</div>
 								</div>
-								{appliedCoupon && (
-									<div className="flex items-center justify-between text-green-600">
-										<div>Discount ({appliedCoupon.code})</div>
-										<div>-{formatCurrency(discountAmount)}</div>
-									</div>
-								)}
+								{
+									appliedCoupon && (
+										<div className="flex items-center justify-between text-green-600">
+											<div>Discount ({appliedCoupon.code})</div>
+											<div>-{formatCurrency(discountAmount)}</div>
+										</div>
+									)
+								}
 								<div className="flex items-center justify-between mt-4 pt-2 border-t text-lg font-semibold">
 									<div>Total</div>
 									<div>{formatCurrency(finalTotal)}</div>

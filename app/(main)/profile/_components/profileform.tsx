@@ -85,7 +85,6 @@ export function ProfileForm({ user }: ProfileFormProps) {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Profile Image Section */}
             <Card className="bg-white/5 backdrop-blur-sm border-white/10">
                 <CardContent className="pt-6">
                     <div className="flex items-center gap-6">
@@ -111,32 +110,36 @@ export function ProfileForm({ user }: ProfileFormProps) {
                                     disabled={imageUploading}
                                     className="border-[#FF6EC7]/30 text-[#FF6EC7] hover:bg-[#FF6EC7]/10"
                                 >
-                                    {imageUploading ? (
-                                        <>
-                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                            Uploading...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Upload className="mr-2 h-4 w-4" />
-                                            Upload Image
-                                        </>
-                                    )}
+                                    {
+                                        imageUploading ? (
+                                            <>
+                                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                Uploading...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Upload className="mr-2 h-4 w-4" />
+                                                Upload Image
+                                            </>
+                                        )
+                                    }
                                 </Button>
-                                {formData.image && (
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={handleRemoveImage}
-                                        className="border-red-400/30 text-red-400 hover:bg-red-400/10"
-                                    >
-                                        <X className="mr-2 h-4 w-4" />
-                                        Remove
-                                    </Button>
-                                )}
+                                {
+                                    formData.image && (
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={handleRemoveImage}
+                                            className="border-red-400/30 text-red-400 hover:bg-red-400/10"
+                                        >
+                                            <X className="mr-2 h-4 w-4" />
+                                            Remove
+                                        </Button>
+                                    )
+                                }
                             </div>
-                            <input
+                            <Input
                                 ref={imageInputRef}
                                 type="file"
                                 accept="image/*"
@@ -147,8 +150,6 @@ export function ProfileForm({ user }: ProfileFormProps) {
                     </div>
                 </CardContent>
             </Card>
-
-            {/* Basic Information */}
             <div className="space-y-2">
                 <Label htmlFor="name" className="text-sm font-medium text-white">
                     Full Name *
@@ -163,8 +164,6 @@ export function ProfileForm({ user }: ProfileFormProps) {
                     placeholder="Enter your full name"
                 />
             </div>
-
-            {/* Coming Soon Section */}
             <Card className="bg-blue-500/10 border-blue-500/20">
                 <CardContent className="pt-6">
                     <div className="text-center">
@@ -175,21 +174,22 @@ export function ProfileForm({ user }: ProfileFormProps) {
                     </div>
                 </CardContent>
             </Card>
-
             <div className="flex justify-end pt-4">
                 <Button
                     type="submit"
                     disabled={loading || !formData.name.trim()}
                     className="bg-gradient-to-r from-[#FF6EC7] to-[#DF87F3] hover:from-[#FF6EC7]/90 hover:to-[#DF87F3]/90 text-white"
                 >
-                    {loading ? (
-                        <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Updating...
-                        </>
-                    ) : (
-                        "Update Profile"
-                    )}
+                    {
+                        loading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Updating...
+                            </>
+                        ) : (
+                            "Update Profile"
+                        )
+                    }
                 </Button>
             </div>
         </form>

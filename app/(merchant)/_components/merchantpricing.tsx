@@ -103,111 +103,117 @@ export function MerchantPricingSection() {
 				</div>
 			</div>
 			<div className="self-stretch px-5 flex flex-col md:flex-row justify-start items-start gap-4 md:gap-6 mt-6 max-w-[1100px] mx-auto">
-				{pricingPlans.map((plan) => (
-					<div
-						key={plan.name}
-						className={`flex-1 p-4 overflow-hidden rounded-xl flex flex-col justify-start items-start gap-6 ${plan.popular ? "bg-primary shadow-[0px_4px_8px_-2px_rgba(0,0,0,0.10)]" : "bg-gradient-to-b from-gray-50/5 to-gray-50/0"}`}
-						style={plan.popular ? {} : { outline: "1px solid hsl(var(--border))", outlineOffset: "-1px" }}
-					>
-						<div className="self-stretch flex flex-col justify-start items-start gap-6">
-							<div className="self-stretch flex flex-col justify-start items-start gap-8">
-								<div
-									className={`w-full h-5 text-sm font-medium leading-tight ${plan.popular ? "text-primary-foreground" : "text-zinc-200"}`}
-								>
-									{plan.name}
-									{plan.popular && (
-										<div className="ml-2 px-2 overflow-hidden rounded-full justify-center items-center gap-2.5 inline-flex mt-0 py-0.5 bg-gradient-to-b from-primary-light/50 to-primary-light bg-white">
-											<div className="text-center text-primary-foreground text-xs font-normal leading-tight break-words">
-												Most Popular
+				{
+					pricingPlans.map((plan) => (
+						<div
+							key={plan.name}
+							className={`flex-1 p-4 overflow-hidden rounded-xl flex flex-col justify-start items-start gap-6 ${plan.popular ? "bg-primary shadow-[0px_4px_8px_-2px_rgba(0,0,0,0.10)]" : "bg-gradient-to-b from-gray-50/5 to-gray-50/0"}`}
+							style={plan.popular ? {} : { outline: "1px solid hsl(var(--border))", outlineOffset: "-1px" }}
+						>
+							<div className="self-stretch flex flex-col justify-start items-start gap-6">
+								<div className="self-stretch flex flex-col justify-start items-start gap-8">
+									<div
+										className={`w-full h-5 text-sm font-medium leading-tight ${plan.popular ? "text-primary-foreground" : "text-zinc-200"}`}
+									>
+										{plan.name}
+										{
+											plan.popular && (
+												<div className="ml-2 px-2 overflow-hidden rounded-full justify-center items-center gap-2.5 inline-flex mt-0 py-0.5 bg-gradient-to-b from-primary-light/50 to-primary-light bg-white">
+													<div className="text-center text-primary-foreground text-xs font-normal leading-tight break-words">
+														Most Popular
+													</div>
+												</div>
+											)
+										}
+									</div>
+									<div className="self-stretch flex flex-col justify-start items-start gap-1">
+										<div className="flex justify-start items-center gap-1.5">
+											<div
+												className={`relative h-10 flex items-center text-3xl font-medium leading-10 ${plan.popular ? "text-primary-foreground" : "text-zinc-50"}`}
+											>
+												<span className="invisible">{isAnnual ? plan.annualPrice : plan.monthlyPrice}</span>
+												<span
+													className="absolute inset-0 flex items-center transition-all duration-500"
+													style={{
+														opacity: isAnnual ? 1 : 0,
+														transform: `scale(${isAnnual ? 1 : 0.8})`,
+														filter: `blur(${isAnnual ? 0 : 4}px)`,
+													}}
+													aria-hidden={!isAnnual}
+												>
+													{plan.annualPrice}
+												</span>
+												<span
+													className="absolute inset-0 flex items-center transition-all duration-500"
+													style={{
+														opacity: !isAnnual ? 1 : 0,
+														transform: `scale(${!isAnnual ? 1 : 0.8})`,
+														filter: `blur(${!isAnnual ? 0 : 4}px)`,
+													}}
+													aria-hidden={isAnnual}
+												>
+													{plan.monthlyPrice}
+												</span>
+											</div>
+											<div
+												className={`text-center text-sm font-medium leading-tight ${plan.popular ? "text-primary-foreground/70" : "text-zinc-400"}`}
+											>
+												/month
 											</div>
 										</div>
-									)}
-								</div>
-								<div className="self-stretch flex flex-col justify-start items-start gap-1">
-									<div className="flex justify-start items-center gap-1.5">
 										<div
-											className={`relative h-10 flex items-center text-3xl font-medium leading-10 ${plan.popular ? "text-primary-foreground" : "text-zinc-50"}`}
+											className={`text-center text-sm font-medium leading-tight ${plan.popular ? "text-primary-foreground/70" : "text-zinc-400"} mb-2`}
 										>
-											<span className="invisible">{isAnnual ? plan.annualPrice : plan.monthlyPrice}</span>
-											<span
-												className="absolute inset-0 flex items-center transition-all duration-500"
-												style={{
-													opacity: isAnnual ? 1 : 0,
-													transform: `scale(${isAnnual ? 1 : 0.8})`,
-													filter: `blur(${isAnnual ? 0 : 4}px)`,
-												}}
-												aria-hidden={!isAnnual}
-											>
-												{plan.annualPrice}
-											</span>
-											<span
-												className="absolute inset-0 flex items-center transition-all duration-500"
-												style={{
-													opacity: !isAnnual ? 1 : 0,
-													transform: `scale(${!isAnnual ? 1 : 0.8})`,
-													filter: `blur(${!isAnnual ? 0 : 4}px)`,
-												}}
-												aria-hidden={isAnnual}
-											>
-												{plan.monthlyPrice}
-											</span>
+											+ {plan.commission} commission per sale
 										</div>
 										<div
-											className={`text-center text-sm font-medium leading-tight ${plan.popular ? "text-primary-foreground/70" : "text-zinc-400"}`}
+											className={`self-stretch text-sm font-medium leading-tight ${plan.popular ? "text-primary-foreground/70" : "text-zinc-400"}`}
 										>
-											/month
+											{plan.description}
 										</div>
 									</div>
-									<div
-										className={`text-center text-sm font-medium leading-tight ${plan.popular ? "text-primary-foreground/70" : "text-zinc-400"} mb-2`}
-									>
-										+ {plan.commission} commission per sale
-									</div>
-									<div
-										className={`self-stretch text-sm font-medium leading-tight ${plan.popular ? "text-primary-foreground/70" : "text-zinc-400"}`}
-									>
-										{plan.description}
-									</div>
 								</div>
+								<Button
+									className={`self-stretch px-5 py-2 rounded-[40px] flex justify-center items-center ${plan.buttonClass}`}
+								>
+									<div className="px-1.5 flex justify-center items-center gap-2">
+										<span
+											className={`text-center text-sm font-medium leading-tight ${plan.name === "Starter" ? "text-gray-800" : plan.name === "Professional" ? "text-primary" : "text-zinc-950"}`}
+										>
+											{plan.buttonText}
+										</span>
+									</div>
+								</Button>
 							</div>
-							<Button
-								className={`self-stretch px-5 py-2 rounded-[40px] flex justify-center items-center ${plan.buttonClass}`}
-							>
-								<div className="px-1.5 flex justify-center items-center gap-2">
-									<span
-										className={`text-center text-sm font-medium leading-tight ${plan.name === "Starter" ? "text-gray-800" : plan.name === "Professional" ? "text-primary" : "text-zinc-950"}`}
-									>
-										{plan.buttonText}
-									</span>
+							<div className="self-stretch flex flex-col justify-start items-start gap-4">
+								<div
+									className={`self-stretch text-sm font-medium leading-tight ${plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}`}
+								>
+									{plan.name === "Starter" ? "What's included:" : "Everything in Starter +"}
 								</div>
-							</Button>
-						</div>
-						<div className="self-stretch flex flex-col justify-start items-start gap-4">
-							<div
-								className={`self-stretch text-sm font-medium leading-tight ${plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}`}
-							>
-								{plan.name === "Starter" ? "What's included:" : "Everything in Starter +"}
-							</div>
-							<div className="self-stretch flex flex-col justify-start items-start gap-3">
-								{plan.features.map((feature) => (
-									<div key={feature} className="self-stretch flex justify-start items-center gap-2">
-										<div className="w-4 h-4 flex items-center justify-center">
-											<Check
-												className={`w-full h-full ${plan.popular ? "text-primary-foreground" : "text-muted-foreground"}`}
-												strokeWidth={2}
-											/>
-										</div>
-										<div
-											className={`leading-tight font-normal text-sm text-left ${plan.popular ? "text-primary-foreground" : "text-muted-foreground"}`}
-										>
-											{feature}
-										</div>
-									</div>
-								))}
+								<div className="self-stretch flex flex-col justify-start items-start gap-3">
+									{
+										plan.features.map((feature) => (
+											<div key={feature} className="self-stretch flex justify-start items-center gap-2">
+												<div className="w-4 h-4 flex items-center justify-center">
+													<Check
+														className={`w-full h-full ${plan.popular ? "text-primary-foreground" : "text-muted-foreground"}`}
+														strokeWidth={2}
+													/>
+												</div>
+												<div
+													className={`leading-tight font-normal text-sm text-left ${plan.popular ? "text-primary-foreground" : "text-muted-foreground"}`}
+												>
+													{feature}
+												</div>
+											</div>
+										))
+									}
+								</div>
 							</div>
 						</div>
-					</div>
-				))}
+					))
+				}
 			</div>
 		</section>
 	)

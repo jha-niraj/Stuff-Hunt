@@ -37,16 +37,18 @@ export function MerchantHeader() {
 						</Link>
 					</div>
 					<nav className="hidden md:flex items-center gap-2">
-						{navItems.map((item) => (
-							<Link
-								key={item.name}
-								href={item.href}
-								onClick={(e) => handleScroll(e, item.href)}
-								className="text-[#888888] hover:text-foreground px-4 py-2 rounded-full font-medium transition-colors"
-							>
-								{item.name}
-							</Link>
-						))}
+						{
+							navItems.map((item) => (
+								<Link
+									key={item.name}
+									href={item.href}
+									onClick={(e) => handleScroll(e, item.href)}
+									className="text-[#888888] hover:text-foreground px-4 py-2 rounded-full font-medium transition-colors"
+								>
+									{item.name}
+								</Link>
+							))
+						}
 					</nav>
 				</div>
 				<div className="flex items-center gap-4">
@@ -72,16 +74,18 @@ export function MerchantHeader() {
 								<SheetTitle className="text-left text-xl font-semibold text-foreground">Navigation</SheetTitle>
 							</SheetHeader>
 							<nav className="flex flex-col gap-4 mt-6">
-								{navItems.map((item) => (
-									<Link
-										key={item.name}
-										href={item.href}
-										onClick={(e) => handleScroll(e, item.href)}
-										className="text-[#888888] hover:text-foreground justify-start text-lg py-2"
-									>
-										{item.name}
-									</Link>
-								))}
+								{
+									navItems.map((item) => (
+										<Link
+											key={item.name}
+											href={item.href}
+											onClick={(e) => handleScroll(e, item.href)}
+											className="text-[#888888] hover:text-foreground justify-start text-lg py-2"
+										>
+											{item.name}
+										</Link>
+									))
+								}
 								<div className="flex flex-col gap-2 mt-4">
 									<Link href="/seller/signin" className="w-full">
 										<Button

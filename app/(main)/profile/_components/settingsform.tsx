@@ -68,7 +68,6 @@ export function SettingsForm({ user }: SettingsFormProps) {
 
     return (
         <div className="space-y-6">
-            {/* Account Information */}
             <Card className="bg-white/5 backdrop-blur-sm border-white/10">
                 <CardHeader>
                     <CardTitle className="text-lg font-semibold text-white">
@@ -106,8 +105,6 @@ export function SettingsForm({ user }: SettingsFormProps) {
                     </p>
                 </CardContent>
             </Card>
-
-            {/* Change Password */}
             <Card className="bg-white/5 backdrop-blur-sm border-white/10">
                 <CardHeader>
                     <CardTitle className="text-lg font-semibold text-white flex items-center gap-2">
@@ -142,15 +139,16 @@ export function SettingsForm({ user }: SettingsFormProps) {
                                     className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
                                     onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                                 >
-                                    {showCurrentPassword ? (
-                                        <EyeOff className="h-4 w-4 text-gray-400" />
-                                    ) : (
-                                        <Eye className="h-4 w-4 text-gray-400" />
-                                    )}
+                                    {
+                                        showCurrentPassword ? (
+                                            <EyeOff className="h-4 w-4 text-gray-400" />
+                                        ) : (
+                                            <Eye className="h-4 w-4 text-gray-400" />
+                                        )
+                                    }
                                 </Button>
                             </div>
                         </div>
-                        
                         <div className="space-y-2">
                             <Label htmlFor="newPassword" className="text-sm font-medium text-white">
                                 New Password
@@ -173,21 +171,26 @@ export function SettingsForm({ user }: SettingsFormProps) {
                                     className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
                                     onClick={() => setShowNewPassword(!showNewPassword)}
                                 >
-                                    {showNewPassword ? (
-                                        <EyeOff className="h-4 w-4 text-gray-400" />
-                                    ) : (
-                                        <Eye className="h-4 w-4 text-gray-400" />
-                                    )}
+                                    {
+                                        showNewPassword ? (
+                                            <EyeOff className="h-4 w-4 text-gray-400" />
+                                        ) : (
+                                            <Eye className="h-4 w-4 text-gray-400" />
+                                        )
+                                    }
                                 </Button>
                             </div>
-                            {passwordData.newPassword && !isPasswordValid && (
-                                <p className="text-xs text-red-400">Password must be at least 6 characters long</p>
-                            )}
-                            {isSameAsCurrentPassword && (
-                                <p className="text-xs text-red-400">New password cannot be the same as your current password</p>
-                            )}
+                            {
+                                passwordData.newPassword && !isPasswordValid && (
+                                    <p className="text-xs text-red-400">Password must be at least 6 characters long</p>
+                                )
+                            }
+                            {
+                                isSameAsCurrentPassword && (
+                                    <p className="text-xs text-red-400">New password cannot be the same as your current password</p>
+                                )
+                            }
                         </div>
-                        
                         <div className="space-y-2">
                             <Label htmlFor="confirmPassword" className="text-sm font-medium text-white">
                                 Confirm New Password
@@ -210,39 +213,42 @@ export function SettingsForm({ user }: SettingsFormProps) {
                                     className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
                                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                 >
-                                    {showConfirmPassword ? (
-                                        <EyeOff className="h-4 w-4 text-gray-400" />
-                                    ) : (
-                                        <Eye className="h-4 w-4 text-gray-400" />
-                                    )}
+                                    {
+                                        showConfirmPassword ? (
+                                            <EyeOff className="h-4 w-4 text-gray-400" />
+                                        ) : (
+                                            <Eye className="h-4 w-4 text-gray-400" />
+                                        )
+                                    }
                                 </Button>
                             </div>
-                            {passwordData.confirmPassword && !doPasswordsMatch && (
-                                <p className="text-xs text-red-400">Passwords do not match</p>
-                            )}
+                            {
+                                passwordData.confirmPassword && !doPasswordsMatch && (
+                                    <p className="text-xs text-red-400">Passwords do not match</p>
+                                )
+                            }
                         </div>
-                        
                         <div className="flex justify-end pt-4">
                             <Button
                                 type="submit"
                                 disabled={loading || !canSubmit}
                                 className="bg-gradient-to-r from-[#FF6EC7] to-[#DF87F3] hover:from-[#FF6EC7]/90 hover:to-[#DF87F3]/90 text-white"
                             >
-                                {loading ? (
-                                    <>
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        Changing...
-                                    </>
-                                ) : (
-                                    "Change Password"
-                                )}
+                                {
+                                    loading ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            Changing...
+                                        </>
+                                    ) : (
+                                        "Change Password"
+                                    )
+                                }
                             </Button>
                         </div>
                     </form>
                 </CardContent>
             </Card>
-
-            {/* Security Tips */}
             <Card className="bg-yellow-500/10 border-yellow-500/20">
                 <CardContent className="pt-6">
                     <div className="flex items-start gap-3">

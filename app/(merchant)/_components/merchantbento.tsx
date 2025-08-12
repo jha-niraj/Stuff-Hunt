@@ -1,8 +1,7 @@
-import { AIProductRecommendations, EcommerceIntegrations, MultiChannelSales, LiveStorePreview, EasyStoreSetup, PaymentIntegrations } from "./bentocomponents";	
+import { AIProductRecommendations, EcommerceIntegrations, MultiChannelSales, LiveStorePreview, EasyStoreSetup, PaymentIntegrations } from "./bentocomponents";
 
-const BentoCard = ({ title, description, Component } : { title: string; description: string; Component: React.ElementType; }) => (
+const BentoCard = ({ title, description, Component }: { title: string; description: string; Component: React.ElementType; }) => (
 	<div className="overflow-hidden rounded-2xl border border-white/20 flex flex-col justify-start items-start relative">
-		{/* Background with blur effect */}
 		<div
 			className="absolute inset-0 rounded-2xl"
 			style={{
@@ -11,7 +10,6 @@ const BentoCard = ({ title, description, Component } : { title: string; descript
 				WebkitBackdropFilter: "blur(4px)",
 			}}
 		/>
-		{/* Additional subtle gradient overlay */}
 		<div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl" />
 
 		<div className="self-stretch p-6 flex flex-col justify-start items-start gap-2 relative z-10">
@@ -78,9 +76,11 @@ export function MerchantBentoSection() {
 					</div>
 				</div>
 				<div className="self-stretch grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 z-10">
-					{cards.map((card) => (
-						<BentoCard key={card.title} {...card} />
-					))}
+					{
+						cards.map((card) => (
+							<BentoCard key={card.title} {...card} />
+						))
+					}
 				</div>
 			</div>
 		</section>

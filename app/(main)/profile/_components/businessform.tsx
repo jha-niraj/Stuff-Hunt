@@ -31,7 +31,7 @@ export function BusinessForm({ user }: BusinessFormProps) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        
+
         try {
             // This would typically call a different API endpoint for business info
             // For now, we'll use the same updateProfile endpoint
@@ -64,7 +64,6 @@ export function BusinessForm({ user }: BusinessFormProps) {
 
     return (
         <div className="space-y-6">
-            {/* Business Status Card */}
             <Card className="bg-white/5 backdrop-blur-sm border-white/10">
                 <CardHeader>
                     <CardTitle className="text-white flex items-center gap-2">
@@ -78,15 +77,14 @@ export function BusinessForm({ user }: BusinessFormProps) {
                 <CardContent className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
                         <Label className="text-sm font-medium text-gray-300">KYC Status</Label>
-                        <Badge 
+                        <Badge
                             variant={user.kycStatus === 'APPROVED' ? 'default' : 'secondary'}
-                            className={`${
-                                user.kycStatus === 'APPROVED' 
-                                    ? 'bg-green-500/20 text-green-400 border-green-500/30' 
+                            className={`${user.kycStatus === 'APPROVED'
+                                    ? 'bg-green-500/20 text-green-400 border-green-500/30'
                                     : user.kycStatus === 'REJECTED'
-                                    ? 'bg-red-500/20 text-red-400 border-red-500/30'
-                                    : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
-                            }`}
+                                        ? 'bg-red-500/20 text-red-400 border-red-500/30'
+                                        : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
+                                }`}
                         >
                             {user.kycStatus === 'APPROVED' && <CheckCircle className="mr-1 h-3 w-3" />}
                             {user.kycStatus === 'REJECTED' && <AlertCircle className="mr-1 h-3 w-3" />}
@@ -95,28 +93,27 @@ export function BusinessForm({ user }: BusinessFormProps) {
                     </div>
                     <div className="space-y-2">
                         <Label className="text-sm font-medium text-gray-300">Verification Badge</Label>
-                        <Badge 
+                        <Badge
                             variant={user.verificationBadge ? 'default' : 'secondary'}
-                            className={`${
-                                user.verificationBadge 
-                                    ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' 
+                            className={`${user.verificationBadge
+                                    ? 'bg-blue-500/20 text-blue-400 border-blue-500/30'
                                     : 'bg-gray-500/20 text-gray-400 border-gray-500/30'
-                            }`}
+                                }`}
                         >
-                            {user.verificationBadge ? (
-                                <>
-                                    <CheckCircle className="mr-1 h-3 w-3" />
-                                    Verified
-                                </>
-                            ) : (
-                                'Not Verified'
-                            )}
+                            {
+                                user.verificationBadge ? (
+                                    <>
+                                        <CheckCircle className="mr-1 h-3 w-3" />
+                                        Verified
+                                    </>
+                                ) : (
+                                    'Not Verified'
+                                )
+                            }
                         </Badge>
                     </div>
                 </CardContent>
             </Card>
-
-            {/* Business Information Form */}
             <Card className="bg-white/5 backdrop-blur-sm border-white/10">
                 <CardHeader>
                     <CardTitle className="text-white flex items-center gap-2">
@@ -129,7 +126,6 @@ export function BusinessForm({ user }: BusinessFormProps) {
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Company Name */}
                         <div className="space-y-2">
                             <Label htmlFor="companyName" className="text-white">
                                 Company Name *
@@ -144,8 +140,6 @@ export function BusinessForm({ user }: BusinessFormProps) {
                                 required
                             />
                         </div>
-
-                        {/* Business Type */}
                         <div className="space-y-2">
                             <Label htmlFor="businessType" className="text-white">
                                 Business Type *
@@ -167,8 +161,6 @@ export function BusinessForm({ user }: BusinessFormProps) {
                                 </SelectContent>
                             </Select>
                         </div>
-
-                        {/* PAN and GST */}
                         <div className="grid gap-4 md:grid-cols-2">
                             <div className="space-y-2">
                                 <Label htmlFor="panNumber" className="text-white flex items-center gap-2">
@@ -202,8 +194,6 @@ export function BusinessForm({ user }: BusinessFormProps) {
                                 />
                             </div>
                         </div>
-
-                        {/* Business Address */}
                         <div className="space-y-2">
                             <Label htmlFor="businessAddress" className="text-white flex items-center gap-2">
                                 <MapPin className="w-4 h-4 text-[#DF87F3]" />
@@ -220,8 +210,6 @@ export function BusinessForm({ user }: BusinessFormProps) {
                                 required
                             />
                         </div>
-
-                        {/* Phone Number */}
                         <div className="space-y-2">
                             <Label htmlFor="phoneNumber" className="text-white flex items-center gap-2">
                                 <Phone className="w-4 h-4 text-[#FF6EC7]" />
@@ -238,29 +226,27 @@ export function BusinessForm({ user }: BusinessFormProps) {
                                 required
                             />
                         </div>
-
-                        {/* Submit Button */}
                         <div className="flex justify-end pt-4">
                             <Button
                                 type="submit"
                                 disabled={loading}
                                 className="bg-gradient-to-r from-[#FF6EC7] to-[#DF87F3] hover:from-[#FF6EC7]/90 hover:to-[#DF87F3]/90 text-white"
                             >
-                                {loading ? (
-                                    <>
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        Updating...
-                                    </>
-                                ) : (
-                                    "Update Business Information"
-                                )}
+                                {
+                                    loading ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            Updating...
+                                        </>
+                                    ) : (
+                                        "Update Business Information"
+                                    )
+                                }
                             </Button>
                         </div>
                     </form>
                 </CardContent>
             </Card>
-
-            {/* Help Card */}
             <Card className="bg-blue-500/10 border-blue-500/20">
                 <CardContent className="pt-6">
                     <div className="flex items-start gap-3">
@@ -270,8 +256,8 @@ export function BusinessForm({ user }: BusinessFormProps) {
                                 Need Help with Verification?
                             </h4>
                             <p className="text-sm text-blue-200/80">
-                                Make sure all your business information is accurate and up-to-date. 
-                                Our verification team will review your details and update your KYC status. 
+                                Make sure all your business information is accurate and up-to-date.
+                                Our verification team will review your details and update your KYC status.
                                 This may take 2-3 business days.
                             </p>
                         </div>

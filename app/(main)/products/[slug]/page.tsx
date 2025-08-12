@@ -16,7 +16,7 @@ import Link from "next/link"
 export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
 	const { slug } = await params
 	const result = await getProductBySlug(slug)
-	
+
 	if (!result.success || !result.product) {
 		return notFound()
 	}
@@ -33,84 +33,94 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 						<ProductGallery images={product.images} alt={product.name} />
 						<div className="lg:pl-4">
 							<div className="flex items-center gap-3">
-								{product.inStock ? (
-									<Badge className="bg-green-600 text-white hover:bg-green-600/90">In stock</Badge>
-								) : (
-									<Badge variant="destructive">Out of stock</Badge>
-								)}
+								{
+									product.inStock ? (
+										<Badge className="bg-green-600 text-white hover:bg-green-600/90">In stock</Badge>
+									) : (
+										<Badge variant="destructive">Out of stock</Badge>
+									)
+								}
 							</div>
 							<h1 className="text-3xl md:text-4xl font-semibold tracking-tight mt-3">{product.name}</h1>
 							<p className="text-muted-foreground mt-2">{product.shortDescription}</p>
-
 							<div className="flex items-center gap-2 mt-4">
 								<div className="flex items-center">
-									{Array.from({ length: 5 }).map((_, i) => (
-										<Star 
-											key={i} 
-											className={`w-4 h-4 ${
-												i < Math.floor(product.averageRating || 0) 
-													? 'fill-yellow-400 text-yellow-400' 
-													: 'text-gray-300'
-											}`}
-										/>
-									))}
+									{
+										Array.from({ length: 5 }).map((_, i) => (
+											<Star
+												key={i}
+												className={`w-4 h-4 ${i < Math.floor(product.averageRating || 0)
+														? 'fill-yellow-400 text-yellow-400'
+														: 'text-gray-300'
+													}`}
+											/>
+										))
+									}
 								</div>
 								<span className="text-sm text-muted-foreground">
 									({product._count?.reviews || 0} reviews)
 								</span>
 							</div>
-
 							<div className="flex items-center justify-between mt-6">
 								<div className="flex items-center gap-3">
 									<div className="text-3xl font-semibold">{formatCurrency(product.price)}</div>
-									{product.originalPrice && product.originalPrice > product.price && (
-										<div className="text-lg text-muted-foreground line-through">
-											{formatCurrency(product.originalPrice)}
-										</div>
-									)}
+									{
+										product.originalPrice && product.originalPrice > product.price && (
+											<div className="text-lg text-muted-foreground line-through">
+												{formatCurrency(product.originalPrice)}
+											</div>
+										)
+									}
 								</div>
-								<button
+								<Button
 									className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground"
 									aria-label="Save to wishlist"
 								>
 									<Heart className="w-5 h-5" />
 									<span className="text-sm">Save</span>
-								</button>
+								</Button>
 							</div>
-
 							<div className="mt-6 space-y-4">
-								{product.colors && product.colors.length > 0 && (
-									<div className="space-y-2">
-										<Label>Color</Label>
-										<div className="flex flex-wrap gap-2">
-											{product.colors.map((color: string) => (
-												<button
-													key={color}
-													className="h-9 px-3 rounded-md border text-sm hover:bg-accent"
-													aria-label={`Choose ${color}`}
-												>
-													{color}
-												</button>
-											))}
+								{
+									product.colors && product.colors.length > 0 && (
+										<div className="space-y-2">
+											<Label>Color</Label>
+											<div className="flex flex-wrap gap-2">
+												{
+													product.colors.map((color: string) => (
+														<Button
+															key={color}
+															className="h-9 px-3 rounded-md border text-sm hover:bg-accent"
+															aria-label={`Choose ${color}`}
+														>
+															{color}
+														</Button>
+													))
+												}
+											</div>
 										</div>
-									</div>
-								)}
-								{product.sizes && product.sizes.length > 0 && (
-									<div className="space-y-2">
-										<Label>Size</Label>
-										<div className="flex flex-wrap gap-2">
-											{product.sizes.map((size: string) => (
-												<button
-													key={size}
-													className="h-9 px-3 rounded-md border text-sm hover:bg-accent"
-													aria-label={`Choose size ${size}`}
-												>
-													{size}
-												</button>
-											))}
+									)
+								}
+								{
+									product.sizes && product.sizes.length > 0 && (
+										<div className="space-y-2">
+											<Label>Size</Label>
+											<div className="flex flex-wrap gap-2">
+												{
+													product.sizes.map((size: string) => (
+														<Button
+															key={size}
+															className="h-9 px-3 rounded-md border text-sm hover:bg-accent"
+															aria-label={`Choose size ${size}`}
+														>
+															{size}
+														</Button>
+													))
+												}
+											</div>
 										</div>
-									</div>
-								)}
+									)
+								}
 								<div className="flex items-center gap-3">
 									<div className="grid gap-1">
 										<Label htmlFor="qty">Quantity</Label>
@@ -119,7 +129,6 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 									<AddToCart product={product} />
 								</div>
 							</div>
-
 							<div className="mt-8 grid gap-4 text-sm">
 								<div className="flex items-center gap-3 text-muted-foreground">
 									<Truck className="w-4 h-4" />
@@ -131,14 +140,15 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 								</div>
 								<div className="text-sm text-muted-foreground">
 									Sold by {product.seller.name}
-									{product.seller.verificationBadge && (
-										<Badge variant="secondary" className="ml-2 text-xs">
-											Verified
-										</Badge>
-									)}
+									{
+										product.seller.verificationBadge && (
+											<Badge variant="secondary" className="ml-2 text-xs">
+												Verified
+											</Badge>
+										)
+									}
 								</div>
 							</div>
-
 							<Tabs defaultValue="details" className="mt-10">
 								<TabsList>
 									<TabsTrigger value="details">Details</TabsTrigger>
@@ -157,7 +167,6 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 									Standard shipping 3-5 business days. Expedited options available at checkout.
 								</TabsContent>
 							</Tabs>
-
 							<div className="mt-10">
 								<Accordion type="single" collapsible>
 									<AccordionItem value="customization">
@@ -172,18 +181,19 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 						</div>
 					</div>
 				</section>
-
-				{relatedProducts.length > 0 && (
-					<section className="container mx-auto px-4 pb-12">
-						<div className="flex items-center justify-between mb-6">
-							<h2 className="text-xl md:text-2xl font-semibold tracking-tight">You might also like</h2>
-							<Button variant="ghost" asChild>
-								<Link href="/products">View all</Link>
-							</Button>
-						</div>
-						<ProductGrid products={relatedProducts} />
-					</section>
-				)}
+				{
+					relatedProducts.length > 0 && (
+						<section className="container mx-auto px-4 pb-12">
+							<div className="flex items-center justify-between mb-6">
+								<h2 className="text-xl md:text-2xl font-semibold tracking-tight">You might also like</h2>
+								<Button variant="ghost" asChild>
+									<Link href="/products">View all</Link>
+								</Button>
+							</div>
+							<ProductGrid products={relatedProducts} />
+						</section>
+					)
+				}
 			</main>
 		</div>
 	)

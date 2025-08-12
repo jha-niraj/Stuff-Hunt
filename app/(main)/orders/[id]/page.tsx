@@ -26,7 +26,7 @@ function isAddress(address: unknown): address is Address {
 export default async function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params
 	const result = await getOrderById(id)
-	
+
 	if (!result.success || !result.order) {
 		return notFound()
 	}
@@ -41,15 +41,16 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
 						<div>
 							<h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Order #{order.orderNumber}</h1>
 							<div className="text-sm text-muted-foreground mt-1">{new Date(order.createdAt).toLocaleString()}</div>
-							{order.trackingNumber && (
-								<div className="text-sm text-muted-foreground mt-1">
-									Tracking: <span className="font-mono">{order.trackingNumber}</span>
-								</div>
-							)}
+							{
+								order.trackingNumber && (
+									<div className="text-sm text-muted-foreground mt-1">
+										Tracking: <span className="font-mono">{order.trackingNumber}</span>
+									</div>
+								)
+							}
 						</div>
 						<OrderStatusBadge status={order.status} />
 					</div>
-
 					<div className="grid lg:grid-cols-[1fr_360px] gap-6 md:gap-8">
 						<Card>
 							<CardHeader>
@@ -66,32 +67,35 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
 										</TableRow>
 									</TableHeader>
 									<TableBody>
-										{order.items.map((i) => (
-											<TableRow key={i.id}>
-												<TableCell>
-													<div className="font-medium">
-														<Link href={`/products/${i.product.slug}`} className="hover:underline">
-															{i.product.name}
-														</Link>
-													</div>
-													{i.variantKey && (
-														<div className="text-xs text-muted-foreground">{i.variantKey}</div>
-													)}
-													<div className="text-xs text-muted-foreground">
-														by {i.product.seller.name}
-														{i.product.seller.verificationBadge && " ✓"}
-													</div>
-												</TableCell>
-												<TableCell>{i.quantity}</TableCell>
-												<TableCell>{formatCurrency(i.unitPrice)}</TableCell>
-												<TableCell className="text-right">{formatCurrency(i.totalPrice)}</TableCell>
-											</TableRow>
-										))}
+										{
+											order.items.map((i) => (
+												<TableRow key={i.id}>
+													<TableCell>
+														<div className="font-medium">
+															<Link href={`/products/${i.product.slug}`} className="hover:underline">
+																{i.product.name}
+															</Link>
+														</div>
+														{
+															i.variantKey && (
+																<div className="text-xs text-muted-foreground">{i.variantKey}</div>
+															)
+														}
+														<div className="text-xs text-muted-foreground">
+															by {i.product.seller.name}
+															{i.product.seller.verificationBadge && " ✓"}
+														</div>
+													</TableCell>
+													<TableCell>{i.quantity}</TableCell>
+													<TableCell>{formatCurrency(i.unitPrice)}</TableCell>
+													<TableCell className="text-right">{formatCurrency(i.totalPrice)}</TableCell>
+												</TableRow>
+											))
+										}
 									</TableBody>
 								</Table>
 							</CardContent>
 						</Card>
-
 						<div className="grid gap-6 h-max">
 							<Card>
 								<CardHeader>
@@ -106,18 +110,22 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
 										<div className="text-muted-foreground">Shipping</div>
 										<div className="font-medium">{formatCurrency(order.shippingCost)}</div>
 									</div>
-									{order.taxAmount > 0 && (
-										<div className="flex items-center justify-between">
-											<div className="text-muted-foreground">Tax</div>
-											<div className="font-medium">{formatCurrency(order.taxAmount)}</div>
-										</div>
-									)}
-									{order.discountAmount > 0 && (
-										<div className="flex items-center justify-between text-green-600">
-											<div>Discount</div>
-											<div>-{formatCurrency(order.discountAmount)}</div>
-										</div>
-									)}
+									{
+										order.taxAmount > 0 && (
+											<div className="flex items-center justify-between">
+												<div className="text-muted-foreground">Tax</div>
+												<div className="font-medium">{formatCurrency(order.taxAmount)}</div>
+											</div>
+										)
+									}
+									{
+										order.discountAmount > 0 && (
+											<div className="flex items-center justify-between text-green-600">
+												<div>Discount</div>
+												<div>-{formatCurrency(order.discountAmount)}</div>
+											</div>
+										)
+									}
 									<div className="flex items-center justify-between pt-2 text-base font-semibold">
 										<div>Total</div>
 										<div>{formatCurrency(order.total)}</div>
@@ -129,41 +137,51 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
 									<CardTitle className="text-base">Shipping address</CardTitle>
 								</CardHeader>
 								<CardContent className="text-sm">
-									{isAddress(order.shippingAddress) ? (
-										<>
-											<div className="font-medium">
-												{order.shippingAddress.firstName} {order.shippingAddress.lastName}
-											</div>
-											{order.shippingAddress.company && (
-												<div>{order.shippingAddress.company}</div>
-											)}
-											<div>{order.shippingAddress.address1}</div>
-											{order.shippingAddress.address2 && (
-												<div>{order.shippingAddress.address2}</div>
-											)}
-											<div>
-												{order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.postalCode}
-											</div>
-											<div>{order.shippingAddress.country}</div>
-											{order.shippingAddress.phone && (
-												<div className="mt-2">Phone: {order.shippingAddress.phone}</div>
-											)}
-										</>
-									) : (
-										<div className="text-muted-foreground">Address information not available</div>
-									)}
+									{
+										isAddress(order.shippingAddress) ? (
+											<>
+												<div className="font-medium">
+													{order.shippingAddress.firstName} {order.shippingAddress.lastName}
+												</div>
+												{
+													order.shippingAddress.company && (
+														<div>{order.shippingAddress.company}</div>
+													)
+												}
+												<div>{order.shippingAddress.address1}</div>
+												{
+													order.shippingAddress.address2 && (
+														<div>{order.shippingAddress.address2}</div>
+													)
+												}
+												<div>
+													{order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.postalCode}
+												</div>
+												<div>{order.shippingAddress.country}</div>
+												{
+													order.shippingAddress.phone && (
+														<div className="mt-2">Phone: {order.shippingAddress.phone}</div>
+													)
+												}
+											</>
+										) : (
+											<div className="text-muted-foreground">Address information not available</div>
+										)
+									}
 								</CardContent>
 							</Card>
-							{order.notes && (
-								<Card>
-									<CardHeader>
-										<CardTitle className="text-base">Order notes</CardTitle>
-									</CardHeader>
-									<CardContent className="text-sm">
-										{order.notes}
-									</CardContent>
-								</Card>
-							)}
+							{
+								order.notes && (
+									<Card>
+										<CardHeader>
+											<CardTitle className="text-base">Order notes</CardTitle>
+										</CardHeader>
+										<CardContent className="text-sm">
+											{order.notes}
+										</CardContent>
+									</Card>
+								)
+							}
 							<div className="flex gap-2">
 								<Button asChild variant="outline" className="bg-transparent">
 									<Link href="/products">Shop more</Link>

@@ -75,7 +75,6 @@ export default function LandingPage() {
 			<div className="relative z-10">
 				<main className="max-w-[1320px] mx-auto relative">
 					<MerchantHeroSection />
-					{/* Dashboard Preview Wrapper */}
 					<div className="absolute bottom-[-150px] md:bottom-[-400px] left-1/2 transform -translate-x-1/2 z-30">
 						<AnimatedSection>
 							<motion.div
@@ -119,24 +118,26 @@ export default function LandingPage() {
 							Trusted by sellers from leading platforms
 						</motion.div>
 						<div className="self-stretch grid grid-cols-2 md:grid-cols-4 gap-8 justify-items-center">
-							{Array.from({ length: 8 }).map((_, i) => (
-								<motion.div
-									key={i}
-									initial={{ opacity: 0, y: 30 }}
-									whileInView={{ opacity: 1, y: 0 }}
-									viewport={{ once: true }}
-									transition={{ duration: 0.6, delay: i * 0.1 }}
-									whileHover={{ scale: 1.05 }}
-								>
-									<Image
-										src={`/logos/logo0${i + 1}.svg`}
-										alt={`${brands[i]} Logo`}
-										width={400}
-										height={120}
-										className="w-full max-w-[400px] h-auto object-contain grayscale opacity-70 hover:opacity-90 transition-opacity"
-									/>
-								</motion.div>
-							))}
+							{
+								Array.from({ length: 8 }).map((_, i) => (
+									<motion.div
+										key={i}
+										initial={{ opacity: 0, y: 30 }}
+										whileInView={{ opacity: 1, y: 0 }}
+										viewport={{ once: true }}
+										transition={{ duration: 0.6, delay: i * 0.1 }}
+										whileHover={{ scale: 1.05 }}
+									>
+										<Image
+											src={`/logos/logo0${i + 1}.svg`}
+											alt={`${brands[i]} Logo`}
+											width={400}
+											height={120}
+											className="w-full max-w-[400px] h-auto object-contain grayscale opacity-70 hover:opacity-90 transition-opacity"
+										/>
+									</motion.div>
+								))
+							}
 						</div>
 					</section>
 				</AnimatedSection>
@@ -156,29 +157,30 @@ export default function LandingPage() {
 									business faster.
 								</p>
 							</motion.div>
-
 							<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-								{features.map((feature, index) => (
-									<motion.div
-										key={index}
-										className="text-center group"
-										initial={{ opacity: 0, y: 50 }}
-										whileInView={{ opacity: 1, y: 0 }}
-										viewport={{ once: true }}
-										transition={{ duration: 0.6, delay: index * 0.1 }}
-										whileHover={{ y: -10 }}
-									>
+								{
+									features.map((feature, index) => (
 										<motion.div
-											className="w-16 h-16 mx-auto mb-6 bg-primary/10 rounded-2xl flex items-center justify-center group-hover:bg-primary/20 transition-colors"
-											whileHover={{ scale: 1.1, rotate: 5 }}
-											transition={{ duration: 0.3 }}
+											key={index}
+											className="text-center group"
+											initial={{ opacity: 0, y: 50 }}
+											whileInView={{ opacity: 1, y: 0 }}
+											viewport={{ once: true }}
+											transition={{ duration: 0.6, delay: index * 0.1 }}
+											whileHover={{ y: -10 }}
 										>
-											<feature.icon className="w-8 h-8 text-primary" />
+											<motion.div
+												className="w-16 h-16 mx-auto mb-6 bg-primary/10 rounded-2xl flex items-center justify-center group-hover:bg-primary/20 transition-colors"
+												whileHover={{ scale: 1.1, rotate: 5 }}
+												transition={{ duration: 0.3 }}
+											>
+												<feature.icon className="w-8 h-8 text-primary" />
+											</motion.div>
+											<h3 className="text-xl font-semibold text-foreground mb-3">{feature.title}</h3>
+											<p className="text-muted-foreground leading-relaxed">{feature.description}</p>
 										</motion.div>
-										<h3 className="text-xl font-semibold text-foreground mb-3">{feature.title}</h3>
-										<p className="text-muted-foreground leading-relaxed">{feature.description}</p>
-									</motion.div>
-								))}
+									))
+								}
 							</div>
 						</div>
 					</section>
@@ -202,47 +204,50 @@ export default function LandingPage() {
 									Get your business online and start reaching millions of customers in just three simple steps.
 								</p>
 							</motion.div>
-
 							<div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-								{steps.map((step, index) => (
-									<motion.div
-										key={index}
-										className="text-center relative"
-										initial={{ opacity: 0, scale: 0.8 }}
-										whileInView={{ opacity: 1, scale: 1 }}
-										viewport={{ once: true }}
-										transition={{ duration: 0.6, delay: index * 0.2 }}
-									>
+								{
+									steps.map((step, index) => (
 										<motion.div
-											className="w-20 h-20 mx-auto mb-6 bg-primary rounded-full flex items-center justify-center relative z-10"
-											whileHover={{ scale: 1.1 }}
-											transition={{ duration: 0.3 }}
-										>
-											<step.icon className="w-10 h-10 text-primary-foreground" />
-										</motion.div>
-										<motion.div
-											className="absolute top-10 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-bold z-20"
-											initial={{ scale: 0 }}
-											whileInView={{ scale: 1 }}
+											key={index}
+											className="text-center relative"
+											initial={{ opacity: 0, scale: 0.8 }}
+											whileInView={{ opacity: 1, scale: 1 }}
 											viewport={{ once: true }}
-											transition={{ duration: 0.4, delay: index * 0.2 + 0.3 }}
+											transition={{ duration: 0.6, delay: index * 0.2 }}
 										>
-											{index + 1}
-										</motion.div>
-										<h3 className="text-xl font-semibold text-foreground mb-3 mt-4">{step.title}</h3>
-										<p className="text-muted-foreground leading-relaxed">{step.description}</p>
-
-										{index < steps.length - 1 && (
 											<motion.div
-												className="hidden md:block absolute top-10 left-full w-full h-0.5 bg-border transform -translate-y-1/2"
-												initial={{ scaleX: 0 }}
-												whileInView={{ scaleX: 1 }}
+												className="w-20 h-20 mx-auto mb-6 bg-primary rounded-full flex items-center justify-center relative z-10"
+												whileHover={{ scale: 1.1 }}
+												transition={{ duration: 0.3 }}
+											>
+												<step.icon className="w-10 h-10 text-primary-foreground" />
+											</motion.div>
+											<motion.div
+												className="absolute top-10 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-bold z-20"
+												initial={{ scale: 0 }}
+												whileInView={{ scale: 1 }}
 												viewport={{ once: true }}
-												transition={{ duration: 0.8, delay: index * 0.2 + 0.5 }}
-											/>
-										)}
-									</motion.div>
-								))}
+												transition={{ duration: 0.4, delay: index * 0.2 + 0.3 }}
+											>
+												{index + 1}
+											</motion.div>
+											<h3 className="text-xl font-semibold text-foreground mb-3 mt-4">{step.title}</h3>
+											<p className="text-muted-foreground leading-relaxed">{step.description}</p>
+
+											{
+												index < steps.length - 1 && (
+													<motion.div
+														className="hidden md:block absolute top-10 left-full w-full h-0.5 bg-border transform -translate-y-1/2"
+														initial={{ scaleX: 0 }}
+														whileInView={{ scaleX: 1 }}
+														viewport={{ once: true }}
+														transition={{ duration: 0.8, delay: index * 0.2 + 0.5 }}
+													/>
+												)
+											}
+										</motion.div>
+									))
+								}
 							</div>
 						</div>
 					</section>
@@ -251,28 +256,30 @@ export default function LandingPage() {
 					<section className="w-full px-5 py-16 md:py-24">
 						<div className="max-w-6xl mx-auto">
 							<div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-								{stats.map((stat, index) => (
-									<motion.div
-										key={index}
-										className="text-center"
-										initial={{ opacity: 0, y: 30 }}
-										whileInView={{ opacity: 1, y: 0 }}
-										viewport={{ once: true }}
-										transition={{ duration: 0.6, delay: index * 0.1 }}
-										whileHover={{ scale: 1.05 }}
-									>
+								{
+									stats.map((stat, index) => (
 										<motion.div
-											className="text-3xl md:text-4xl font-bold text-primary mb-2"
-											initial={{ scale: 0 }}
-											whileInView={{ scale: 1 }}
+											key={index}
+											className="text-center"
+											initial={{ opacity: 0, y: 30 }}
+											whileInView={{ opacity: 1, y: 0 }}
 											viewport={{ once: true }}
-											transition={{ duration: 0.8, delay: index * 0.1 + 0.3, type: "spring", bounce: 0.4 }}
+											transition={{ duration: 0.6, delay: index * 0.1 }}
+											whileHover={{ scale: 1.05 }}
 										>
-											{stat.number}
+											<motion.div
+												className="text-3xl md:text-4xl font-bold text-primary mb-2"
+												initial={{ scale: 0 }}
+												whileInView={{ scale: 1 }}
+												viewport={{ once: true }}
+												transition={{ duration: 0.8, delay: index * 0.1 + 0.3, type: "spring", bounce: 0.4 }}
+											>
+												{stat.number}
+											</motion.div>
+											<div className="text-muted-foreground font-medium">{stat.label}</div>
 										</motion.div>
-										<div className="text-muted-foreground font-medium">{stat.label}</div>
-									</motion.div>
-								))}
+									))
+								}
 							</div>
 						</div>
 					</section>

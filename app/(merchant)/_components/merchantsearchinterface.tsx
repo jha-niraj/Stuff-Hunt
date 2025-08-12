@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Store, Plus } from "lucide-react"
+import Link from "next/link"
 
 export function MerchantSearchInterface() {
     const [storeName, setStoreName] = useState("")
@@ -20,8 +21,6 @@ export function MerchantSearchInterface() {
                     <h3 className="text-lg font-semibold text-foreground mb-2">Ready to Start Selling?</h3>
                     <p className="text-sm text-muted-foreground">Enter your store name to begin your journey</p>
                 </div>
-
-                {/* Store Name Input */}
                 <div className="relative">
                     <Store className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
                     <Input
@@ -31,8 +30,6 @@ export function MerchantSearchInterface() {
                         className="pl-10 h-12 text-base bg-background/50 border-border"
                     />
                 </div>
-
-                {/* Get Started Button */}
                 <Button
                     onClick={handleGetStarted}
                     disabled={!storeName.trim()}
@@ -42,13 +39,12 @@ export function MerchantSearchInterface() {
                     <Plus className="mr-2 h-5 w-5" />
                     Create Your Store
                 </Button>
-
                 <div className="text-center">
                     <p className="text-xs text-muted-foreground">
                         Already have an account?{" "}
-                        <a href="/seller/signin" className="text-primary hover:underline">
+                        <Link href="/seller/signin" className="text-primary hover:underline">
                             Sign in here
-                        </a>
+                        </Link>
                     </p>
                 </div>
             </div>

@@ -94,7 +94,7 @@ export default function ContactPage() {
 
 		try {
 			const formData = new FormData(e.currentTarget)
-			
+
 			const contactData: ContactFormData = {
 				firstName: formData.get("firstName") as string,
 				lastName: formData.get("lastName") as string,
@@ -118,7 +118,7 @@ export default function ContactPage() {
 			}
 
 			const result = await submitContactForm(contactData)
-			
+
 			if (result.success) {
 				setIsSubmitted(true)
 				toast.success("Thank you! Your inquiry has been submitted successfully.")
@@ -183,7 +183,6 @@ export default function ContactPage() {
 	return (
 		<div className="min-h-dvh flex flex-col">
 			<main className="flex-1">
-				{/* Hero Section */}
 				<section className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20">
 					<div className="container mx-auto px-4 py-16 md:py-24">
 						<div className="max-w-4xl mx-auto text-center">
@@ -224,14 +223,11 @@ export default function ContactPage() {
 						</div>
 					</div>
 				</section>
-
-				{/* Contact Form Section */}
 				<section className="container mx-auto px-4 py-16">
 					<div className="grid lg:grid-cols-[1fr_400px] gap-12 max-w-6xl mx-auto">
 						<div>
 							<h2 className="text-3xl font-semibold mb-6">Tell us about your project</h2>
 							<form onSubmit={handleSubmit} className="space-y-8">
-								{/* Contact Information */}
 								<Card>
 									<CardHeader>
 										<CardTitle className="flex items-center gap-2">
@@ -279,8 +275,6 @@ export default function ContactPage() {
 										</div>
 									</CardContent>
 								</Card>
-
-								{/* Business Information */}
 								<Card>
 									<CardHeader>
 										<CardTitle className="flex items-center gap-2">
@@ -326,8 +320,6 @@ export default function ContactPage() {
 										</div>
 									</CardContent>
 								</Card>
-
-								{/* Order Information */}
 								<Card>
 									<CardHeader>
 										<CardTitle className="flex items-center gap-2">
@@ -342,16 +334,18 @@ export default function ContactPage() {
 										<div className="space-y-2">
 											<Label>Product Types * (Select all that apply)</Label>
 											<div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-												{productTypes.map(type => (
-													<div key={type} className="flex items-center space-x-2">
-														<Checkbox
-															id={type}
-															checked={selectedProductTypes.includes(type)}
-															onCheckedChange={(checked) => handleProductTypeChange(type, checked as boolean)}
-														/>
-														<Label htmlFor={type} className="text-sm">{type}</Label>
-													</div>
-												))}
+												{
+													productTypes.map(type => (
+														<div key={type} className="flex items-center space-x-2">
+															<Checkbox
+																id={type}
+																checked={selectedProductTypes.includes(type)}
+																onCheckedChange={(checked) => handleProductTypeChange(type, checked as boolean)}
+															/>
+															<Label htmlFor={type} className="text-sm">{type}</Label>
+														</div>
+													))
+												}
 											</div>
 										</div>
 										<div className="grid md:grid-cols-2 gap-4">
@@ -362,9 +356,11 @@ export default function ContactPage() {
 														<SelectValue placeholder="Select quantity range" />
 													</SelectTrigger>
 													<SelectContent>
-														{quantityRanges.map(range => (
-															<SelectItem key={range} value={range}>{range}</SelectItem>
-														))}
+														{
+															quantityRanges.map(range => (
+																<SelectItem key={range} value={range}>{range}</SelectItem>
+															))
+														}
 													</SelectContent>
 												</Select>
 											</div>
@@ -375,9 +371,11 @@ export default function ContactPage() {
 														<SelectValue placeholder="Select budget range" />
 													</SelectTrigger>
 													<SelectContent>
-														{budgetRanges.map(range => (
-															<SelectItem key={range} value={range}>{range}</SelectItem>
-														))}
+														{
+															budgetRanges.map(range => (
+																<SelectItem key={range} value={range}>{range}</SelectItem>
+															))
+														}
 													</SelectContent>
 												</Select>
 											</div>
@@ -389,16 +387,16 @@ export default function ContactPage() {
 													<SelectValue placeholder="When do you need this?" />
 												</SelectTrigger>
 												<SelectContent>
-													{timelineOptions.map(option => (
-														<SelectItem key={option} value={option}>{option}</SelectItem>
-													))}
+													{
+														timelineOptions.map(option => (
+															<SelectItem key={option} value={option}>{option}</SelectItem>
+														))
+													}
 												</SelectContent>
 											</Select>
 										</div>
 									</CardContent>
 								</Card>
-
-								{/* Project Details */}
 								<Card>
 									<CardHeader>
 										<CardTitle>Project Details</CardTitle>
@@ -437,8 +435,6 @@ export default function ContactPage() {
 										</div>
 									</CardContent>
 								</Card>
-
-								{/* Additional Information */}
 								<Card>
 									<CardHeader>
 										<CardTitle>Additional Information</CardTitle>
@@ -451,9 +447,11 @@ export default function ContactPage() {
 													<SelectValue placeholder="Select an option" />
 												</SelectTrigger>
 												<SelectContent>
-													{hearAboutOptions.map(option => (
-														<SelectItem key={option} value={option}>{option}</SelectItem>
-													))}
+													{
+														hearAboutOptions.map(option => (
+															<SelectItem key={option} value={option}>{option}</SelectItem>
+														))
+													}
 												</SelectContent>
 											</Select>
 										</div>
@@ -465,14 +463,11 @@ export default function ContactPage() {
 										</div>
 									</CardContent>
 								</Card>
-
 								<Button type="submit" size="lg" className="w-full" disabled={isSubmitting || selectedProductTypes.length === 0}>
 									{isSubmitting ? "Submitting..." : "Submit Inquiry"}
 								</Button>
 							</form>
 						</div>
-
-						{/* Sidebar */}
 						<div className="space-y-6">
 							<Card>
 								<CardHeader>
@@ -505,7 +500,6 @@ export default function ContactPage() {
 									</div>
 								</CardContent>
 							</Card>
-
 							<Card>
 								<CardHeader>
 									<CardTitle>Why Choose Us?</CardTitle>

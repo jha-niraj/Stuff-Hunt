@@ -45,36 +45,37 @@ export default function ServicesPage() {
 							From intricate embroidery to end‑to‑end fulfillment. We help brands look sharp and stay consistent.
 						</p>
 					</motion.div>
-
 					<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mt-10">
-						{services.map((s, i) => (
-							<motion.div
-								key={s.title}
-								initial={{ opacity: 0, y: 16 }}
-								whileInView={{ opacity: 1, y: 0 }}
-								transition={{ delay: i * 0.06 }}
-								viewport={{ once: true, amount: 0.3 }}
-								className="rounded-xl border p-6 bg-card"
-							>
-								<s.icon className="w-6 h-6" />
-								<h3 className="text-lg font-semibold mt-3">{s.title}</h3>
-								<p className="text-sm text-muted-foreground mt-2">{s.desc}</p>
-								<ul className="mt-4 space-y-2 text-sm">
-									<li className="flex items-center gap-2">
-										<CheckCircle2 className="w-4 h-4 text-green-600" />
-										Consistent quality control
-									</li>
-									<li className="flex items-center gap-2">
-										<CheckCircle2 className="w-4 h-4 text-green-600" />
-										Fast, reliable turnaround
-									</li>
-									<li className="flex items-center gap-2">
-										<CheckCircle2 className="w-4 h-4 text-green-600" />
-										Proofing before production
-									</li>
-								</ul>
-							</motion.div>
-						))}
+						{
+							services.map((s, i) => (
+								<motion.div
+									key={s.title}
+									initial={{ opacity: 0, y: 16 }}
+									whileInView={{ opacity: 1, y: 0 }}
+									transition={{ delay: i * 0.06 }}
+									viewport={{ once: true, amount: 0.3 }}
+									className="rounded-xl border p-6 bg-card"
+								>
+									<s.icon className="w-6 h-6" />
+									<h3 className="text-lg font-semibold mt-3">{s.title}</h3>
+									<p className="text-sm text-muted-foreground mt-2">{s.desc}</p>
+									<ul className="mt-4 space-y-2 text-sm">
+										<li className="flex items-center gap-2">
+											<CheckCircle2 className="w-4 h-4 text-green-600" />
+											Consistent quality control
+										</li>
+										<li className="flex items-center gap-2">
+											<CheckCircle2 className="w-4 h-4 text-green-600" />
+											Fast, reliable turnaround
+										</li>
+										<li className="flex items-center gap-2">
+											<CheckCircle2 className="w-4 h-4 text-green-600" />
+											Proofing before production
+										</li>
+									</ul>
+								</motion.div>
+							))
+						}
 						<motion.div
 							initial={{ opacity: 0, y: 16 }}
 							whileInView={{ opacity: 1, y: 0 }}
