@@ -17,7 +17,7 @@ import { useSession, signOut } from "next-auth/react"
 import { cn } from "@/lib/utils"
 
 const navItems = [
-    { href: "/", label: "Home" },
+    // { href: "/", label: "Home" },
     { href: "/products", label: "Products" },
     { href: "/contact", label: "Contact" },
 ]

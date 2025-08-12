@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ImageUp, Sparkles, Loader2 } from "lucide-react"
-import { processSearchQuery, filtersToSearchParams } from "@/actions/search.action"
+import { processSearchQuery } from "@/actions/search.action"
 import { toast } from "sonner"
+import { filtersToSearchParams } from "@/lib/search"
 
 export function Hero({
 	title = "Find Products with AI‑Powered Search",
