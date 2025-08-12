@@ -2,7 +2,7 @@
 
 import { auth } from "@/auth"
 import { prisma } from "@/lib/prisma"
-import { v2 as cloudinary } from 'cloudinary'
+import cloudinary from '@/lib/cloudinary'
 import bcrypt from "bcryptjs"
 import { z } from "zod"
 import { revalidatePath } from "next/cache"
@@ -36,13 +36,6 @@ interface PasswordChangeData {
 	newPassword: string
 	confirmPassword: string
 }
-
-// Configure Cloudinary
-cloudinary.config({
-	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-	api_key: process.env.CLOUDINARY_API_KEY,
-	api_secret: process.env.CLOUDINARY_API_SECRET,
-})
 
 // Validation schemas
 const updateProfileSchema = z.object({
