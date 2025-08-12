@@ -10,6 +10,15 @@ import { Sparkles, X, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { searchParamsToFilters } from "@/lib/search"
+import {
+	Pagination,
+	PaginationContent,
+	PaginationEllipsis,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+} from "@/components/ui/pagination"
 
 export function ProductsClient() {
 	const sp = useSearchParams()
@@ -25,6 +34,12 @@ export function ProductsClient() {
 	const originalQuery = sp.get("q") || ""
 	const isAIProcessed = sp.get("aiProcessed") === "true"
 	const confidence = Number(sp.get("confidence")) || 0
+
+	// Update current page when URL changes
+	useEffect(() => {
+		const page = Number(sp.get("page")) || 1
+		setCurrentPage(page)
+	}, [sp])
 
 	// Load products based on search parameters
 	useEffect(() => {
@@ -44,18 +59,19 @@ export function ProductsClient() {
 						priceRange: aiFilters.priceRange,
 						query: originalQuery,
 						page: currentPage,
-						limit: 20
+						limit: 12
 					})
 				} else {
 					// Use regular search
+					const sortBy = sp.get("sort") as 'newest' | 'oldest' | 'price_low' | 'price_high' | 'rating' | 'popular' | null
 					const filters = {
 						search: sp.get("q") || sp.get("query") || undefined,
 						category: sp.get("category") || undefined,
 						minPrice: sp.get("minPrice") ? Number(sp.get("minPrice")) : undefined,
 						maxPrice: sp.get("maxPrice") ? Number(sp.get("maxPrice")) : undefined,
-						sortBy: (sp.get("sort") as any) || 'newest',
+						sortBy: sortBy || 'newest',
 						page: currentPage,
-						limit: 20
+						limit: 12
 					}
 
 					result = await getProducts(filters)
@@ -91,6 +107,52 @@ export function ProductsClient() {
 			newParams.set("source", "text")
 		}
 		router.push(`/products?${newParams.toString()}`)
+	}
+
+	const handlePageChange = (page: number) => {
+		const newParams = new URLSearchParams(sp.toString())
+		newParams.set("page", page.toString())
+		router.push(`/products?${newParams.toString()}`)
+		// Scroll to top when page changes
+		window.scrollTo({ top: 0, behavior: 'smooth' })
+	}
+
+	const generatePaginationItems = () => {
+		const items = []
+		const maxVisiblePages = 5
+		
+		if (totalPages <= maxVisiblePages) {
+			// Show all pages if total pages is small
+			for (let i = 1; i <= totalPages; i++) {
+				items.push(i)
+			}
+		} else {
+			// Show first page
+			items.push(1)
+			
+			if (currentPage > 3) {
+				items.push('ellipsis1')
+			}
+			
+			// Show pages around current page
+			const start = Math.max(2, currentPage - 1)
+			const end = Math.min(totalPages - 1, currentPage + 1)
+			
+			for (let i = start; i <= end; i++) {
+				items.push(i)
+			}
+			
+			if (currentPage < totalPages - 2) {
+				items.push('ellipsis2')
+			}
+			
+			// Show last page
+			if (totalPages > 1) {
+				items.push(totalPages)
+			}
+		}
+		
+		return items
 	}
 
 	if (loading) {
@@ -181,8 +243,9 @@ export function ProductsClient() {
 				<aside className="lg:sticky top-24 h-max">
 					<ProductFilters />
 				</aside>
-				<div>
+				<div className="space-y-6">
 					<ProductGrid products={products} />
+					
 					{products.length === 0 && !loading && (
 						<div className="rounded-xl border p-8 text-center">
 							<div className="text-muted-foreground mb-4">
@@ -201,6 +264,60 @@ export function ProductsClient() {
 									Clear AI filters
 								</Button>
 							)}
+						</div>
+					)}
+
+					{/* Pagination */}
+					{totalPages > 1 && products.length > 0 && (
+						<div className="flex flex-col items-center gap-4">
+							<div className="text-sm text-muted-foreground">
+								Showing {((currentPage - 1) * 12) + 1} to {Math.min(currentPage * 12, totalProducts)} of {totalProducts} products
+							</div>
+							<Pagination>
+								<PaginationContent>
+									<PaginationItem>
+										<PaginationPrevious 
+											href="#"
+											onClick={(e) => {
+												e.preventDefault()
+												if (currentPage > 1) handlePageChange(currentPage - 1)
+											}}
+											className={currentPage <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+										/>
+									</PaginationItem>
+									
+									{generatePaginationItems().map((item, index) => (
+										<PaginationItem key={index}>
+											{typeof item === 'number' ? (
+												<PaginationLink
+													href="#"
+													onClick={(e) => {
+														e.preventDefault()
+														handlePageChange(item)
+													}}
+													isActive={currentPage === item}
+													className="cursor-pointer"
+												>
+													{item}
+												</PaginationLink>
+											) : (
+												<PaginationEllipsis />
+											)}
+										</PaginationItem>
+									))}
+									
+									<PaginationItem>
+										<PaginationNext 
+											href="#"
+											onClick={(e) => {
+												e.preventDefault()
+												if (currentPage < totalPages) handlePageChange(currentPage + 1)
+											}}
+											className={currentPage >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+										/>
+									</PaginationItem>
+								</PaginationContent>
+							</Pagination>
 						</div>
 					)}
 				</div>

@@ -12,6 +12,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { useCart } from "@/stores/cart-store"
 import { AuthDialog } from "@/components/auth/auth-dialog"
 import { useAuthDialog } from "@/components/auth/use-auth-dialog"
+import { Suspense } from "react"
 import { useTheme } from "next-themes"
 import { useSession, signOut } from "next-auth/react"
 import { cn } from "@/lib/utils"
@@ -416,7 +417,9 @@ export function Navbar() {
             </nav>
 
             {/* Global auth dialog */}
-            <AuthDialog />
+            <Suspense fallback={null}>
+                <AuthDialog />
+            </Suspense>
         </header>
     )
 }
