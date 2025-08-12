@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { ProductGrid } from "@/components/product/product-grid"
 import { allProducts, featuredProducts } from "@/lib/products"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export function FeaturedGrid() {
 	const products = featuredProducts.length ? featuredProducts : allProducts.slice(0, 8)
@@ -21,7 +22,7 @@ export function FeaturedGrid() {
 						<p className="text-muted-foreground mt-1">Our bestsellers and new arrivals.</p>
 					</div>
 					<Button variant="ghost" asChild>
-						<a href="/products">View all</a>
+						<Link href="/products">View all</Link>
 					</Button>
 				</motion.div>
 				<ProductGrid products={products} />

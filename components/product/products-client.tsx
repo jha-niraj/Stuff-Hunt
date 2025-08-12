@@ -192,7 +192,7 @@ export function ProductsClient() {
 						`${filtered.length} product${filtered.length === 1 ? "" : "s"} found`
 					)}
 					{originalQuery && (
-						<span> for "{originalQuery}"</span>
+						<span> for &quot;{originalQuery}&quot;</span>
 					)}
 				</div>
 			</div>

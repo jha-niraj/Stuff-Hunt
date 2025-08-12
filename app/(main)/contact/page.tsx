@@ -11,7 +11,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { submitContactForm, type ContactFormData } from "@/actions/contact.action"
 import { toast } from "sonner"
-import { Mail, Phone, MapPin, Clock, Users, Package, Zap, Shield, Award, CheckCircle } from "lucide-react"
+import { Mail, Phone, Clock, Users, Package, Zap, Shield, Award, CheckCircle } from "lucide-react"
+import Link from "next/link"
 
 const productTypes = [
 	"Apparel & Clothing",
@@ -159,17 +160,17 @@ export default function ContactPage() {
 								<h3 className="font-semibold mb-2">What happens next?</h3>
 								<ul className="text-sm text-muted-foreground space-y-1">
 									<li>• Our bulk sales team will review your requirements</li>
-									<li>• We'll prepare a customized quote based on your needs</li>
+									<li>• We&apos;ll prepare a customized quote based on your needs</li>
 									<li>• A team member will contact you to discuss details</li>
-									<li>• We'll provide samples if needed</li>
+									<li>• We&apos;ll provide samples if needed</li>
 								</ul>
 							</div>
 							<div className="flex gap-4 justify-center">
 								<Button asChild>
-									<a href="/products">Browse Products</a>
+									<Link href="/products">Browse Products</Link>
 								</Button>
 								<Button variant="outline" asChild>
-									<a href="/">Back to Home</a>
+									<Link href="/">Back to Home</Link>
 								</Button>
 							</div>
 						</div>
@@ -188,7 +189,7 @@ export default function ContactPage() {
 						<div className="max-w-4xl mx-auto text-center">
 							<Badge variant="secondary" className="mb-4">Bulk Orders & Custom Solutions</Badge>
 							<h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
-								Let's Create Something
+								Let&apos;s Create Something
 								<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600"> Amazing</span>
 							</h1>
 							<p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
@@ -477,7 +478,7 @@ export default function ContactPage() {
 								<CardHeader>
 									<CardTitle>Get in Touch</CardTitle>
 									<CardDescription>
-										Prefer to talk? We're here to help
+										Prefer to talk? We&apos;re here to help
 									</CardDescription>
 								</CardHeader>
 								<CardContent className="space-y-4">

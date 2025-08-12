@@ -39,7 +39,7 @@ export default async function OrdersPage() {
 
 					{orders.length === 0 ? (
 						<div className="text-center py-12">
-							<p className="text-muted-foreground mb-4">You haven't placed any orders yet.</p>
+							<p className="text-muted-foreground mb-4">You haven&apos;t placed any orders yet.</p>
 							<Button asChild>
 								<Link href="/products">Start shopping</Link>
 							</Button>

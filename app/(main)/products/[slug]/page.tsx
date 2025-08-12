@@ -11,6 +11,7 @@ import { formatCurrency } from "@/lib/format"
 import { ProductGrid } from "@/components/product/product-grid"
 import { AddToCart } from "@/components/product/add-to-cart"
 import { ProductGallery } from "@/components/product/product-gallery"
+import Link from "next/link"
 
 export default function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
 	async function load() {
@@ -18,10 +19,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 		const product = getProductBySlug(slug)
 		return { product }
 	}
-
-	// This async wrapper allows server component to await params
-	// and still render synchronously.
-	// eslint-disable-next-line react/display-name
+	
 	const Content = async () => {
 		const { product } = await load()
 		if (!product) return notFound()
@@ -145,7 +143,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 					<div className="flex items-center justify-between mb-6">
 						<h2 className="text-xl md:text-2xl font-semibold tracking-tight">You might also like</h2>
 						<Button variant="ghost" asChild>
-							<a href="/products">View all</a>
+							<Link href="/products">View all</Link>
 						</Button>
 					</div>
 					<ProductGrid products={rel} />

@@ -18,7 +18,7 @@ export function AuthDialog() {
 	const sp = useSearchParams()
 	const pathname = usePathname()
 	const router = useRouter()
-	const { open, callbackUrl, openAuth, closeAuth, setCallbackUrl } = useAuthDialog()
+	const { open, callbackUrl, openAuth, closeAuth } = useAuthDialog()
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
 	const [showPw, setShowPw] = useState(false)
@@ -75,6 +75,7 @@ export function AuthDialog() {
 				redirect: true,
 			})
 		} catch (err) {
+			console.log("Error while signin in:" + err);
 			setError("Unable to sign in. Please try again.")
 			setSubmitting(false)
 		}

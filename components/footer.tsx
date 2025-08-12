@@ -19,14 +19,14 @@ export function Footer() {
                             </Link>
                         </li>
                         <li>
-                            <a href="/products?category=Hats" className="text-muted-foreground hover:underline">
+                            <Link href="/products?category=Hats" className="text-muted-foreground hover:underline">
                                 Hats
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a href="/products?category=Polos" className="text-muted-foreground hover:underline">
+                            <Link href="/products?category=Polos" className="text-muted-foreground hover:underline">
                                 Polos
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>
