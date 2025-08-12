@@ -4,6 +4,17 @@ import { getUserOrders } from "@/actions/order.action"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { formatCurrency } from "@/lib/format"
+import { Address } from "@/types"
+
+// Type guard to check if the address is a valid Address object
+function isAddress(address: unknown): address is Address {
+	return (
+		typeof address === 'object' &&
+		address !== null &&
+		'city' in address &&
+		'state' in address
+	)
+}
 
 export default async function OrdersPage() {
 	const result = await getUserOrders()
@@ -59,8 +70,7 @@ export default async function OrdersPage() {
 									</CardHeader>
 									<CardContent className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
 										<div className="text-sm text-muted-foreground">
-											{o.items.length} item{o.items.length > 1 ? "s" : ""} • {(o.shippingAddress as any)?.city},{" "}
-											{(o.shippingAddress as any)?.state}
+											{o.items.length} item{o.items.length > 1 ? "s" : ""} • {isAddress(o.shippingAddress) ? `${o.shippingAddress.city}, ${o.shippingAddress.state}` : 'Address not available'}
 										</div>
 										<div className="text-sm">
 											Total <span className="font-semibold">{formatCurrency(o.total)}</span>

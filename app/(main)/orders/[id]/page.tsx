@@ -6,6 +6,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { formatCurrency } from "@/lib/format"
 import { Button } from "@/components/ui/button"
+import { Address } from "@/types"
+
+// Type guard to check if the address is a valid Address object
+function isAddress(address: unknown): address is Address {
+	return (
+		typeof address === 'object' &&
+		address !== null &&
+		'firstName' in address &&
+		'lastName' in address &&
+		'address1' in address &&
+		'city' in address &&
+		'state' in address &&
+		'postalCode' in address &&
+		'country' in address
+	)
+}
 
 export default async function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params
@@ -113,22 +129,28 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
 									<CardTitle className="text-base">Shipping address</CardTitle>
 								</CardHeader>
 								<CardContent className="text-sm">
-									<div className="font-medium">
-										{(order.shippingAddress as any).firstName} {(order.shippingAddress as any).lastName}
-									</div>
-									{(order.shippingAddress as any).company && (
-										<div>{(order.shippingAddress as any).company}</div>
-									)}
-									<div>{(order.shippingAddress as any).address1}</div>
-									{(order.shippingAddress as any).address2 && (
-										<div>{(order.shippingAddress as any).address2}</div>
-									)}
-									<div>
-										{(order.shippingAddress as any).city}, {(order.shippingAddress as any).state} {(order.shippingAddress as any).postalCode}
-									</div>
-									<div>{(order.shippingAddress as any).country}</div>
-									{(order.shippingAddress as any).phone && (
-										<div className="mt-2">Phone: {(order.shippingAddress as any).phone}</div>
+									{isAddress(order.shippingAddress) ? (
+										<>
+											<div className="font-medium">
+												{order.shippingAddress.firstName} {order.shippingAddress.lastName}
+											</div>
+											{order.shippingAddress.company && (
+												<div>{order.shippingAddress.company}</div>
+											)}
+											<div>{order.shippingAddress.address1}</div>
+											{order.shippingAddress.address2 && (
+												<div>{order.shippingAddress.address2}</div>
+											)}
+											<div>
+												{order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.postalCode}
+											</div>
+											<div>{order.shippingAddress.country}</div>
+											{order.shippingAddress.phone && (
+												<div className="mt-2">Phone: {order.shippingAddress.phone}</div>
+											)}
+										</>
+									) : (
+										<div className="text-muted-foreground">Address information not available</div>
 									)}
 								</CardContent>
 							</Card>

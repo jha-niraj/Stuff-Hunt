@@ -2,12 +2,44 @@
 
 import { motion } from "framer-motion"
 import { ProductGrid } from "@/components/product/product-grid"
-import { allProducts, featuredProducts } from "@/lib/products"
+import { getFeaturedProducts, type ProductWithDetails } from "@/actions/product.action"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { useEffect, useState } from "react"
 
 export function FeaturedGrid() {
-	const products = featuredProducts.length ? featuredProducts : allProducts.slice(0, 8)
+	const [products, setProducts] = useState<ProductWithDetails[]>([])
+	const [loading, setLoading] = useState(true)
+
+	useEffect(() => {
+		const loadFeaturedProducts = async () => {
+			try {
+				const featuredProducts = await getFeaturedProducts(8)
+				setProducts(featuredProducts)
+			} catch (error) {
+				console.error('Error loading featured products:', error)
+				setProducts([])
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		loadFeaturedProducts()
+	}, [])
+
+	if (loading) {
+		return (
+			<section className="py-10 md:py-16">
+				<div className="container mx-auto px-4">
+					<div className="flex items-center justify-center py-12">
+						<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+						<span className="ml-2 text-muted-foreground">Loading featured products...</span>
+					</div>
+				</div>
+			</section>
+		)
+	}
+
 	return (
 		<section className="py-10 md:py-16">
 			<div className="container mx-auto px-4">

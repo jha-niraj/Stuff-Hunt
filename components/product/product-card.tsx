@@ -4,17 +4,16 @@ import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { allProducts, type Product } from "@/lib/products"
+import { type ProductWithDetails } from "@/actions/product.action"
 import { formatCurrency } from "@/lib/format"
 import { Plus } from "lucide-react"
 import { useCart } from "@/stores/cart-store"
 
 type Props = {
-  product?: Product
+  product: ProductWithDetails
 }
 
-export function ProductCard({ product = allProducts[0] }: Props) {
-  const p = product
+export function ProductCard({ product }: Props) {
   const { add } = useCart()
   return (
     <motion.div
@@ -23,11 +22,11 @@ export function ProductCard({ product = allProducts[0] }: Props) {
       viewport={{ once: true, amount: 0.2 }}
       className="group rounded-xl border overflow-hidden bg-card"
     >
-      <Link href={`/products/${p.slug}`} className="block">
+      <Link href={`/products/${product.slug}`} className="block">
         <div className="relative bg-muted">
           <Image
-            src={p.images?.[0] ?? "/placeholder.svg?height=900&width=900&query=product"}
-            alt={p.name}
+            src={product.images?.[0] ?? "/placeholder.svg?height=900&width=900&query=product"}
+            alt={product.name}
             width={900}
             height={900}
             className="aspect-square object-cover transition-transform duration-300 group-hover:scale-105"
@@ -37,24 +36,26 @@ export function ProductCard({ product = allProducts[0] }: Props) {
       <div className="p-4">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <Link href={`/products/${p.slug}`} className="font-medium line-clamp-1 hover:underline">
-              {p.name}
+            <Link href={`/products/${product.slug}`} className="font-medium line-clamp-1 hover:underline">
+              {product.name}
             </Link>
-            <div className="text-xs text-muted-foreground mt-1">{p.category}</div>
+            <div className="text-xs text-muted-foreground mt-1">
+              {product.categories[0]?.name || 'Uncategorized'}
+            </div>
           </div>
-          <div className="font-semibold shrink-0">{formatCurrency(p.price)}</div>
+          <div className="font-semibold shrink-0">{formatCurrency(product.price)}</div>
         </div>
         <div className="mt-3 flex items-center justify-between">
           <div className="flex -space-x-1">
-            {(p.colors ?? []).slice(0, 3).map((c) => (
-              <span key={c} className="inline-block w-5 h-5 rounded-full border bg-muted" title={c} />
+            {(product.colors ?? []).slice(0, 3).map((color: string) => (
+              <span key={color} className="inline-block w-5 h-5 rounded-full border bg-muted" title={color} />
             ))}
           </div>
           <Button
             size="sm"
             variant="outline"
             className="gap-2 bg-transparent"
-            onClick={() => add(p, 1, undefined)}
+            onClick={() => add(product, 1, undefined)}
             aria-label="Quick add to cart"
           >
             <Plus className="w-4 h-4" />

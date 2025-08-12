@@ -22,11 +22,11 @@ const Layout = ({ children }: LayoutProps) => {
 		}
 	}, []);
 
-	const toggleSidebar = () => {
-		const newState = !sidebarCollapsed;
-		setSidebarCollapsed(newState);
-		localStorage.setItem('mainSidebarCollapsed', JSON.stringify(newState));
-	};
+	// const toggleSidebar = () => {
+	// 	const newState = !sidebarCollapsed;
+	// 	setSidebarCollapsed(newState);
+	// 	localStorage.setItem('mainSidebarCollapsed', JSON.stringify(newState));
+	// };
 
 	if (!session?.user) {
 		redirect('/signin');

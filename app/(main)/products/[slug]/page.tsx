@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Heart, ShieldCheck, Truck } from "lucide-react"
-import { getProductBySlug, relatedProducts } from "@/lib/products"
+import { getProductBySlug, getRelatedProducts } from "@/actions/product.action"
 import { formatCurrency } from "@/lib/format"
 import { ProductGrid } from "@/components/product/product-grid"
 import { AddToCart } from "@/components/product/add-to-cart"
@@ -19,7 +19,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 		const product = getProductBySlug(slug)
 		return { product }
 	}
-	
+
 	const Content = async () => {
 		const { product } = await load()
 		if (!product) return notFound()

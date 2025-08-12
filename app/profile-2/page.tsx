@@ -9,10 +9,9 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { useProfile } from "@/stores/profile-store"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
 
 export default function ProfilePage() {
-	const { toast } = useToast()
 	const profile = useProfile((s) => s.profile)
 	const update = useProfile((s) => s.update)
 	const addresses = useProfile((s) => s.addresses)
@@ -135,7 +134,10 @@ export default function ProfilePage() {
 										<div className="mt-4">
 											<Button
 												onClick={() =>
-													toast({ title: "Profile saved", description: "Your profile information has been updated." })
+													toast("Profile saved", 
+														{
+															description: "Your profile information has been updated." 
+														})
 												}
 											>
 												Save changes
@@ -161,7 +163,11 @@ export default function ProfilePage() {
 															variant="outline"
 															className="bg-transparent"
 															onClick={() => {
-																setAddrForm({ ...a })
+																setAddrForm({ 
+																	...a,
+																	label: a.label || "",
+																	line2: a.line2 || ""
+																})
 															}}
 														>
 															Edit
@@ -235,10 +241,14 @@ export default function ProfilePage() {
 														onClick={() => {
 															if (addrForm.id) {
 																updateAddress(addrForm.id, addrForm)
-																toast({ title: "Address updated", description: "Saved your changes." })
+																toast("Address updated", {
+																	description: "Saved your changes." 
+																})
 															} else {
 																addAddress(addrForm)
-																toast({ title: "Address added", description: "New address saved to your profile." })
+																toast("Address added", {
+																	description: "New address saved to your profile." 
+																})
 															}
 															setAddrForm({
 																id: "",
@@ -311,14 +321,20 @@ export default function ProfilePage() {
 											<Button
 												onClick={() => {
 													if (!pw.next || pw.next.length < 8) {
-														toast({ title: "Password too short", description: "Use at least 8 characters." })
+														toast("Password too short", {
+															description: "Use at least 8 characters." 
+														})
 														return
 													}
 													if (pw.next !== pw.confirm) {
-														toast({ title: "Passwords do not match", description: "Check your confirmation." })
+														toast("Passwords do not match", {
+															description: "Check your confirmation." 
+														})
 														return
 													}
-													toast({ title: "Password updated", description: "Your password was changed." })
+													toast("Password updated", {
+														description: "Your password was changed." 
+													})
 													setPw({ current: "", next: "", confirm: "" })
 												}}
 											>

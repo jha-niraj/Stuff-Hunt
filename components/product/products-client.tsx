@@ -1,109 +1,25 @@
 "use client"
 
-import { useMemo } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { useSearchParams } from "next/navigation"
 import { ProductGrid } from "@/components/product/product-grid"
 import { ProductFilters } from "@/components/product/product-filters"
-import { allProducts, type Product } from "@/lib/products"
+import { getProducts, searchProductsWithFilters, type ProductWithDetails } from "@/actions/product.action"
+import { searchParamsToFilters } from "@/actions/search.action"
+import { type SearchFilters } from "@/types"
 import { Badge } from "@/components/ui/badge"
-import { Sparkles, X } from "lucide-react"
+import { Sparkles, X, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
-import { SearchFilters } from "@/types"
-import { searchParamsToFilters } from "@/lib/search"
-
-function filterProducts(products: Product[], params: URLSearchParams, aiFilters?: SearchFilters | null) {
-	let result = [...products]
-
-	// Handle AI-enhanced search
-	if (aiFilters) {
-		// Filter by AI-detected categories
-		if (aiFilters.categories.length > 0) {
-			result = result.filter((p) => {
-				const productCategory = p.category?.toLowerCase() || ""
-				return aiFilters.categories.some(cat =>
-					productCategory.includes(cat.toLowerCase()) ||
-					p.name.toLowerCase().includes(cat.toLowerCase()) ||
-					p.shortDescription?.toLowerCase().includes(cat.toLowerCase())
-				)
-			})
-		}
-
-		// Filter by AI-detected attributes
-		if (aiFilters.attributes.length > 0) {
-			result = result.filter((p) => {
-				const searchText = `${p.name} ${p.shortDescription} ${p.description}`.toLowerCase()
-				return aiFilters.attributes.some(attr =>
-					searchText.includes(attr.toLowerCase())
-				)
-			})
-		}
-
-		// Filter by AI-detected colors
-		if (aiFilters.colors && aiFilters.colors.length > 0) {
-			result = result.filter((p) => {
-				if (!p.colors) return false
-				return aiFilters.colors!.some(color =>
-					p.colors!.some(pColor =>
-						pColor.toLowerCase().includes(color.toLowerCase())
-					)
-				)
-			})
-		}
-
-		// Filter by AI-detected sizes
-		if (aiFilters.sizes && aiFilters.sizes.length > 0) {
-			result = result.filter((p) => {
-				if (!p.sizes) return false
-				return aiFilters.sizes!.some(size =>
-					p.sizes!.includes(size)
-				)
-			})
-		}
-
-		// Filter by AI-detected price range
-		if (aiFilters.priceRange) {
-			if (aiFilters.priceRange.min) {
-				result = result.filter((p) => p.price >= aiFilters.priceRange!.min!)
-			}
-			if (aiFilters.priceRange.max) {
-				result = result.filter((p) => p.price <= aiFilters.priceRange!.max!)
-			}
-		}
-	} else {
-		// Fallback to traditional search
-		const q = (params.get("q") || params.get("query") || "").toLowerCase().trim()
-		if (q) {
-			result = result.filter((p) => {
-				const searchText = `${p.name} ${p.category} ${p.shortDescription} ${p.description}`.toLowerCase()
-				return searchText.includes(q)
-			})
-		}
-	}
-
-	// Apply manual filters from UI
-	const category = params.get("category")
-	if (category && category !== "All") {
-		result = result.filter((p) => p.category === category)
-	}
-
-	// Apply sorting
-	const sort = params.get("sort") || "featured"
-	if (sort === "price-asc") {
-		result.sort((a, b) => a.price - b.price)
-	} else if (sort === "price-desc") {
-		result.sort((a, b) => b.price - a.price)
-	} else if (sort === "name") {
-		result.sort((a, b) => a.name.localeCompare(b.name))
-	}
-	// "featured" keeps natural order
-
-	return result
-}
 
 export function ProductsClient() {
 	const sp = useSearchParams()
 	const router = useRouter()
+	const [products, setProducts] = useState<ProductWithDetails[]>([])
+	const [loading, setLoading] = useState(true)
+	const [totalProducts, setTotalProducts] = useState(0)
+	const [currentPage, setCurrentPage] = useState(1)
+	const [totalPages, setTotalPages] = useState(1)
 
 	// Parse AI filters from URL
 	const aiFilters = useMemo(() => searchParamsToFilters(sp), [sp])
@@ -111,10 +27,63 @@ export function ProductsClient() {
 	const isAIProcessed = sp.get("aiProcessed") === "true"
 	const confidence = Number(sp.get("confidence")) || 0
 
-	const filtered = useMemo(() =>
-		filterProducts(allProducts, sp, aiFilters),
-		[sp, aiFilters]
-	)
+	// Load products based on search parameters
+	useEffect(() => {
+		const loadProducts = async () => {
+			setLoading(true)
+			try {
+				let result
+
+				if (isAIProcessed && aiFilters) {
+					// Use AI-enhanced search
+					result = await searchProductsWithFilters({
+						categories: aiFilters.categories,
+						attributes: aiFilters.attributes,
+						colors: aiFilters.colors,
+						sizes: aiFilters.sizes,
+						brands: aiFilters.brands,
+						priceRange: aiFilters.priceRange,
+						query: originalQuery,
+						page: currentPage,
+						limit: 20
+					})
+				} else {
+					// Use regular search
+					const filters = {
+						search: sp.get("q") || sp.get("query") || undefined,
+						category: sp.get("category") || undefined,
+						minPrice: sp.get("minPrice") ? Number(sp.get("minPrice")) : undefined,
+						maxPrice: sp.get("maxPrice") ? Number(sp.get("maxPrice")) : undefined,
+						sortBy: (sp.get("sort") as any) || 'newest',
+						page: currentPage,
+						limit: 20
+					}
+
+					result = await getProducts(filters)
+				}
+
+				if (result.success) {
+					setProducts(result.products)
+					setTotalProducts(result.totalProducts)
+					setTotalPages(result.totalPages)
+				} else {
+					console.error('Failed to load products:', result.error)
+					setProducts([])
+					setTotalProducts(0)
+					setTotalPages(1)
+				}
+			} catch (error) {
+				console.error('Error loading products:', error)
+				setProducts([])
+				setTotalProducts(0)
+				setTotalPages(1)
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		loadProducts()
+	}, [sp, aiFilters, isAIProcessed, originalQuery, currentPage])
 
 	const clearAIFilters = () => {
 		const newParams = new URLSearchParams()
@@ -123,6 +92,17 @@ export function ProductsClient() {
 			newParams.set("source", "text")
 		}
 		router.push(`/products?${newParams.toString()}`)
+	}
+
+	if (loading) {
+		return (
+			<div className="space-y-6">
+				<div className="flex items-center justify-center py-12">
+					<Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+					<span className="ml-2 text-muted-foreground">Loading products...</span>
+				</div>
+			</div>
+		)
 	}
 
 	return (
@@ -147,17 +127,17 @@ export function ProductsClient() {
 							</p>
 
 							<div className="flex flex-wrap gap-2">
-								{aiFilters.categories.map((category) => (
+								{aiFilters.categories.map((category: string) => (
 									<Badge key={category} variant="outline" className="text-xs">
 										{category}
 									</Badge>
 								))}
-								{aiFilters.attributes.map((attr) => (
+								{aiFilters.attributes.map((attr: string) => (
 									<Badge key={attr} variant="outline" className="text-xs">
 										{attr}
 									</Badge>
 								))}
-								{aiFilters.colors?.map((color) => (
+								{aiFilters.colors?.map((color: string) => (
 									<Badge key={color} variant="outline" className="text-xs">
 										{color}
 									</Badge>
@@ -186,13 +166,13 @@ export function ProductsClient() {
 			{/* Search Results Count */}
 			<div className="flex items-center justify-between">
 				<div className="text-sm text-muted-foreground">
-					{filtered.length === 0 ? (
+					{totalProducts === 0 ? (
 						"No products found"
 					) : (
-						`${filtered.length} product${filtered.length === 1 ? "" : "s"} found`
+						`${totalProducts} product${totalProducts === 1 ? "" : "s"} found`
 					)}
 					{originalQuery && (
-						<span> for &quot;{originalQuery}&quot;</span>
+						<span> for "{originalQuery}"</span>
 					)}
 				</div>
 			</div>
@@ -203,8 +183,8 @@ export function ProductsClient() {
 					<ProductFilters />
 				</aside>
 				<div>
-					<ProductGrid products={filtered} />
-					{filtered.length === 0 && (
+					<ProductGrid products={products} />
+					{products.length === 0 && !loading && (
 						<div className="rounded-xl border p-8 text-center">
 							<div className="text-muted-foreground mb-4">
 								<h3 className="font-semibold mb-2">No products found</h3>

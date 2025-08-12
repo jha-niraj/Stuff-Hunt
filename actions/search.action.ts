@@ -4,6 +4,32 @@ import { SearchFilters } from "@/types"
 import OpenAI from "openai"
 import { cache } from "react"
 
+// Helper function to convert search params to filters
+export function searchParamsToFilters(searchParams: URLSearchParams): SearchFilters | null {
+	const categories = searchParams.get("categories")?.split(",") || []
+	const attributes = searchParams.get("attributes")?.split(",") || []
+	const colors = searchParams.get("colors")?.split(",") || []
+	const sizes = searchParams.get("sizes")?.split(",") || []
+	const brands = searchParams.get("brands")?.split(",") || []
+	const minPrice = searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : undefined
+	const maxPrice = searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined
+	const confidence = Number(searchParams.get("confidence")) || 0
+
+	if (categories.length === 0 && attributes.length === 0 && colors.length === 0 && sizes.length === 0 && brands.length === 0 && !minPrice && !maxPrice) {
+		return null
+	}
+
+	return {
+		categories,
+		attributes,
+		colors,
+		sizes,
+		brands,
+		priceRange: minPrice || maxPrice ? { min: minPrice, max: maxPrice } : undefined,
+		confidence
+	}
+}
+
 const openai = new OpenAI({
 	apiKey: process.env.OPEN_AI_API,
 })

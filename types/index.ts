@@ -1,6 +1,7 @@
 // Re-export all types from different modules
 export * from './user'
 export * from './product'
+export * from './order'
 export * from './common'
 export * from './merchant'
 
