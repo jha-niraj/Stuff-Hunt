@@ -1,21 +1,33 @@
 export type Product = {
+  id: string
   slug: string
   name: string
-  shortDescription: string
-  description: string
-  category: string
+  shortDescription?: string
+  description?: string
+  detailedDescription?: string
+  category?: string
   price: number
-  images?: string[]
+  originalPrice?: number
+  images: string[]
   colors?: string[]
   sizes?: string[]
-  inStock?: boolean
+  inStock: boolean
   badge?: string
+  stockQuantity?: number
+  discountPercentage?: number
+  brand?: string
+  seller?: {
+    id: string
+    name: string
+    verificationBadge: boolean
+  }
 }
 
 const img = (q: string) => `/placeholder.svg?height=900&width=900&query=${encodeURIComponent(q)}`
 
 export const allProducts: Product[] = [
   {
+    id: "1",
     slug: "classic-dad-hat",
     name: "Classic Dad Hat",
     shortDescription: "Low‑profile cotton cap with custom embroidery.",
@@ -27,8 +39,15 @@ export const allProducts: Product[] = [
     colors: ["Black", "Navy", "Khaki"],
     inStock: true,
     badge: "Bestseller",
+    stockQuantity: 50,
+    seller: {
+      id: "seller1",
+      name: "Premium Apparel Co.",
+      verificationBadge: true
+    }
   },
   {
+    id: "2",
     slug: "premium-polo",
     name: "Premium Polo",
     shortDescription: "Moisture‑wicking polo with a clean drape.",
@@ -40,8 +59,15 @@ export const allProducts: Product[] = [
     colors: ["Black", "Heather Grey", "Navy"],
     sizes: ["S", "M", "L", "XL", "2XL"],
     inStock: true,
+    stockQuantity: 30,
+    seller: {
+      id: "seller1",
+      name: "Premium Apparel Co.",
+      verificationBadge: true
+    }
   },
   {
+    id: "3",
     slug: "heavyweight-hoodie",
     name: "Heavyweight Hoodie",
     shortDescription: "Cozy fleece hoodie built to last.",
@@ -53,6 +79,12 @@ export const allProducts: Product[] = [
     sizes: ["S", "M", "L", "XL", "2XL", "3XL"],
     inStock: true,
     badge: "New",
+    stockQuantity: 25,
+    seller: {
+      id: "seller2",
+      name: "Cozy Wear",
+      verificationBadge: false
+    }
   },
   {
     slug: "canvas-tote",

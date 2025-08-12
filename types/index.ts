@@ -6,7 +6,7 @@ export * from './merchant'
 
 // Common type utilities
 export type Prettify<T> = {
-  [K in keyof T]: T[K]
+	[K in keyof T]: T[K]
 } & {}
 
 export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
@@ -19,7 +19,7 @@ export type Maybe<T> = T | undefined
 
 // Database entity base
 export interface BaseEntity {
-  id: string
-  createdAt: Date
-  updatedAt?: Date
+	id: string
+	createdAt: Date
+	updatedAt?: Date
 }

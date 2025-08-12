@@ -18,7 +18,7 @@ const navItems = [
     { href: "/profile", label: "Profile" },
 ]
 
-export function SiteHeader() {
+export function Navbar() {
     const pathname = usePathname()
     const router = useRouter()
     const sp = useSearchParams()

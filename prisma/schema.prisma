@@ -49,10 +49,16 @@ model User {
     kycStatus           String    @default("PENDING") // PENDING, APPROVED, REJECTED
     verificationBadge   Boolean   @default(false)
 
+    // Shipping addresses
+    addresses            Address[]
+
     accounts              Account[]
     products              Product[] @relation("SellerProducts")
     orders                Order[]   @relation("BuyerOrders")
     reviews               Review[]
+    cartItems             CartItem[]
+    wishlistItems         WishlistItem[]
+    productLikes          ProductLike[]
 
     @@index([email])
     @@index([role])
@@ -84,15 +90,45 @@ model Account {
 model Product {
     id                  String    @id @default(cuid())
     name                String
+    slug                String    @unique
     price               Float
+    originalPrice       Float?    // For showing discounts
     shortDescription    String?
     detailedDescription String?
     images              String[]  // Array of Cloudinary URLs
     viewCount           Int       @default(0)
     isActive            Boolean   @default(true)
+    inStock             Boolean   @default(true)
+    stockQuantity       Int       @default(0)
+    
+    // Product variants
+    colors              String[]  @default([])
+    sizes               String[]  @default([])
+    variants            Json?     // Store complex variant data
+    
+    // SEO and metadata
+    metaTitle           String?
+    metaDescription     String?
+    tags                String[]  @default([])
+    
+    // Pricing and discounts
+    discountPercentage  Float?
+    discountStartDate   DateTime?
+    discountEndDate     DateTime?
+    
+    // Product specifications
+    weight              Float?
+    dimensions          String?   // e.g., "10x5x2 cm"
+    material            String?
+    brand               String?
+    sku                 String?   @unique
     
     // AI-generated metadata for search optimization
     aiMetadata          Json?     // Stores AI-generated product analysis and search metadata
+    
+    // Engagement metrics
+    likeCount           Int       @default(0)
+    shareCount          Int       @default(0)
     
     createdAt           DateTime  @default(now())
     updatedAt           DateTime  @updatedAt
@@ -105,12 +141,17 @@ model Product {
     categories          Category[] @relation("ProductCategories")
     
     // One-to-many relationships
-    orders              Order[]
+    orderItems          OrderItem[]
     reviews             Review[]
+    likes               ProductLike[]
+    cartItems           CartItem[]
+    wishlistItems       WishlistItem[]
 
     @@index([sellerId])
     @@index([isActive])
     @@index([createdAt])
+    @@index([slug])
+    @@index([inStock])
 }
 
 model Category {
@@ -130,24 +171,48 @@ model Category {
 }
 
 model Order {
-    id        String      @id @default(cuid())
-    status    OrderStatus @default(PENDING)
-    total     Float
-    quantity  Int         @default(1)
-    createdAt DateTime    @default(now())
-    updatedAt DateTime    @updatedAt
+    id              String      @id @default(cuid())
+    orderNumber     String      @unique
+    status          OrderStatus @default(PENDING)
+    subtotal        Float
+    shippingCost    Float       @default(0)
+    taxAmount       Float       @default(0)
+    discountAmount  Float       @default(0)
+    total           Float
+    
+    // Payment information
+    paymentStatus   PaymentStatus @default(PENDING)
+    paymentMethod   String?
+    paymentId       String?
+    
+    // Shipping information
+    shippingAddress Json        // Store shipping address as JSON
+    billingAddress  Json?       // Store billing address as JSON
+    trackingNumber  String?
+    estimatedDelivery DateTime?
+    deliveredAt     DateTime?
+    
+    // Order notes and metadata
+    notes           String?
+    metadata        Json?
+    
+    createdAt       DateTime    @default(now())
+    updatedAt       DateTime    @updatedAt
 
     // Buyer relationship
-    buyerId   String
-    buyer     User        @relation("BuyerOrders", fields: [buyerId], references: [id], onDelete: Cascade)
+    buyerId         String
+    buyer           User        @relation("BuyerOrders", fields: [buyerId], references: [id], onDelete: Cascade)
 
-    // Product relationship
-    productId String
-    product   Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+    // Order items
+    items           OrderItem[]
+    
+    // Coupons used
+    couponsUsed     OrderCoupon[]
 
     @@index([buyerId])
-    @@index([productId])
     @@index([status])
+    @@index([orderNumber])
+    @@index([createdAt])
 }
 
 model Review {
@@ -177,4 +242,165 @@ enum OrderStatus {
     DELIVERED
     CANCELLED
     REFUNDED
+}
+
+enum PaymentStatus {
+    PENDING
+    PAID
+    FAILED
+    REFUNDED
+    PARTIALLY_REFUNDED
+}
+
+// Cart items stored in database for logged-in users
+model CartItem {
+    id          String   @id @default(cuid())
+    quantity    Int      @default(1)
+    variantKey  String?  // e.g., "Black|L" for color and size
+    metadata    Json?    // Store additional variant data
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    // User relationship
+    userId      String
+    user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    // Product relationship
+    productId   String
+    product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+    @@unique([userId, productId, variantKey])
+    @@index([userId])
+    @@index([productId])
+}
+
+// Order items - individual products in an order
+model OrderItem {
+    id          String   @id @default(cuid())
+    quantity    Int
+    unitPrice   Float    // Price at time of order
+    totalPrice  Float    // unitPrice * quantity
+    variantKey  String?  // Product variant selected
+    metadata    Json?    // Store variant details at time of order
+    
+    createdAt   DateTime @default(now())
+
+    // Order relationship
+    orderId     String
+    order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+    // Product relationship
+    productId   String
+    product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+    @@index([orderId])
+    @@index([productId])
+}
+
+// Wishlist functionality
+model WishlistItem {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+
+    // User relationship
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    // Product relationship
+    productId String
+    product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+    @@unique([userId, productId])
+    @@index([userId])
+    @@index([productId])
+}
+
+// Product likes/favorites
+model ProductLike {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+
+    // User relationship
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    // Product relationship
+    productId String
+    product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+    @@unique([userId, productId])
+    @@index([userId])
+    @@index([productId])
+}
+
+// User addresses for shipping
+model Address {
+    id          String  @id @default(cuid())
+    type        String  @default("SHIPPING") // SHIPPING, BILLING
+    firstName   String
+    lastName    String
+    company     String?
+    address1    String
+    address2    String?
+    city        String
+    state       String
+    postalCode  String
+    country     String  @default("US")
+    phone       String?
+    isDefault   Boolean @default(false)
+    
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    // User relationship
+    userId      String
+    user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
+    @@index([isDefault])
+}
+
+// Discount coupons
+model Coupon {
+    id              String    @id @default(cuid())
+    code            String    @unique
+    name            String
+    description     String?
+    type            String    // PERCENTAGE, FIXED_AMOUNT, FREE_SHIPPING
+    value           Float     // Percentage (0-100) or fixed amount
+    minimumAmount   Float?    // Minimum order amount to use coupon
+    maximumDiscount Float?    // Maximum discount amount for percentage coupons
+    usageLimit      Int?      // Total usage limit
+    usageCount      Int       @default(0)
+    userLimit       Int?      // Per-user usage limit
+    isActive        Boolean   @default(true)
+    startsAt        DateTime?
+    expiresAt       DateTime?
+    
+    createdAt       DateTime  @default(now())
+    updatedAt       DateTime  @updatedAt
+
+    // Track coupon usage
+    orderCoupons    OrderCoupon[]
+
+    @@index([code])
+    @@index([isActive])
+    @@index([expiresAt])
+}
+
+// Track coupon usage in orders
+model OrderCoupon {
+    id            String @id @default(cuid())
+    discountAmount Float
+    
+    // Order relationship
+    orderId       String
+    order         Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+    // Coupon relationship
+    couponId      String
+    coupon        Coupon @relation(fields: [couponId], references: [id], onDelete: Cascade)
+
+    @@index([orderId])
+    @@index([couponId])
 }

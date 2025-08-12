@@ -10,7 +10,7 @@ import { MerchantTestimonialsSection } from "../_components/merchanttestimonials
 import { MerchantPricingSection } from "../_components/merchantpricing";
 import { MerchantFAQSection } from "../_components/merchantfaqs";
 import { MerchantCTASection } from "../_components/merchantcta";
-import Footer from "@/components/footer";
+import { Footer } from "@/components/footer";
 import { MerchantBentoSection } from "../_components/merchantbento";
 
 const brands = ["Flipkart", "Amazon", "Myntra", "Nykaa", "BigBasket", "Zomato", "Swiggy", "Paytm"]

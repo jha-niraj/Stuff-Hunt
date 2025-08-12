@@ -1,8 +1,6 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { SiteHeader } from "@/components/site-header"
-import { SiteFooter } from "@/components/site-footer"
-import { getOrderById } from "@/lib/orders"
+import { getOrderById } from "@/actions/order.action"
 import { OrderStatusBadge } from "@/components/orders/order-status-badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -11,18 +9,27 @@ import { Button } from "@/components/ui/button"
 
 export default async function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params
-	const order = getOrderById(id)
-	if (!order) return notFound()
+	const result = await getOrderById(id)
+	
+	if (!result.success || !result.order) {
+		return notFound()
+	}
+
+	const order = result.order
 
 	return (
 		<div className="min-h-dvh flex flex-col">
-			<SiteHeader />
 			<main className="flex-1">
 				<section className="container mx-auto px-4 py-10 md:py-16">
 					<div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6">
 						<div>
-							<h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Order #{order.id}</h1>
+							<h1 className="text-2xl md:text-3xl font-semibold tracking-tight">Order #{order.orderNumber}</h1>
 							<div className="text-sm text-muted-foreground mt-1">{new Date(order.createdAt).toLocaleString()}</div>
+							{order.trackingNumber && (
+								<div className="text-sm text-muted-foreground mt-1">
+									Tracking: <span className="font-mono">{order.trackingNumber}</span>
+								</div>
+							)}
 						</div>
 						<OrderStatusBadge status={order.status} />
 					</div>
@@ -44,18 +51,24 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
 									</TableHeader>
 									<TableBody>
 										{order.items.map((i) => (
-											<TableRow key={`${i.slug}-${i.variant ?? "default"}`}>
+											<TableRow key={i.id}>
 												<TableCell>
 													<div className="font-medium">
-														<Link href={`/products/${i.slug}`} className="hover:underline">
-															{i.name}
+														<Link href={`/products/${i.product.slug}`} className="hover:underline">
+															{i.product.name}
 														</Link>
 													</div>
-													<div className="text-xs text-muted-foreground">{i.variant ?? "Default"}</div>
+													{i.variantKey && (
+														<div className="text-xs text-muted-foreground">{i.variantKey}</div>
+													)}
+													<div className="text-xs text-muted-foreground">
+														by {i.product.seller.name}
+														{i.product.seller.verificationBadge && " ✓"}
+													</div>
 												</TableCell>
 												<TableCell>{i.quantity}</TableCell>
 												<TableCell>{formatCurrency(i.unitPrice)}</TableCell>
-												<TableCell className="text-right">{formatCurrency(i.unitPrice * i.quantity)}</TableCell>
+												<TableCell className="text-right">{formatCurrency(i.totalPrice)}</TableCell>
 											</TableRow>
 										))}
 									</TableBody>
@@ -75,12 +88,20 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
 									</div>
 									<div className="flex items-center justify-between">
 										<div className="text-muted-foreground">Shipping</div>
-										<div className="font-medium">{formatCurrency(order.shipping)}</div>
+										<div className="font-medium">{formatCurrency(order.shippingCost)}</div>
 									</div>
-									<div className="flex items-center justify-between">
-										<div className="text-muted-foreground">Tax</div>
-										<div className="font-medium">{formatCurrency(order.tax)}</div>
-									</div>
+									{order.taxAmount > 0 && (
+										<div className="flex items-center justify-between">
+											<div className="text-muted-foreground">Tax</div>
+											<div className="font-medium">{formatCurrency(order.taxAmount)}</div>
+										</div>
+									)}
+									{order.discountAmount > 0 && (
+										<div className="flex items-center justify-between text-green-600">
+											<div>Discount</div>
+											<div>-{formatCurrency(order.discountAmount)}</div>
+										</div>
+									)}
 									<div className="flex items-center justify-between pt-2 text-base font-semibold">
 										<div>Total</div>
 										<div>{formatCurrency(order.total)}</div>
@@ -92,15 +113,35 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
 									<CardTitle className="text-base">Shipping address</CardTitle>
 								</CardHeader>
 								<CardContent className="text-sm">
-									<div className="font-medium">{order.shippingAddress.name}</div>
-									<div>{order.shippingAddress.line1}</div>
-									{order.shippingAddress.line2 ? <div>{order.shippingAddress.line2}</div> : null}
-									<div>
-										{order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.zip}
+									<div className="font-medium">
+										{(order.shippingAddress as any).firstName} {(order.shippingAddress as any).lastName}
 									</div>
-									<div>{order.shippingAddress.country}</div>
+									{(order.shippingAddress as any).company && (
+										<div>{(order.shippingAddress as any).company}</div>
+									)}
+									<div>{(order.shippingAddress as any).address1}</div>
+									{(order.shippingAddress as any).address2 && (
+										<div>{(order.shippingAddress as any).address2}</div>
+									)}
+									<div>
+										{(order.shippingAddress as any).city}, {(order.shippingAddress as any).state} {(order.shippingAddress as any).postalCode}
+									</div>
+									<div>{(order.shippingAddress as any).country}</div>
+									{(order.shippingAddress as any).phone && (
+										<div className="mt-2">Phone: {(order.shippingAddress as any).phone}</div>
+									)}
 								</CardContent>
 							</Card>
+							{order.notes && (
+								<Card>
+									<CardHeader>
+										<CardTitle className="text-base">Order notes</CardTitle>
+									</CardHeader>
+									<CardContent className="text-sm">
+										{order.notes}
+									</CardContent>
+								</Card>
+							)}
 							<div className="flex gap-2">
 								<Button asChild variant="outline" className="bg-transparent">
 									<Link href="/products">Shop more</Link>
@@ -113,7 +154,6 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
 					</div>
 				</section>
 			</main>
-			<SiteFooter />
 		</div>
 	)
 }
