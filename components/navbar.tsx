@@ -16,6 +16,7 @@ import { Suspense } from "react"
 import { useTheme } from "next-themes"
 import { useSession, signOut } from "next-auth/react"
 import { cn } from "@/lib/utils"
+import Image from "next/image"
 
 const navItems = [
     // { href: "/", label: "Home" },
@@ -226,6 +227,13 @@ export function Navbar() {
                             <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                                 <span className="text-white font-bold text-sm">S</span>
                             </div>
+			    <Image 
+				src="/stuffhunt.jpeg"
+				alt="Stuff Hunt main logo"
+				width={32}
+				height={32}
+				className=""
+			    />
                             <p className="font-semibold text-xl tracking-tighter text-black dark:text-white">
                                 StuffHunt
                             </p>
