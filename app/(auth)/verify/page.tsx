@@ -19,6 +19,8 @@ function VerifyContent() {
 	const [email, setEmail] = useState<string | null>(null)
 	const router = useRouter()
 	const searchParams = useSearchParams()
+	const role = searchParams.get('role')
+	const callbackUrl = searchParams.get('callbackUrl')
 
 	const inputRefs = [
 		useRef<HTMLInputElement>(null),
@@ -133,11 +135,25 @@ function VerifyContent() {
 
                 if (signInResult?.ok) {
                     setTimeout(() => {
-                        router.push('/onboarding')
+                        // Determine redirect URL based on role and callback
+                        let redirectUrl = '/onboarding'
+                        
+                        if (callbackUrl) {
+                            redirectUrl = callbackUrl
+                        } else if (role === 'seller') {
+                            redirectUrl = '/merchant/dashboard'
+                        }
+                        
+                        router.push(redirectUrl)
                     }, 2000)
                 } else {
                     setTimeout(() => {
-                        router.push('/signin?verified=true')
+                        const signinParams = new URLSearchParams()
+                        signinParams.set('verified', 'true')
+                        if (role) signinParams.set('role', role)
+                        if (callbackUrl) signinParams.set('callbackUrl', callbackUrl)
+                        
+                        router.push(`/signin?${signinParams.toString()}`)
                     }, 2000)
                 }
 			} else {

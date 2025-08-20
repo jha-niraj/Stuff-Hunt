@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { ShoppingBag, Sun, Moon, User, LogOut, Equal } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -37,7 +37,7 @@ const protectedNavItems = [
 
 export function Navbar() {
     const pathname = usePathname()
-    // const router = useRouter()
+    const router = useRouter()
 
     const [open, setOpen] = useState(false)
     const [isScrolled, setIsScrolled] = useState(false)
@@ -135,14 +135,14 @@ export function Navbar() {
                 </Button>
                 <Button
                     size="sm"
-                    onClick={() => openAuth({ callbackUrl: pathname })}
+                    onClick={() => router.push("/signup")}
                     className={cn(isScrolled && 'lg:hidden')}
                 >
                     Sign Up
                 </Button>
                 <Button
                     size="sm"
-                    onClick={() => openAuth({ callbackUrl: pathname })}
+                    onClick={() => router.push("/signup")}
                     className={cn(isScrolled ? 'lg:inline-flex' : 'hidden')}
                 >
                     Get Started
@@ -212,7 +212,7 @@ export function Navbar() {
                     <Button
                         size="sm"
                         className="w-full"
-                        onClick={() => openAuth({ callbackUrl: pathname })}
+                        onClick={() => router.push("/signup")}
                     >
                         Get Started
                     </Button>

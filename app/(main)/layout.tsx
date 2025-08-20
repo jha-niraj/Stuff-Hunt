@@ -28,17 +28,13 @@ const Layout = ({ children }: LayoutProps) => {
 	// 	localStorage.setItem('mainSidebarCollapsed', JSON.stringify(newState));
 	// };
 
-	if (!session?.user) {
-		redirect('/signin');
-	}
-
 	return (
 		<OnboardingCheck>
 			<div className="flex h-screen">
 				<Navbar />
-				<div className="flex flex-col flex-1">
-					<main className={`backdrop-blur-sm transition-all duration-300 ${sidebarCollapsed ? 'sm:ml-[60px] ml-[0px]' : 'sm:ml-[180px] ml-[0px]'} pt-16`}>
-						<div className="h-full pb-16 md:pb-0">
+				<div className="w-full flex flex-col flex-1">
+					<main className={`w-full backdrop-blur-sm transition-all duration-300 pt-16`}>
+						<div className="max-w-7xl mx-auto h-full pb-16 md:pb-0">
 							{children}
 						</div>
 					</main>

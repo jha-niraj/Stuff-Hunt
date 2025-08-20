@@ -23,6 +23,7 @@ function SignUp() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const role = searchParams.get('role') // Get role from URL params
+    const callbackUrl = searchParams.get('callbackUrl') // Get callback URL
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -39,7 +40,14 @@ function SignUp() {
             console.log("Signup Result: " + result?.message);
 
             toast.success(`${role === 'seller' ? 'Seller' : 'User'} account created successfully! Please check your email for verification code.`)
-            router.push(`/verify?email=${encodeURIComponent(email)}${role ? `&role=${role}` : ''}`)
+            
+            // Build verification URL with all necessary parameters
+            const verifyParams = new URLSearchParams()
+            verifyParams.set('email', email)
+            if (role) verifyParams.set('role', role)
+            if (callbackUrl) verifyParams.set('callbackUrl', callbackUrl)
+            
+            router.push(`/verify?${verifyParams.toString()}`)
         } catch (error) {
             console.error('Registration error:', error)
             toast.error(error instanceof Error ? error.message : 'Registration failed')
@@ -51,8 +59,14 @@ function SignUp() {
     const handleGoogleSignUp = async () => {
         setIsGoogleLoading(true)
         try {
+            // Determine callback URL based on role
+            let redirectUrl = callbackUrl || '/'
+            if (role === 'seller' && !callbackUrl) {
+                redirectUrl = '/merchant/dashboard'
+            }
+            
             await signIn('google', {
-                callbackUrl: '/dashboard'
+                callbackUrl: redirectUrl
             })
         } catch (error) {
             console.error('Google sign-up error:', error)
@@ -185,7 +199,10 @@ function SignUp() {
                         <div className="mt-8 text-center">
                             <p className="text-sm text-neutral-600 dark:text-neutral-400">
                                 Already have an account?{" "}
-                                <Link href={`/signin${role ? `?role=${role}` : ''}`} className="text-neutral-900 dark:text-white hover:underline font-medium">
+                                <Link 
+                                    href={`/signin${role || callbackUrl ? '?' : ''}${role ? `role=${role}` : ''}${role && callbackUrl ? '&' : ''}${callbackUrl ? `callbackUrl=${encodeURIComponent(callbackUrl)}` : ''}`} 
+                                    className="text-neutral-900 dark:text-white hover:underline font-medium"
+                                >
                                     Sign in
                                 </Link>
                             </p>

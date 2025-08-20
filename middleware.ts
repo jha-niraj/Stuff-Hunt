@@ -3,15 +3,11 @@ import { NextResponse } from "next/server"
 
 // Protected routes that require authentication
 const protectedRoutes = [
-	'/merchant',
-	'/admin',
 	'/profile',
-	'/settings',
 	'/onboarding',
 	'/orders',
 	'/wishlist',
-	'/cart',
-	'/checkout'
+	'/checkout' // Remove /cart as users can view cart without login
 ]
 
 // Seller-specific routes that require SELLER role
@@ -49,7 +45,10 @@ const publicRoutes = [
 	'/contact',
 	'/privacy',
 	'/terms',
-	'/merchantonboard' // Public merchant onboarding page
+	'/cart', // Allow cart access without login
+	'/merchantonboard', // Public merchant onboarding page
+	'/pricing',
+	'/services'
 ]
 
 // API routes that should be excluded from auth checks

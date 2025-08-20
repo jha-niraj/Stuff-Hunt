@@ -13,6 +13,8 @@ import { submitContactForm, type ContactFormData } from "@/actions/contact.actio
 import { toast } from "sonner"
 import { Mail, Phone, Clock, Users, Package, Zap, Shield, Award, CheckCircle } from "lucide-react"
 import Link from "next/link"
+import { Navbar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
 
 const productTypes = [
 	"Apparel & Clothing",
@@ -182,6 +184,7 @@ export default function ContactPage() {
 
 	return (
 		<div className="min-h-dvh flex flex-col">
+			<Navbar />
 			<main className="flex-1">
 				<section className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20">
 					<div className="container mx-auto px-4 py-16 md:py-24">
@@ -539,6 +542,7 @@ export default function ContactPage() {
 					</div>
 				</section>
 			</main>
+			<Footer />
 		</div>
 	)
 }

@@ -134,7 +134,7 @@ export function AuthDialog() {
 								</svg>
 								Continue with Google
 							</Button>
-							<div className="relative my-2">
+							<div className="relative my-4">
 								<Separator />
 								<span className="absolute left-1/2 -translate-x-1/2 -top-3 bg-background/30 backdrop-blur px-2 text-xs text-muted-foreground">
 									or
@@ -186,9 +186,33 @@ export function AuthDialog() {
 									Continue
 								</Button>
 							</form>
-							<div className="mt-4 text-xs text-muted-foreground flex items-center gap-2">
-								<CircleHelp className="w-3.5 h-3.5" />
-								Already have an account? Use your email and password or continue with Google.
+							<div className="mt-4 space-y-3">
+								<div className="text-xs text-muted-foreground flex items-center gap-2">
+									<CircleHelp className="w-3.5 h-3.5" />
+									Already have an account? Use your email and password or continue with Google.
+								</div>
+								
+								<Separator />
+								
+								<div className="text-center">
+									<p className="text-sm text-muted-foreground mb-3">
+										Don't have an account yet?
+									</p>
+									<Button
+										variant="outline"
+										className="w-full"
+										onClick={() => {
+											const signupUrl = new URL('/signup', window.location.origin)
+											if (resolvedCallback) {
+												signupUrl.searchParams.set('callbackUrl', resolvedCallback)
+											}
+											router.push(signupUrl.toString())
+											closeAuth()
+										}}
+									>
+										Create New Account
+									</Button>
+								</div>
 							</div>
 						</div>
 					</div>

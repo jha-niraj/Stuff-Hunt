@@ -1,3 +1,5 @@
+"use client"
+
 import { ProductsClient } from "@/components/product/products-client"
 
 export default function ProductsPage() {

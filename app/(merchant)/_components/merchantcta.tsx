@@ -111,7 +111,7 @@ export function MerchantCTASection() {
 						customers with StuffHunt&apos;s AI-powered marketplace
 					</p>
 				</div>
-				<Link href="/seller/signup">
+				<Link href="/signup?role=seller">
 					<Button
 						className="px-[30px] py-2 bg-secondary text-secondary-foreground text-base font-medium leading-6 rounded-[99px] shadow-[0px_0px_0px_4px_rgba(255,255,255,0.13)] hover:bg-secondary/90 transition-all duration-200"
 						size="lg"
