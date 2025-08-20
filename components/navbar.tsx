@@ -6,9 +6,15 @@ import { useEffect, useState } from "react"
 import { ShoppingBag, Sun, Moon, User, LogOut, Equal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SmartSearch } from "@/components/search/smart-search"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet"
+import { 
+    Sheet, SheetContent, SheetHeader, 
+    SheetTitle, SheetTrigger, SheetClose 
+} from "@/components/ui/sheet"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { 
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, 
+    DropdownMenuSeparator, DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu"
 import { useCart } from "@/stores/cart-store"
 import { AuthDialog } from "@/components/auth/auth-dialog"
 import { useAuthDialog } from "@/components/auth/use-auth-dialog"
@@ -224,16 +230,13 @@ export function Navbar() {
                 <div className="flex items-center justify-between py-2">
                     <div className="flex items-center gap-8">
                         <Link href="/" aria-label="home" className="flex gap-2 items-center">
-                            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                                <span className="text-white font-bold text-sm">S</span>
-                            </div>
-			    <Image 
-				src="/stuffhunt.jpeg"
-				alt="Stuff Hunt main logo"
-				width={32}
-				height={32}
-				className=""
-			    />
+                            <Image
+                                src="/stuffhunt.jpeg"
+                                alt="Stuff Hunt main logo"
+                                width={32}
+                                height={32}
+                                className=""
+                            />
                             <p className="font-semibold text-xl tracking-tighter text-black dark:text-white">
                                 StuffHunt
                             </p>
@@ -314,9 +317,7 @@ export function Navbar() {
                                 }
                             </Link>
                         </Button>
-
                         {renderAuthButtons()}
-
                         <Sheet open={open} onOpenChange={setOpen}>
                             <SheetTrigger asChild>
                                 <Button variant="ghost" size="sm" className="lg:hidden p-2">
@@ -373,11 +374,13 @@ export function Navbar() {
                                             <Link href="/cart" aria-label="Open cart">
                                                 <ShoppingBag className="w-4 h-4" />
                                                 Cart
-                                                {itemCount > 0 && (
+                                                {
+                                                itemCount > 0 && (
                                                     <span className="text-xs rounded-full bg-primary text-primary-foreground px-2 py-0.5 ml-1">
                                                         {itemCount}
                                                     </span>
-                                                )}
+                                                )
+                                                }
                                             </Link>
                                         </Button>
                                     </SheetClose>
@@ -412,7 +415,6 @@ export function Navbar() {
                     </div>
                 </div>
             </nav>
-
             <Suspense fallback={null}>
                 <AuthDialog />
             </Suspense>

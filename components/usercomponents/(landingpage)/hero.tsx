@@ -10,7 +10,6 @@ import { ImageUp, Sparkles, Loader2 } from "lucide-react"
 import { processSearchQuery } from "@/actions/search.action"
 import { toast } from "sonner"
 import { filtersToSearchParams } from "@/lib/search"
-import AnimatedGradientBackground from "@/components/animated-background-effect"
 
 export function Hero({
 	title = "Find Products with AI‑Powered Search",
@@ -81,7 +80,6 @@ export function Hero({
 
 	return (
 		<section className="relative">
-			<AnimatedGradientBackground />
 			<div className="container mx-auto px-4 py-14 md:py-24">
 				<motion.div
 					initial={{ opacity: 0, y: 14 }}
