@@ -93,13 +93,24 @@ model Product {
     slug                String   @unique
     price               Float
     originalPrice       Float? // For showing discounts
+    finalPrice          Float? // Price after discount
     shortDescription    String?
     detailedDescription String?
-    images              String[] // Array of Cloudinary URLs
+    keyFeatures         String? // Key features from Excel
+    productType         String? // Product type from Excel
+    images              String[] // Array of Cloudinary URLs (up to 5 from Excel)
     viewCount           Int      @default(0)
     isActive            Boolean  @default(true)
     inStock             Boolean  @default(true)
     stockQuantity       Int      @default(0)
+
+    // Excel-specific fields
+    category            String? // Main category from Excel
+    subcategory         String? // Subcategory from Excel
+    extraOptions        String? // Extra options from Excel
+    sizeOptions         String? // Size options from Excel
+    itemsTempQty        Int? // Items temp quantity from Excel
+    returnPolicy        String? // Return policy from Excel
 
     // Product variants
     colors   String[] @default([])
@@ -152,6 +163,9 @@ model Product {
     @@index([createdAt])
     @@index([slug])
     @@index([inStock])
+    @@index([category])
+    @@index([subcategory])
+    @@index([brand])
 }
 
 model Category {
