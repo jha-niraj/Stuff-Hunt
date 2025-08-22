@@ -1,41 +1,55 @@
-# Dynamic Product Detail System
+# Hybrid Product Detail System
 
 ## Overview
 
-StuffHunt now features a dynamic product detail system that automatically renders different UI components based on product types. This system is designed to handle diverse product categories from electronics to clothing, providing tailored user experiences for each product type.
+StuffHunt features a hybrid product detail system that follows the approach used by major e-commerce platforms like Amazon, Flipkart, and Myntra. Instead of creating separate components for each product type, the system uses:
+
+1. **Single Generic PDP Component** - Handles common UI elements (title, price, images, cart buttons)
+2. **Dynamic Attribute Rendering** - JSON-driven specifications based on product category  
+3. **Category-Specific Plugins** - Optional subcomponents for specialized functionality
+
+This approach eliminates code duplication while maintaining category-specific customization capabilities.
 
 ## Architecture
 
-### 1. Product Type Detection
+### 1. Unified Component Structure
 
-The system uses an enum-based approach with automatic detection:
+The system uses a single `UnifiedProductDetail` component that handles all product types:
 
 ```typescript
-enum ProductType {
-  ELECTRONICS_LAPTOP,
-  ELECTRONICS_SMARTPHONE,
-  CLOTHING_APPAREL,
-  CLOTHING_FOOTWEAR,
-  // ... more types
+// Single component for all product types
+<UnifiedProductDetail product={product} />
+```
+
+### 2. JSON-Driven Specifications
+
+Product specifications are stored as structured JSON in the `aiMetadata` field:
+
+```typescript
+// Electronics Laptop
+{
+  "processor": "Intel Core i7-12700H",
+  "ram": "16GB DDR4", 
+  "storage": "512GB SSD",
+  "display": { "size": "15.6 inch", "resolution": "1920x1080" }
+}
+
+// Clothing Apparel  
+{
+  "material": "100% Cotton",
+  "fit": "Regular",
+  "care": ["Machine wash cold", "Tumble dry low"],
+  "season": "All Season"
 }
 ```
 
-### 2. Component Mapping
+### 3. Dynamic Subcomponents
 
-Each product type maps to a specific React component:
+Category-specific functionality is handled by pluggable subcomponents:
 
-- `ELECTRONICS_LAPTOP` → `ElectronicsLaptop.tsx`
-- `ELECTRONICS_SMARTPHONE` → `ElectronicsSmartphone.tsx`
-- `CLOTHING_APPAREL` → `ClothingApparel.tsx`
-- `GENERIC_PRODUCT` → `GenericProduct.tsx` (fallback)
-
-### 3. Dynamic Loading
-
-Components are dynamically imported for optimal performance:
-
-```typescript
-const ElectronicsLaptop = dynamic(() => import("@/components/product-details/ElectronicsLaptop"))
-```
+- `DynamicSpecifications` - Renders specs based on product type schema
+- `CategorySpecificDetails` - Handles specialized sections (size guides, care instructions)
+- `ProductReviews` - Common review system for all products
 
 ## Database Optimization
 
@@ -52,33 +66,33 @@ const ElectronicsLaptop = dynamic(() => import("@/components/product-details/Ele
 - **Index usage**: 95%+ cache hit rate on popular searches
 - **Scalability**: Supports 10K+ products with sub-second response times
 
-## Product Components
+## Component Architecture
 
-### Electronics Components
+### Core Components
 
-#### ElectronicsLaptop
-- **Specifications**: Processor, RAM, Storage, Display, Graphics
-- **Features**: Technical specs table, performance benchmarks
-- **UI Elements**: Detailed spec comparison, warranty info
+#### UnifiedProductDetail.tsx
+- **Common Elements**: Product title, price, images carousel, add to cart buttons
+- **Universal Features**: Seller info, reviews, trust badges, sharing
+- **Responsive Design**: Optimized layouts for different product categories
 
-#### ElectronicsSmartphone
-- **Specifications**: OS, Camera, Battery, Storage, Connectivity
-- **Features**: Camera details, storage variants, connectivity options
-- **UI Elements**: Storage selection, camera showcase
+#### DynamicSpecifications.tsx  
+- **Schema-Based Rendering**: Automatically displays specs based on product type
+- **Icon Mapping**: Category-appropriate icons for different specifications
+- **Flexible Layout**: Adapts to different specification structures
 
-### Clothing Components
+#### CategorySpecificDetails.tsx
+- **Electronics**: Technical details, warranty info, connectivity specs
+- **Clothing**: Size guides, care instructions, fit information  
+- **Home**: Assembly info, material details, room compatibility
+- **Sports**: Equipment specs, target muscles, skill levels
 
-#### ClothingApparel
-- **Specifications**: Material, Fit, Care instructions, Season
-- **Features**: Size guide, care instructions, material info
-- **UI Elements**: Size chart, color swatches, fit guide
+### Legacy Components (Backward Compatibility)
 
-### Generic Component
-
-#### GenericProduct
-- **Fallback**: Handles any product type not specifically implemented
-- **Features**: Basic product info, specifications, reviews
-- **UI Elements**: Standard product layout, flexible spec display
+The system maintains backward compatibility with existing components:
+- `ElectronicsLaptop.tsx` - Legacy laptop component
+- `ElectronicsSmartphone.tsx` - Legacy smartphone component  
+- `ClothingApparel.tsx` - Legacy clothing component
+- `GenericProduct.tsx` - Legacy generic fallback
 
 ## AI Metadata Structure
 
