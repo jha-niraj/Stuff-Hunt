@@ -4,10 +4,10 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Sparkles, Menu, X, Upload, Search } from "lucide-react"
+import { Store, Menu, X, BarChart3, Package, Settings } from "lucide-react"
 import { useSession } from "next-auth/react"
 
-export function Navbar() {
+export function MerchantNavbar() {
 	const { data: session } = useSession()
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	const [scrolled, setScrolled] = useState(false)
@@ -35,42 +35,44 @@ export function Navbar() {
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 				<div className="flex items-center justify-between h-16">
 					{/* Logo */}
-					<Link href="/" className="flex items-center gap-3">
+					<Link href="/merchantonboard" className="flex items-center gap-3">
 						<span className="text-foreground text-xl font-semibold">StuffHunt</span>
 						<div className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-							<Sparkles className="w-3 h-3" />
-							Shop Smart
+							<Store className="w-3 h-3" />
+							Seller Hub
 						</div>
 					</Link>
 
 					{/* Desktop Navigation */}
 					<div className="hidden md:flex items-center gap-8">
-						<Link href="/products" className="text-foreground/80 hover:text-foreground transition-colors">
-							Products
+						<Link href="/merchantonboard#features" className="text-foreground/80 hover:text-foreground transition-colors">
+							Features
 						</Link>
-						<Link href="/categories" className="text-foreground/80 hover:text-foreground transition-colors">
-							Categories
+						<Link href="/merchantonboard#pricing" className="text-foreground/80 hover:text-foreground transition-colors">
+							Pricing
 						</Link>
-						<Link href="/about" className="text-foreground/80 hover:text-foreground transition-colors">
-							About
+						<Link href="/merchantonboard#testimonials" className="text-foreground/80 hover:text-foreground transition-colors">
+							Success Stories
 						</Link>
 						<Link href="/contact" className="text-foreground/80 hover:text-foreground transition-colors">
-							Contact
+							Support
 						</Link>
 					</div>
 
 					{/* Desktop Actions */}
 					<div className="hidden md:flex items-center gap-4">
-						{session?.user ? (
+						{session?.user?.role === "SELLER" ? (
 							<>
-								<Link href="/dashboard">
+								<Link href="/merchantdirectory">
 									<Button variant="ghost" className="text-foreground hover:bg-muted px-4 py-2 rounded-full font-medium">
+										<BarChart3 className="w-4 h-4 mr-2" />
 										Dashboard
 									</Button>
 								</Link>
-								<Link href="/profile">
+								<Link href="/merchantdirectory/products">
 									<Button className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-full font-medium shadow-sm">
-										Profile
+										<Package className="w-4 h-4 mr-2" />
+										My Products
 									</Button>
 								</Link>
 							</>
@@ -83,7 +85,7 @@ export function Navbar() {
 								</Link>
 								<Link href="/signup">
 									<Button className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-full font-medium shadow-sm">
-										Get Started
+										Start Selling
 									</Button>
 								</Link>
 							</>
@@ -111,45 +113,47 @@ export function Navbar() {
 					>
 						<div className="px-4 py-6 space-y-4">
 							<Link 
-								href="/products" 
+								href="/merchantonboard#features" 
 								className="block text-foreground/80 hover:text-foreground transition-colors py-2"
 								onClick={() => setIsMenuOpen(false)}
 							>
-								Products
+								Features
 							</Link>
 							<Link 
-								href="/categories" 
+								href="/merchantonboard#pricing" 
 								className="block text-foreground/80 hover:text-foreground transition-colors py-2"
 								onClick={() => setIsMenuOpen(false)}
 							>
-								Categories
+								Pricing
 							</Link>
 							<Link 
-								href="/about" 
+								href="/merchantonboard#testimonials" 
 								className="block text-foreground/80 hover:text-foreground transition-colors py-2"
 								onClick={() => setIsMenuOpen(false)}
 							>
-								About
+								Success Stories
 							</Link>
 							<Link 
 								href="/contact" 
 								className="block text-foreground/80 hover:text-foreground transition-colors py-2"
 								onClick={() => setIsMenuOpen(false)}
 							>
-								Contact
+								Support
 							</Link>
 							
 							<div className="pt-4 border-t border-border/50 space-y-3">
-								{session?.user ? (
+								{session?.user?.role === "SELLER" ? (
 									<>
-										<Link href="/dashboard" onClick={() => setIsMenuOpen(false)}>
+										<Link href="/merchantdirectory" onClick={() => setIsMenuOpen(false)}>
 											<Button variant="ghost" className="w-full justify-start">
+												<BarChart3 className="w-4 h-4 mr-2" />
 												Dashboard
 											</Button>
 										</Link>
-										<Link href="/profile" onClick={() => setIsMenuOpen(false)}>
+										<Link href="/merchantdirectory/products" onClick={() => setIsMenuOpen(false)}>
 											<Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-												Profile
+												<Package className="w-4 h-4 mr-2" />
+												My Products
 											</Button>
 										</Link>
 									</>
@@ -162,7 +166,7 @@ export function Navbar() {
 										</Link>
 										<Link href="/signup" onClick={() => setIsMenuOpen(false)}>
 											<Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-												Get Started
+												Start Selling
 											</Button>
 										</Link>
 									</>

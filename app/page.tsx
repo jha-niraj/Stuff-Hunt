@@ -8,6 +8,7 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { FeaturedGrid } from "@/components/usercomponents/(landingpage)/featured-grid"
 import { MoreProducts } from "@/components/usercomponents/(landingpage)/more-products"
+import { HeroSection } from "@/components/hero-section"
 import Link from "next/link"
 
 const brands = ["Nike", "Adidas", "Apple", "Samsung", "Sony", "Canon", "Dell", "HP"]
@@ -67,297 +68,7 @@ const steps = [
 	},
 ]
 
-// Hero Header Component
-function HeroHeader() {
-	return (
-		<header className="w-full py-4 px-6">
-			<div className="max-w-7xl mx-auto flex items-center justify-between">
-				<div className="flex items-center gap-6">
-					<div className="flex items-center gap-3">
-						<Link href="/" className="flex items-center gap-3">
-							<span className="text-foreground text-xl font-semibold">StuffHunt</span>
-							<div className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-								<Sparkles className="w-3 h-3" />
-								Shop Smart
-							</div>
-						</Link>
-					</div>
-				</div>
-				<div className="flex items-center gap-4">
-					<Link href="/products" className="hidden md:block">
-						<Button variant="ghost" className="text-foreground hover:bg-muted px-4 py-2 rounded-full font-medium">
-							Browse Products
-						</Button>
-					</Link>
-					<Link href="/signup" className="hidden md:block">
-						<Button className="bg-secondary text-secondary-foreground hover:bg-secondary/90 px-6 py-2 rounded-full font-medium shadow-sm">
-							Get Started
-						</Button>
-					</Link>
-				</div>
-			</div>
-		</header>
-	)
-}
 
-// Hero Section Component
-function HeroSection() {
-	return (
-		<section
-			className="flex flex-col items-center text-center relative mx-auto rounded-2xl overflow-hidden my-6 py-0 px-4
-         w-full h-[400px] md:w-[1220px] md:h-[600px] lg:h-[810px] md:px-0"
-		>
-			<div className="absolute inset-0 z-0">
-				<svg
-					width="100%"
-					height="100%"
-					viewBox="0 0 1220 810"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-					preserveAspectRatio="xMidYMid slice"
-				>
-					<g clipPath="url(#clip0_186_1134)">
-						<mask
-							id="mask0_186_1134"
-							style={{ maskType: "alpha" }}
-							maskUnits="userSpaceOnUse"
-							x="10"
-							y="-1"
-							width="1200"
-							height="812"
-						>
-							<rect x="10" y="-0.84668" width="1200" height="811.693" fill="url(#paint0_linear_186_1134)" />
-						</mask>
-						<g mask="url(#mask0_186_1134)">
-							{[...Array(35)].map((_, i) => (
-								<g key={`row1-${i}`}>
-									{[...Array(22)].map((_, j) => (
-										<rect
-											key={`${i}-${j}`}
-											x={-20.0891 + i * 36}
-											y={9.2 + j * 36}
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-									))}
-								</g>
-							))}
-							{/* Specific Rectangles with fill */}
-							<rect x="699.711" y="81" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.08" />
-							<rect x="195.711" y="153" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.09" />
-							<rect x="1023.71" y="153" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.09" />
-							<rect x="123.711" y="225" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.09" />
-							<rect x="1095.71" y="225" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.09" />
-							<rect x="951.711" y="297" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.09" />
-							<rect x="231.711" y="333" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.07" />
-							<rect x="303.711" y="405" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.07" />
-							<rect x="87.7109" y="405" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.09" />
-							<rect x="519.711" y="405" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.08" />
-							<rect x="771.711" y="405" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.09" />
-							<rect x="591.711" y="477" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.07" />
-						</g>
-
-						<g filter="url(#filter0_f_186_1134)">
-							<path
-								d="M1447.45 -87.0203V-149.03H1770V1248.85H466.158V894.269C1008.11 894.269 1447.45 454.931 1447.45 -87.0203Z"
-								fill="url(#paint1_linear_186_1134)"
-							/>
-						</g>
-
-						<g filter="url(#filter1_f_186_1134)">
-							<path
-								d="M1383.45 -151.02V-213.03H1706V1184.85H402.158V830.269C944.109 830.269 1383.45 390.931 1383.45 -151.02Z"
-								fill="url(#paint2_linear_186_1134)"
-								fillOpacity="0.69"
-							/>
-						</g>
-
-						<g style={{ mixBlendMode: "lighten" }} filter="url(#filter2_f_186_1134)">
-							<path
-								d="M1567.45 -231.02V-293.03H1890V1104.85H586.158V750.269C1128.11 750.269 1567.45 310.931 1567.45 -231.02Z"
-								fill="url(#paint3_linear_186_1134)"
-							/>
-						</g>
-
-						<g style={{ mixBlendMode: "overlay" }} filter="url(#filter3_f_186_1134)">
-							<path
-								d="M65.625 750.269H284.007C860.205 750.269 1327.31 283.168 1327.31 -293.03H1650V1104.85H65.625V750.269Z"
-								fill="url(#paint4_radial_186_1134)"
-								fillOpacity="0.64"
-							/>
-						</g>
-					</g>
-
-					<rect
-						x="0.5"
-						y="0.5"
-						width="1219"
-						height="809"
-						rx="15.5"
-						stroke="hsl(var(--foreground))"
-						strokeOpacity="0.06"
-					/>
-
-					<defs>
-						<filter
-							id="filter0_f_186_1134"
-							x="147.369"
-							y="-467.818"
-							width="1941.42"
-							height="2035.46"
-							filterUnits="userSpaceOnUse"
-							colorInterpolationFilters="sRGB"
-						>
-							<feFlood floodOpacity="0" result="BackgroundImageFix" />
-							<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-							<feGaussianBlur stdDeviation="159.394" result="effect1_foregroundBlur_186_1134" />
-						</filter>
-						<filter
-							id="filter1_f_186_1134"
-							x="-554.207"
-							y="-1169.39"
-							width="3216.57"
-							height="3310.61"
-							filterUnits="userSpaceOnUse"
-							colorInterpolationFilters="sRGB"
-						>
-							<feFlood floodOpacity="0" result="BackgroundImageFix" />
-							<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-							<feGaussianBlur stdDeviation="478.182" result="effect1_foregroundBlur_186_1134" />
-						</filter>
-						<filter
-							id="filter2_f_186_1134"
-							x="426.762"
-							y="-452.424"
-							width="1622.63"
-							height="1716.67"
-							filterUnits="userSpaceOnUse"
-							colorInterpolationFilters="sRGB"
-						>
-							<feFlood floodOpacity="0" result="BackgroundImageFix" />
-							<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-							<feGaussianBlur stdDeviation="79.6969" result="effect1_foregroundBlur_186_1134" />
-						</filter>
-						<filter
-							id="filter3_f_186_1134"
-							x="-253.163"
-							y="-611.818"
-							width="2221.95"
-							height="2035.46"
-							filterUnits="userSpaceOnUse"
-							colorInterpolationFilters="sRGB"
-						>
-							<feFlood floodOpacity="0" result="BackgroundImageFix" />
-							<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-							<feGaussianBlur stdDeviation="159.394" result="effect1_foregroundBlur_186_1134" />
-						</filter>
-						<linearGradient
-							id="paint0_linear_186_1134"
-							x1="35.0676"
-							y1="23.6807"
-							x2="903.8"
-							y2="632.086"
-							gradientUnits="userSpaceOnUse"
-						>
-							<stop stopColor="hsl(var(--foreground))" stopOpacity="0" />
-							<stop offset="1" stopColor="hsl(var(--muted-foreground))" />
-						</linearGradient>
-						<linearGradient
-							id="paint1_linear_186_1134"
-							x1="1118.08"
-							y1="-149.03"
-							x2="1118.08"
-							y2="1248.85"
-							gradientUnits="userSpaceOnUse"
-						>
-							<stop stopColor="hsl(var(--foreground))" />
-							<stop offset="0.578125" stopColor="hsl(var(--primary-light))" />
-							<stop offset="1" stopColor="hsl(var(--primary))" />
-						</linearGradient>
-						<linearGradient
-							id="paint2_linear_186_1134"
-							x1="1054.08"
-							y1="-213.03"
-							x2="1054.08"
-							y2="1184.85"
-							gradientUnits="userSpaceOnUse"
-						>
-							<stop stopColor="hsl(var(--foreground))" />
-							<stop offset="0.578125" stopColor="hsl(var(--primary-light))" />
-							<stop offset="1" stopColor="hsl(var(--primary))" />
-						</linearGradient>
-						<linearGradient
-							id="paint3_linear_186_1134"
-							x1="1238.08"
-							y1="-293.03"
-							x2="1238.08"
-							y2="1104.85"
-							gradientUnits="userSpaceOnUse"
-						>
-							<stop stopColor="hsl(var(--foreground))" />
-							<stop offset="0.578125" stopColor="hsl(var(--primary-light))" />
-							<stop offset="1" stopColor="hsl(var(--primary))" />
-						</linearGradient>
-						<radialGradient
-							id="paint4_radial_186_1134"
-							cx="0"
-							cy="0"
-							r="1"
-							gradientUnits="userSpaceOnUse"
-							gradientTransform="translate(989.13 557.24) rotate(47.9516) scale(466.313 471.424)"
-						>
-							<stop stopColor="hsl(var(--foreground))" />
-							<stop offset="0.157789" stopColor="hsl(var(--primary-light))" />
-							<stop offset="1" stopColor="hsl(var(--primary))" />
-						</radialGradient>
-						<clipPath id="clip0_186_1134">
-							<rect width="1220" height="810" rx="16" fill="hsl(var(--foreground))" />
-						</clipPath>
-					</defs>
-				</svg>
-			</div>
-
-			{/* Header positioned at top of hero container */}
-			<div className="absolute top-0 left-0 right-0 z-20">
-				<HeroHeader />
-			</div>
-
-			<div className="relative z-10 space-y-4 md:space-y-5 lg:space-y-6 mb-6 md:mb-7 lg:mb-9 max-w-md md:max-w-[500px] lg:max-w-[588px] mt-16 md:mt-[120px] lg:mt-[160px] px-4">
-				<h1 className="text-foreground text-3xl md:text-4xl lg:text-6xl font-semibold leading-tight">
-					Discover Amazing Products with AI-Powered Shopping
-				</h1>
-				<p className="text-muted-foreground text-base md:text-base lg:text-lg font-medium leading-relaxed max-w-lg mx-auto">
-					Find exactly what you're looking for with intelligent search, personalized recommendations, and seamless shopping experience.
-				</p>
-			</div>
-
-			{/* Search Interface */}
-			<div className="relative z-10 w-full max-w-2xl mx-auto px-4">
-				<div className="bg-background/80 backdrop-blur-xl rounded-2xl border border-border/50 p-6 shadow-2xl">
-					<div className="flex flex-col sm:flex-row gap-3">
-						<div className="flex-1">
-							<input
-								type="text"
-								placeholder="Search for anything... 'wireless headphones', 'running shoes', etc."
-								className="w-full px-4 py-3 rounded-xl border border-border bg-background/50 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 text-sm"
-							/>
-						</div>
-						<Link href="/products">
-							<Button className="w-full sm:w-auto px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-medium">
-								<Search className="w-4 h-4 mr-2" />
-								Search
-							</Button>
-						</Link>
-					</div>
-				</div>
-			</div>
-		</section>
-	)
-}
 
 // Animated Section Component
 function AnimatedSection({ children, className = "", delay = 0, id }: { children: React.ReactNode; className?: string; delay?: number; id?: string }) {
@@ -501,41 +212,12 @@ function CTASection() {
 export default function HomePage() {
 	return (
 		<div className="min-h-screen bg-background relative overflow-hidden pb-0">
+			<Navbar />
 			<div className="relative z-10">
 				<main className="max-w-[1320px] mx-auto relative">
 					<HeroSection />
-					<div className="absolute bottom-[-150px] md:bottom-[-400px] left-1/2 transform -translate-x-1/2 z-30">
-						<AnimatedSection>
-							<motion.div
-								className="w-[calc(100vw-32px)] md:w-[1160px]"
-								initial={{ opacity: 0, y: 100, scale: 0.8 }}
-								animate={{ opacity: 1, y: 0, scale: 1 }}
-								transition={{
-									duration: 1.2,
-									ease: [0.25, 0.46, 0.45, 0.94],
-									delay: 0.5,
-								}}
-							>
-								<motion.div
-									className="bg-primary-light/50 rounded-2xl p-2 shadow-2xl"
-									whileHover={{ scale: 1.02 }}
-									transition={{ duration: 0.3 }}
-								>
-									<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.8 }}>
-										<Image
-											src="/images/shopping-dashboard.png"
-											alt="StuffHunt shopping interface showing AI search, product discovery, and personalized recommendations"
-											width={1160}
-											height={700}
-											className="w-full h-full object-cover rounded-xl shadow-lg"
-										/>
-									</motion.div>
-								</motion.div>
-							</motion.div>
-						</AnimatedSection>
-					</div>
 				</main>
-				<AnimatedSection className="relative z-10 max-w-[1320px] mx-auto px-6 mt-[411px] md:mt-[400px]" delay={0.1}>
+				<AnimatedSection className="relative z-10 max-w-[1320px] mx-auto px-6 mt-[100px] md:mt-[150px]" delay={0.1}>
 					<section className="self-stretch py-16 flex flex-col justify-center items-center gap-6 overflow-hidden">
 						<motion.div
 							className="text-center text-gray-300 text-sm font-medium leading-tight"
@@ -569,6 +251,9 @@ export default function HomePage() {
 							}
 						</div>
 					</section>
+				</AnimatedSection>
+				<AnimatedSection className="relative z-10 max-w-[1320px] mx-auto mt-16" delay={0.2}>
+					<FeaturedGrid />
 				</AnimatedSection>
 				<AnimatedSection id="features-section" className="relative z-10 max-w-[1320px] mx-auto mt-16" delay={0.15}>
 					<section className="w-full px-5 py-16 md:py-24">
@@ -711,9 +396,6 @@ export default function HomePage() {
 							</div>
 						</div>
 					</section>
-				</AnimatedSection>
-				<AnimatedSection className="relative z-10 max-w-[1320px] mx-auto mt-16" delay={0.2}>
-					<FeaturedGrid />
 				</AnimatedSection>
 				<AnimatedSection className="relative z-10 max-w-[1320px] mx-auto mt-8 md:mt-16" delay={0.2}>
 					<MoreProducts />

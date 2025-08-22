@@ -470,6 +470,64 @@ export async function getFeaturedProducts(limit: number = 8): Promise<ProductWit
 	}
 }
 
+// Get products by IDs for comparison
+export async function getProductsByIds(ids: string[]): Promise<ProductWithDetails[]> {
+	try {
+		const products = await prisma.product.findMany({
+			where: {
+				id: {
+					in: ids,
+				},
+				isActive: true,
+			},
+			include: {
+				seller: {
+					select: {
+						id: true,
+						name: true,
+						verificationBadge: true
+					}
+				},
+				categories: {
+					select: {
+						id: true,
+						name: true,
+						description: true
+					}
+				},
+				_count: {
+					select: {
+						reviews: true,
+						orderItems: true,
+						likes: true
+					}
+				}
+			}
+		})
+
+		// Add average ratings
+		const productsWithRatings = await Promise.all(
+			products.map(async (product) => {
+				const avgRating = await prisma.review.aggregate({
+					where: { productId: product.id },
+					_avg: { rating: true }
+				})
+
+				return {
+					...product,
+					averageRating: avgRating._avg.rating || 0
+				}
+			})
+		)
+
+		return productsWithRatings
+
+	} catch (error) {
+		console.error('Error fetching products by IDs:', error)
+		return []
+	}
+}
+
 // Get all categories
 export async function getCategories() {
 	try {

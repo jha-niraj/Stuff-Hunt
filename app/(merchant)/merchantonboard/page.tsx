@@ -12,6 +12,7 @@ import { MerchantFAQSection } from "../_components/merchantfaqs";
 import { MerchantCTASection } from "../_components/merchantcta";
 import { Footer } from "@/components/footer";
 import { MerchantBentoSection } from "../_components/merchantbento";
+import { MerchantNavbar } from "@/components/merchantnavbar";
 
 const brands = ["Flipkart", "Amazon", "Myntra", "Nykaa", "BigBasket", "Zomato", "Swiggy", "Paytm"]
 
@@ -72,41 +73,12 @@ export default function LandingPage() {
 
 	return (
 		<div className="min-h-screen bg-background relative overflow-hidden pb-0">
+			<MerchantNavbar />
 			<div className="relative z-10">
 				<main className="max-w-[1320px] mx-auto relative">
 					<MerchantHeroSection />
-					<div className="absolute bottom-[-150px] md:bottom-[-400px] left-1/2 transform -translate-x-1/2 z-30">
-						<AnimatedSection>
-							<motion.div
-								className="w-[calc(100vw-32px)] md:w-[1160px]"
-								initial={{ opacity: 0, y: 100, scale: 0.8 }}
-								animate={{ opacity: 1, y: 0, scale: 1 }}
-								transition={{
-									duration: 1.2,
-									ease: [0.25, 0.46, 0.45, 0.94],
-									delay: 0.5,
-								}}
-							>
-								<motion.div
-									className="bg-primary-light/50 rounded-2xl p-2 shadow-2xl"
-									whileHover={{ scale: 1.02 }}
-									transition={{ duration: 0.3 }}
-								>
-									<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.8 }}>
-										<Image
-											src="/images/merchant-dashboard.png"
-											alt="StuffHunt seller dashboard showing product management, analytics, and sales insights"
-											width={1160}
-											height={700}
-											className="w-full h-full object-cover rounded-xl shadow-lg"
-										/>
-									</motion.div>
-								</motion.div>
-							</motion.div>
-						</AnimatedSection>
-					</div>
 				</main>
-				<AnimatedSection className="relative z-10 max-w-[1320px] mx-auto px-6 mt-[411px] md:mt-[400px]" delay={0.1}>
+				<AnimatedSection className="relative z-10 max-w-[1320px] mx-auto px-6 mt-[100px] md:mt-[150px]" delay={0.1}>
 					<section className="self-stretch py-16 flex flex-col justify-center items-center gap-6 overflow-hidden">
 						<motion.div
 							className="text-center text-gray-300 text-sm font-medium leading-tight"

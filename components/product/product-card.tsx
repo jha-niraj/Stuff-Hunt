@@ -6,8 +6,13 @@ import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { type ProductWithDetails } from "@/actions/product.action"
 import { formatCurrency } from "@/lib/format"
-import { Plus } from "lucide-react"
+import { Plus, Heart, GitCompare } from "lucide-react"
 import { useCart } from "@/stores/cart-store"
+import { useCompare } from "@/contexts/compare-context"
+import { useState, useEffect } from "react"
+import { toast } from "sonner"
+import { cn } from "@/lib/utils"
+import { addToWishlist, removeFromWishlist, isInWishlist } from "@/actions/wishlist.action"
 
 type Props = {
 	product: ProductWithDetails
@@ -15,13 +20,98 @@ type Props = {
 
 export function ProductCard({ product }: Props) {
 	const { add } = useCart()
+	const { addToCompare, removeFromCompare, isInCompare } = useCompare()
+	const [isWishlisted, setIsWishlisted] = useState(false)
+	const [isAddingToWishlist, setIsAddingToWishlist] = useState(false)
+
+	// Check if product is in wishlist on mount
+	useEffect(() => {
+		const checkWishlistStatus = async () => {
+			try {
+				const inWishlist = await isInWishlist(product.id)
+				setIsWishlisted(inWishlist)
+			} catch (error) {
+				console.error('Error checking wishlist status:', error)
+			}
+		}
+		checkWishlistStatus()
+	}, [product.id])
+
+	const handleCompareToggle = () => {
+		if (isInCompare(product.id)) {
+			removeFromCompare(product.id)
+		} else {
+			addToCompare({
+				id: product.id,
+				name: product.name,
+				price: product.price,
+				image: product.images?.[0] ?? "/placeholder.svg",
+				slug: product.slug
+			})
+		}
+	}
+
+	const handleWishlistToggle = async () => {
+		setIsAddingToWishlist(true)
+		try {
+			if (isWishlisted) {
+				const response = await removeFromWishlist(product.id)
+				if (response.success) {
+					setIsWishlisted(false)
+					toast.success('Removed from wishlist')
+				} else {
+					toast.error(response.error || 'Failed to remove from wishlist')
+				}
+			} else {
+				const response = await addToWishlist(product.id)
+				if (response.success) {
+					setIsWishlisted(true)
+					toast.success('Added to wishlist')
+				} else {
+					toast.error(response.error || 'Failed to add to wishlist')
+				}
+			}
+		} catch (error) {
+			toast.error('Failed to update wishlist')
+		} finally {
+			setIsAddingToWishlist(false)
+		}
+	}
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, y: 10 }}
 			whileInView={{ opacity: 1, y: 0 }}
 			viewport={{ once: true, amount: 0.2 }}
-			className="group rounded-xl border overflow-hidden bg-card"
+			className="group rounded-xl border overflow-hidden bg-card relative"
 		>
+			{/* Action Buttons Overlay */}
+			<div className="absolute top-2 right-2 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+				<Button
+					variant="secondary"
+					size="sm"
+					onClick={handleWishlistToggle}
+					disabled={isAddingToWishlist}
+					className={cn(
+						"h-8 w-8 p-0 bg-background/80 backdrop-blur-sm hover:bg-background",
+						isWishlisted && "text-red-500 hover:text-red-600"
+					)}
+				>
+					<Heart className={cn("h-4 w-4", isWishlisted && "fill-current")} />
+				</Button>
+				<Button
+					variant="secondary"
+					size="sm"
+					onClick={handleCompareToggle}
+					className={cn(
+						"h-8 w-8 p-0 bg-background/80 backdrop-blur-sm hover:bg-background",
+						isInCompare(product.id) && "text-primary bg-primary/10"
+					)}
+				>
+					<GitCompare className="h-4 w-4" />
+				</Button>
+			</div>
+
 			<Link href={`/products/${product.slug}`} className="block">
 				<div className="relative bg-muted">
 					<Image
@@ -53,16 +143,31 @@ export function ProductCard({ product }: Props) {
 							))
 						}
 					</div>
-					<Button
-						size="sm"
-						variant="outline"
-						className="gap-2 bg-transparent"
-						onClick={() => add(product, 1, undefined)}
-						aria-label="Quick add to cart"
-					>
-						<Plus className="w-4 h-4" />
-						Add
-					</Button>
+					<div className="flex items-center gap-2">
+						{/* Compare Checkbox for Desktop */}
+						<div className="hidden sm:flex items-center gap-1">
+							<input
+								type="checkbox"
+								id={`compare-${product.id}`}
+								checked={isInCompare(product.id)}
+								onChange={handleCompareToggle}
+								className="rounded border-gray-300 text-primary focus:ring-primary"
+							/>
+							<label htmlFor={`compare-${product.id}`} className="text-xs text-muted-foreground cursor-pointer">
+								Compare
+							</label>
+						</div>
+						<Button
+							size="sm"
+							variant="outline"
+							className="gap-2 bg-transparent"
+							onClick={() => add(product, 1, undefined)}
+							aria-label="Quick add to cart"
+						>
+							<Plus className="w-4 h-4" />
+							Add
+						</Button>
+					</div>
 				</div>
 			</div>
 		</motion.div>

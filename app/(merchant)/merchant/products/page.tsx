@@ -338,7 +338,6 @@ export default function MerchantProductsPage() {
 												)}
 											</div>
 										</div>
-
 										<CardContent className="p-4">
 											<div className="space-y-3">
 												<div>

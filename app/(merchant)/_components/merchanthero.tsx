@@ -1,14 +1,31 @@
+"use client"
+
 import React from "react"
-import { MerchantHeader } from "./merchantheader"
-import { MerchantSearchInterface } from "./merchantsearchinterface"
+import { motion } from "framer-motion"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Store, TrendingUp, Users } from "lucide-react"
 
 export function MerchantHeroSection() {
 	return (
-		<section
-			className="flex flex-col items-center text-center relative mx-auto rounded-2xl overflow-hidden my-6 py-0 px-4
-         w-full h-[400px] md:w-[1220px] md:h-[600px] lg:h-[810px] md:px-0"
-		>
+		<section className="flex flex-col items-center text-center relative mx-auto rounded-2xl overflow-hidden my-6 py-0 px-4 w-full h-[400px] md:w-[1220px] md:h-[600px] lg:h-[810px] md:px-0">
+			{/* Animated Background */}
 			<div className="absolute inset-0 z-0">
+				<motion.div
+					className="absolute inset-0 opacity-20"
+					animate={{
+						background: [
+							"linear-gradient(45deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 50%, hsl(var(--primary)) 100%)",
+							"linear-gradient(90deg, hsl(var(--secondary)) 0%, hsl(var(--primary)) 50%, hsl(var(--secondary)) 100%)",
+							"linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 50%, hsl(var(--primary)) 100%)",
+						]
+					}}
+					transition={{
+						duration: 8,
+						repeat: Infinity,
+						repeatType: "reverse"
+					}}
+				/>
 				<svg
 					width="100%"
 					height="100%"
@@ -30,231 +47,31 @@ export function MerchantHeroSection() {
 							<rect x="10" y="-0.84668" width="1200" height="811.693" fill="url(#paint0_linear_186_1134)" />
 						</mask>
 						<g mask="url(#mask0_186_1134)">
-							{
-								[...Array(35)].map((_, i) => (
-									<React.Fragment key={`row1-${i}`}>
-										<rect
+							{[...Array(35)].map((_, i) => (
+								<g key={`row1-${i}`}>
+									{[...Array(22)].map((_, j) => (
+										<motion.rect
+											key={`${i}-${j}`}
 											x={-20.0891 + i * 36}
-											y="9.2"
+											y={9.2 + j * 36}
 											width="35.6"
 											height="35.6"
 											stroke="hsl(var(--foreground))"
 											strokeOpacity="0.11"
 											strokeWidth="0.4"
 											strokeDasharray="2 2"
+											animate={{
+												opacity: [0.1, 0.3, 0.1]
+											}}
+											transition={{
+												duration: 3 + (i + j) * 0.1,
+												repeat: Infinity,
+												repeatType: "reverse"
+											}}
 										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="45.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="81.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="117.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="153.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="189.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="225.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="261.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="297.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="333.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="369.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="405.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="441.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="477.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="513.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="549.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="585.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="621.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="657.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="693.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="729.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-										<rect
-											x={-20.0891 + i * 36}
-											y="765.2"
-											width="35.6"
-											height="35.6"
-											stroke="hsl(var(--foreground))"
-											strokeOpacity="0.11"
-											strokeWidth="0.4"
-											strokeDasharray="2 2"
-										/>
-									</React.Fragment>
-								))}
+									))}
+								</g>
+							))}
 							{/* Specific Rectangles with fill */}
 							<rect x="699.711" y="81" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.08" />
 							<rect x="195.711" y="153" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.09" />
@@ -430,23 +247,75 @@ export function MerchantHeroSection() {
 				</svg>
 			</div>
 
-			{/* Header positioned at top of hero container */}
-			<div className="absolute top-0 left-0 right-0 z-20">
-				<MerchantHeader />
-			</div>
-
-			<div className="relative z-10 space-y-4 md:space-y-5 lg:space-y-6 mb-6 md:mb-7 lg:mb-9 max-w-md md:max-w-[500px] lg:max-w-[588px] mt-16 md:mt-[120px] lg:mt-[160px] px-4">
-				<h1 className="text-foreground text-3xl md:text-4xl lg:text-6xl font-semibold leading-tight">
+			{/* Content */}
+			<motion.div 
+				className="relative z-10 space-y-4 md:space-y-5 lg:space-y-6 mb-6 md:mb-7 lg:mb-9 max-w-md md:max-w-[500px] lg:max-w-[588px] mt-20 md:mt-[120px] lg:mt-[160px] px-4"
+				initial={{ opacity: 0, y: 50 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.8, delay: 0.2 }}
+			>
+				<motion.h1 
+					className="text-foreground text-3xl md:text-4xl lg:text-6xl font-semibold leading-tight"
+					initial={{ opacity: 0, y: 30 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.8, delay: 0.4 }}
+				>
 					Grow Your Business with AI-Powered Marketplace
-				</h1>
-				<p className="text-muted-foreground text-base md:text-base lg:text-lg font-medium leading-relaxed max-w-lg mx-auto">
+				</motion.h1>
+				<motion.p 
+					className="text-muted-foreground text-base md:text-base lg:text-lg font-medium leading-relaxed max-w-lg mx-auto"
+					initial={{ opacity: 0, y: 30 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.8, delay: 0.6 }}
+				>
 					Join thousands of successful sellers on StuffHunt. Reach millions of customers with intelligent product
 					discovery and automated store management.
-				</p>
-			</div>
+				</motion.p>
+			</motion.div>
 
-			{/* Merchant Search Interface */}
-			<MerchantSearchInterface />
+			{/* Enhanced CTA Section */}
+			<motion.div 
+				className="relative z-10 w-full max-w-2xl mx-auto px-4"
+				initial={{ opacity: 0, y: 50 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.8, delay: 0.8 }}
+			>
+				<div className="bg-background/80 backdrop-blur-xl rounded-2xl border border-border/50 p-6 shadow-2xl">
+					<div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+						<div className="flex items-center gap-4 text-sm text-muted-foreground">
+							<div className="flex items-center gap-2">
+								<Store className="w-4 h-4 text-primary" />
+								<span>Easy Setup</span>
+							</div>
+							<div className="flex items-center gap-2">
+								<TrendingUp className="w-4 h-4 text-primary" />
+								<span>AI-Powered</span>
+							</div>
+							<div className="flex items-center gap-2">
+								<Users className="w-4 h-4 text-primary" />
+								<span>Millions of Customers</span>
+							</div>
+						</div>
+					</div>
+					
+					<div className="flex flex-col sm:flex-row gap-3 mt-6">
+						<Link href="/signup" className="flex-1">
+							<Button className="w-full px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-medium">
+								Start Selling Today
+							</Button>
+						</Link>
+						<Link href="/signin">
+							<Button variant="outline" className="w-full sm:w-auto px-6 py-3 rounded-xl font-medium">
+								Sign In
+							</Button>
+						</Link>
+					</div>
+					
+					<p className="text-xs text-muted-foreground mt-3 text-center">
+						Free to start • No setup fees • 24/7 support
+					</p>
+				</div>
+			</motion.div>
 		</section>
 	)
 }

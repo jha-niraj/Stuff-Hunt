@@ -150,16 +150,7 @@ export function ProductsClient() {
 		return items
 	}
 
-	if (loading) {
-		return (
-			<div className="space-y-6">
-				<div className="flex items-center justify-center py-12">
-					<Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
-					<span className="ml-2 text-muted-foreground">Loading products...</span>
-				</div>
-			</div>
-		)
-	}
+	// Remove the loading check here since we're handling it in ProductGrid
 
 	return (
 		<div className="space-y-6">
@@ -245,7 +236,7 @@ export function ProductsClient() {
 					<ProductFilters />
 				</aside>
 				<div className="space-y-6">
-					<ProductGrid products={products} />
+					<ProductGrid products={products} loading={loading} skeletonCount={12} />
 					{
 						products.length === 0 && !loading && (
 							<div className="rounded-xl border p-8 text-center">

@@ -3,7 +3,7 @@
 import { useTheme } from "next-themes"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { Moon, Sun, Home, User, LogOut, Shield, LogIn, Search, Sparkles, Heart } from "lucide-react"
+import { Moon, Sun, Home, User, LogOut, Shield, LogIn, Store, Package, BarChart3, Settings, Bell } from "lucide-react"
 import { Button } from "./ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -14,14 +14,11 @@ import { signOut, useSession } from "next-auth/react"
 import { toast } from "sonner"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
-import CartIcon from "./cart/CartIcon"
-import { AISearchDialog } from "./ai-search-dialog"
 
-const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
+const MerchantMainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
     const { data: session } = useSession();
     const { theme, setTheme } = useTheme()
     const [scrolled, setScrolled] = useState(false)
-    const [searchDialogOpen, setSearchDialogOpen] = useState(false)
     const pathname = usePathname()
     const router = useRouter()
 
@@ -39,20 +36,23 @@ const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
         const currentPath = pathSegments[pathSegments.length - 1] || "dashboard"
 
         switch (currentPath) {
+            case "merchantdirectory":
             case "dashboard":
-                return "Dashboard"
-            case "projects":
-                return "Projects"
-            case "team":
-                return "Team"
+                return "Seller Dashboard"
+            case "products":
+                return "My Products"
+            case "orders":
+                return "Orders"
             case "analytics":
                 return "Analytics"
-            case "feedback":
-                return "Feedback"
-            case "profile":
-                return "Profile"
+            case "customers":
+                return "Customers"
+            case "inventory":
+                return "Inventory"
             case "settings":
                 return "Settings"
+            case "profile":
+                return "Profile"
             default:
                 return currentPath.charAt(0).toUpperCase() + currentPath.slice(1)
         }
@@ -85,48 +85,27 @@ const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                             </motion.h1>
                             {
                                 session?.user && (
-                                    <Badge variant="secondary" className="hidden sm:flex bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700">
-                                        <Shield className="h-3 w-3 mr-1" />
-                                        {session.user.role}
+                                    <Badge variant="secondary" className="hidden sm:flex bg-primary/10 text-primary border-primary/20">
+                                        <Store className="h-3 w-3 mr-1" />
+                                        Seller
                                     </Badge>
                                 )
                             }
                         </div>
                     </div>
                     <div className="flex items-center gap-2 sm:gap-3">
-                        {/* AI Search Button */}
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setSearchDialogOpen(true)}
-                            className="hidden sm:flex items-center gap-2 bg-primary/5 hover:bg-primary/10 border-primary/20 text-primary hover:text-primary"
-                        >
-                            <Sparkles className="h-4 w-4" />
-                            <span className="hidden md:inline">Search with AI</span>
-                        </Button>
-                        
-                        {/* Mobile AI Search Button */}
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setSearchDialogOpen(true)}
-                            className="sm:hidden h-8 w-8 p-0"
-                        >
-                            <Search className="h-4 w-4 text-primary" />
-                        </Button>
-
-                        {/* Wishlist Button */}
+                        {/* Notifications */}
                         {session?.user && (
-                            <Link href="/wishlist">
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="relative h-8 w-8 p-0"
-                                >
-                                    <Heart className="h-4 w-4 text-gray-700 dark:text-gray-300" />
-                                    {/* TODO: Add wishlist count badge */}
-                                </Button>
-                            </Link>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="relative h-8 w-8 p-0"
+                            >
+                                <Bell className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+                                <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full text-xs flex items-center justify-center text-white">
+                                    3
+                                </span>
+                            </Button>
                         )}
 
                         <div className="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg p-1 border border-gray-200 dark:border-gray-700">
@@ -147,7 +126,7 @@ const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                                 <Moon className="h-3 w-3 text-gray-700 dark:text-gray-300" />
                             </Button>
                         </div>
-                        {session?.user && <CartIcon className="mr-2" />}
+
                         {
                             session?.user ? (
                                 <DropdownMenu>
@@ -155,12 +134,12 @@ const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                                         <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0">
                                             <Avatar className="h-8 w-8 border-2 border-gray-200 dark:border-gray-700">
                                                 <AvatarImage src={session?.user?.image || "/placeholder.svg"} alt={session?.user?.name || "User"} />
-                                                <AvatarFallback className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-xs font-bold">
+                                                <AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">
                                                     {
                                                         session.user.name
                                                             ?.split(" ")
                                                             .map((n: string) => n[0])
-                                                            .join("") || "U"
+                                                            .join("") || "M"
                                                     }
                                                 </AvatarFallback>
                                             </Avatar>
@@ -172,15 +151,19 @@ const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                                                 <p className="text-sm font-medium leading-none">{session.user.name}</p>
                                                 <p className="text-xs leading-none text-muted-foreground">{session.user.email}</p>
                                                 <div className="flex items-center gap-1 mt-1">
-                                                    <Shield className="w-3 h-3 text-gray-600 dark:text-gray-400" />
-                                                    <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">{session.user.role}</span>
+                                                    <Store className="w-3 h-3 text-primary" />
+                                                    <span className="text-xs text-primary font-medium">Seller Account</span>
                                                 </div>
                                             </div>
                                         </DropdownMenuLabel>
                                         <DropdownMenuSeparator />
-                                        <DropdownMenuItem className="cursor-pointer md:hidden" onClick={() => router.push("/dashboard")}>
-                                            <Home className="mr-2 h-4 w-4" />
+                                        <DropdownMenuItem className="cursor-pointer md:hidden" onClick={() => router.push("/merchantdirectory")}>
+                                            <BarChart3 className="mr-2 h-4 w-4" />
                                             <span>Dashboard</span>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer md:hidden" onClick={() => router.push("/merchantdirectory/products")}>
+                                            <Package className="mr-2 h-4 w-4" />
+                                            <span>My Products</span>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             className="cursor-pointer md:hidden"
@@ -205,6 +188,10 @@ const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                                             <User className="mr-2 h-4 w-4" />
                                             <span>Profile</span>
                                         </DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer" onClick={() => router.push("/merchantdirectory/settings")}>
+                                            <Settings className="mr-2 h-4 w-4" />
+                                            <span>Settings</span>
+                                        </DropdownMenuItem>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem className="cursor-pointer text-red-600 dark:text-red-400" onClick={handleSignOut}>
                                             <LogOut className="mr-2 h-4 w-4" />
@@ -215,7 +202,7 @@ const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                             ) : (
                                 <Link href="/signin">
                                     <Button
-                                        className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 hover:shadow-sm transition-all duration-200"
+                                        className="bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-sm transition-all duration-200"
                                         size="sm"
                                     >
                                         <LogIn className="h-4 w-4 mr-2" />
@@ -227,14 +214,8 @@ const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                     </div>
                 </div>
             </div>
-            
-            {/* AI Search Dialog */}
-            <AISearchDialog 
-                open={searchDialogOpen} 
-                onOpenChange={setSearchDialogOpen} 
-            />
         </nav>
     )
 }
 
-export default MainNavbar; 
+export default MerchantMainNavbar;
