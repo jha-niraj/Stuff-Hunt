@@ -9,7 +9,6 @@ import { Store, TrendingUp, Users } from "lucide-react"
 export function MerchantHeroSection() {
 	return (
 		<section className="flex flex-col items-center text-center relative mx-auto rounded-2xl overflow-hidden my-6 py-0 px-4 w-full h-[400px] md:w-[1220px] md:h-[600px] lg:h-[810px] md:px-0">
-			{/* Animated Background */}
 			<div className="absolute inset-0 z-0">
 				<motion.div
 					className="absolute inset-0 opacity-20"
@@ -72,7 +71,6 @@ export function MerchantHeroSection() {
 									))}
 								</g>
 							))}
-							{/* Specific Rectangles with fill */}
 							<rect x="699.711" y="81" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.08" />
 							<rect x="195.711" y="153" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.09" />
 							<rect x="1023.71" y="153" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.09" />
@@ -86,14 +84,12 @@ export function MerchantHeroSection() {
 							<rect x="771.711" y="405" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.09" />
 							<rect x="591.711" y="477" width="36" height="36" fill="hsl(var(--foreground))" fillOpacity="0.07" />
 						</g>
-
 						<g filter="url(#filter0_f_186_1134)">
 							<path
 								d="M1447.45 -87.0203V-149.03H1770V1248.85H466.158V894.269C1008.11 894.269 1447.45 454.931 1447.45 -87.0203Z"
 								fill="url(#paint1_linear_186_1134)"
 							/>
 						</g>
-
 						<g filter="url(#filter1_f_186_1134)">
 							<path
 								d="M1383.45 -151.02V-213.03H1706V1184.85H402.158V830.269C944.109 830.269 1383.45 390.931 1383.45 -151.02Z"
@@ -101,14 +97,12 @@ export function MerchantHeroSection() {
 								fillOpacity="0.69"
 							/>
 						</g>
-
 						<g style={{ mixBlendMode: "lighten" }} filter="url(#filter2_f_186_1134)">
 							<path
 								d="M1567.45 -231.02V-293.03H1890V1104.85H586.158V750.269C1128.11 750.269 1567.45 310.931 1567.45 -231.02Z"
 								fill="url(#paint3_linear_186_1134)"
 							/>
 						</g>
-
 						<g style={{ mixBlendMode: "overlay" }} filter="url(#filter3_f_186_1134)">
 							<path
 								d="M65.625 750.269H284.007C860.205 750.269 1327.31 283.168 1327.31 -293.03H1650V1104.85H65.625V750.269Z"
@@ -117,7 +111,6 @@ export function MerchantHeroSection() {
 							/>
 						</g>
 					</g>
-
 					<rect
 						x="0.5"
 						y="0.5"
@@ -127,7 +120,6 @@ export function MerchantHeroSection() {
 						stroke="hsl(var(--foreground))"
 						strokeOpacity="0.06"
 					/>
-
 					<defs>
 						<filter
 							id="filter0_f_186_1134"
@@ -246,15 +238,13 @@ export function MerchantHeroSection() {
 					</defs>
 				</svg>
 			</div>
-
-			{/* Content */}
-			<motion.div 
+			<motion.div
 				className="relative z-10 space-y-4 md:space-y-5 lg:space-y-6 mb-6 md:mb-7 lg:mb-9 max-w-md md:max-w-[500px] lg:max-w-[588px] mt-20 md:mt-[120px] lg:mt-[160px] px-4"
 				initial={{ opacity: 0, y: 50 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.8, delay: 0.2 }}
 			>
-				<motion.h1 
+				<motion.h1
 					className="text-foreground text-3xl md:text-4xl lg:text-6xl font-semibold leading-tight"
 					initial={{ opacity: 0, y: 30 }}
 					animate={{ opacity: 1, y: 0 }}
@@ -262,7 +252,7 @@ export function MerchantHeroSection() {
 				>
 					Grow Your Business with AI-Powered Marketplace
 				</motion.h1>
-				<motion.p 
+				<motion.p
 					className="text-muted-foreground text-base md:text-base lg:text-lg font-medium leading-relaxed max-w-lg mx-auto"
 					initial={{ opacity: 0, y: 30 }}
 					animate={{ opacity: 1, y: 0 }}
@@ -272,9 +262,7 @@ export function MerchantHeroSection() {
 					discovery and automated store management.
 				</motion.p>
 			</motion.div>
-
-			{/* Enhanced CTA Section */}
-			<motion.div 
+			<motion.div
 				className="relative z-10 w-full max-w-2xl mx-auto px-4"
 				initial={{ opacity: 0, y: 50 }}
 				animate={{ opacity: 1, y: 0 }}
@@ -297,7 +285,6 @@ export function MerchantHeroSection() {
 							</div>
 						</div>
 					</div>
-					
 					<div className="flex flex-col sm:flex-row gap-3 mt-6">
 						<Link href="/signup" className="flex-1">
 							<Button className="w-full px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl font-medium">
@@ -310,7 +297,6 @@ export function MerchantHeroSection() {
 							</Button>
 						</Link>
 					</div>
-					
 					<p className="text-xs text-muted-foreground mt-3 text-center">
 						Free to start • No setup fees • 24/7 support
 					</p>

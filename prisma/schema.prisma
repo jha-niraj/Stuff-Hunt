@@ -13,6 +13,62 @@ enum Role {
     ADMIN
 }
 
+enum ProductType {
+    // Electronics
+    ELECTRONICS_LAPTOP
+    ELECTRONICS_SMARTPHONE
+    ELECTRONICS_HEADPHONES
+    ELECTRONICS_CAMERA
+    ELECTRONICS_TABLET
+    ELECTRONICS_SMARTWATCH
+    ELECTRONICS_GAMING
+    ELECTRONICS_AUDIO
+    ELECTRONICS_ACCESSORIES
+    
+    // Clothing
+    CLOTHING_APPAREL
+    CLOTHING_FOOTWEAR
+    CLOTHING_ACCESSORIES
+    CLOTHING_ACTIVEWEAR
+    CLOTHING_FORMAL
+    CLOTHING_CASUAL
+    
+    // Home & Garden
+    HOME_FURNITURE
+    HOME_KITCHEN
+    HOME_DECOR
+    HOME_BEDDING
+    HOME_BATHROOM
+    HOME_GARDEN
+    HOME_APPLIANCES
+    
+    // Sports & Outdoors
+    SPORTS_FITNESS
+    SPORTS_OUTDOOR
+    SPORTS_TEAM_SPORTS
+    SPORTS_WATER_SPORTS
+    
+    // Books & Media
+    BOOKS_FICTION
+    BOOKS_NON_FICTION
+    BOOKS_EDUCATIONAL
+    BOOKS_CHILDREN
+    
+    // Beauty & Personal Care
+    BEAUTY_SKINCARE
+    BEAUTY_MAKEUP
+    BEAUTY_HAIRCARE
+    BEAUTY_FRAGRANCE
+    
+    // Automotive
+    AUTOMOTIVE_PARTS
+    AUTOMOTIVE_ACCESSORIES
+    AUTOMOTIVE_TOOLS
+    
+    // Generic (fallback)
+    GENERIC_PRODUCT
+}
+
 model User {
     id                   String    @id @default(cuid())
     email                String    @unique
@@ -97,7 +153,7 @@ model Product {
     shortDescription    String?
     detailedDescription String?
     keyFeatures         String? // Key features from Excel
-    productType         String? // Product type from Excel
+    productType         ProductType @default(GENERIC_PRODUCT) // Product type enum
     images              String[] // Array of Cloudinary URLs (up to 5 from Excel)
     viewCount           Int      @default(0)
     isActive            Boolean  @default(true)
@@ -158,6 +214,7 @@ model Product {
     cartItems     CartItem[]
     wishlistItems WishlistItem[]
 
+    // Optimized indexes for search performance
     @@index([sellerId])
     @@index([isActive])
     @@index([createdAt])
@@ -166,6 +223,21 @@ model Product {
     @@index([category])
     @@index([subcategory])
     @@index([brand])
+    @@index([productType])
+    @@index([price])
+    @@index([viewCount])
+    
+    // Composite indexes for common search patterns
+    @@index([isActive, inStock, category])
+    @@index([isActive, productType, category])
+    @@index([isActive, brand, category])
+    @@index([isActive, price, category])
+    @@index([category, subcategory, isActive])
+    @@index([brand, productType, isActive])
+    
+    // Full-text search optimization (will be added via raw SQL)
+    // @@index([name]) - for text search
+    // @@index([shortDescription]) - for text search
 }
 
 model Category {

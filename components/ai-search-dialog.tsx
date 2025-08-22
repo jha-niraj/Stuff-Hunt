@@ -6,12 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Search, Upload, X, Loader2, Sparkles } from "lucide-react"
 import { toast } from "sonner"
 import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
+	Dialog, DialogContent, DialogDescription, 
+	DialogHeader, DialogTitle
 } from "@/components/ui/dialog"
+import { searchWithAI, searchWithImage } from "@/actions/ai-search.action"
+import { fileToBase64 } from "@/lib/ai-search"
 
 interface AISearchDialogProps {
 	open: boolean
@@ -40,29 +39,102 @@ export function AISearchDialog({ open, onOpenChange }: AISearchDialogProps) {
 
 		setIsAnalyzing(true)
 		try {
-			// Here you would integrate with OpenAI Vision API
-			// For now, we'll simulate the analysis
-			await new Promise(resolve => setTimeout(resolve, 2000))
+			// Convert image to base64
+			const base64 = await fileToBase64(uploadedImage)
 			
-			// Simulate AI response
-			const mockAnalysis = "wireless bluetooth headphones black over-ear"
-			setSearchQuery(mockAnalysis)
-			toast.success("Image analyzed successfully!")
+			// Analyze with AI
+			const result = await searchWithImage(base64)
 			
-			// Close dialog and redirect to products page with search query
-			onOpenChange(false)
-			window.location.href = `/products?search=${encodeURIComponent(mockAnalysis)}`
+			if (result.success && result.searchQuery) {
+				setSearchQuery(result.searchQuery)
+				toast.success("Image analyzed successfully!")
+				
+				// Build search URL with AI filters
+				const params = new URLSearchParams()
+				params.set("q", result.searchQuery)
+				params.set("aiProcessed", "true")
+				params.set("confidence", (result.confidence || 0).toString())
+				
+				if (result.filters) {
+					if (result.filters.categories?.length) {
+						params.set("categories", result.filters.categories.join(","))
+					}
+					if (result.filters.colors?.length) {
+						params.set("colors", result.filters.colors.join(","))
+					}
+					if (result.filters.brands?.length) {
+						params.set("brands", result.filters.brands.join(","))
+					}
+					if (result.filters.priceRange?.max) {
+						params.set("maxPrice", result.filters.priceRange.max.toString())
+					}
+					if (result.filters.priceRange?.min) {
+						params.set("minPrice", result.filters.priceRange.min.toString())
+					}
+				}
+				
+				// Close dialog and redirect
+				onOpenChange(false)
+				window.location.href = `/products?${params.toString()}`
+			} else {
+				toast.error(result.error || "Failed to analyze image")
+			}
 		} catch (error) {
+			console.error('Image analysis error:', error)
 			toast.error("Failed to analyze image. Please try again.")
 		} finally {
 			setIsAnalyzing(false)
 		}
 	}
 
-	const handleSearch = () => {
-		if (searchQuery.trim()) {
+	const handleSearch = async () => {
+		if (!searchQuery.trim()) return
+
+		setIsAnalyzing(true)
+		try {
+			// Analyze search query with AI
+			const result = await searchWithAI(searchQuery.trim())
+			
+			if (result.success) {
+				// Build search URL with AI filters
+				const params = new URLSearchParams()
+				params.set("q", result.searchQuery || searchQuery.trim())
+				params.set("aiProcessed", "true")
+				params.set("confidence", (result.confidence || 0).toString())
+				
+				if (result.filters) {
+					if (result.filters.categories?.length) {
+						params.set("categories", result.filters.categories.join(","))
+					}
+					if (result.filters.colors?.length) {
+						params.set("colors", result.filters.colors.join(","))
+					}
+					if (result.filters.brands?.length) {
+						params.set("brands", result.filters.brands.join(","))
+					}
+					if (result.filters.priceRange?.max) {
+						params.set("maxPrice", result.filters.priceRange.max.toString())
+					}
+					if (result.filters.priceRange?.min) {
+						params.set("minPrice", result.filters.priceRange.min.toString())
+					}
+				}
+				
+				// Close dialog and redirect
+				onOpenChange(false)
+				window.location.href = `/products?${params.toString()}`
+			} else {
+				// Fallback to regular search
+				onOpenChange(false)
+				window.location.href = `/products?q=${encodeURIComponent(searchQuery.trim())}`
+			}
+		} catch (error) {
+			console.error('Search error:', error)
+			// Fallback to regular search
 			onOpenChange(false)
-			window.location.href = `/products?search=${encodeURIComponent(searchQuery.trim())}`
+			window.location.href = `/products?q=${encodeURIComponent(searchQuery.trim())}`
+		} finally {
+			setIsAnalyzing(false)
 		}
 	}
 

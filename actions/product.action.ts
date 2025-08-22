@@ -1,6 +1,7 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
+import { ProductType } from "@prisma/client"
 
 // Product types based on Prisma schema
 export interface ProductWithDetails {
@@ -11,6 +12,7 @@ export interface ProductWithDetails {
 	originalPrice?: number | null
 	shortDescription?: string | null
 	detailedDescription?: string | null
+	keyFeatures?: string | null
 	images: string[]
 	viewCount: number
 	isActive: boolean
@@ -20,6 +22,13 @@ export interface ProductWithDetails {
 	sizes?: string[]
 	discountPercentage?: number | null
 	brand?: string | null
+	category?: string | null
+	subcategory?: string | null
+	productType: ProductType
+	weight?: number | null
+	dimensions?: string | null
+	material?: string | null
+	aiMetadata?: any
 	sku?: string | null
 	createdAt: Date
 	updatedAt: Date
@@ -571,6 +580,7 @@ export async function searchProductsWithFilters(filters: {
 	try {
 		const {
 			categories,
+			attributes,
 			colors,
 			sizes,
 			brands,
@@ -580,26 +590,160 @@ export async function searchProductsWithFilters(filters: {
 			limit = 20
 		} = filters
 
-		const productFilters: ProductFilters = {
-			search: query,
-			colors,
-			sizes,
-			brands,
-			minPrice: priceRange?.min,
-			maxPrice: priceRange?.max,
-			page,
-			limit
+		const skip = (page - 1) * limit
+
+		// Build advanced where clause for AI-enhanced search
+		const where: any = {
+			isActive: true,
 		}
 
-		// If categories are provided, use the first one as the main category filter
+		// Text search across multiple fields
+		if (query) {
+			where.OR = [
+				{ name: { contains: query, mode: 'insensitive' } },
+				{ shortDescription: { contains: query, mode: 'insensitive' } },
+				{ detailedDescription: { contains: query, mode: 'insensitive' } },
+				{ keyFeatures: { contains: query, mode: 'insensitive' } },
+				{ brand: { contains: query, mode: 'insensitive' } },
+				{ category: { contains: query, mode: 'insensitive' } },
+				{ subcategory: { contains: query, mode: 'insensitive' } }
+			]
+
+			// Also search in tags array
+			if (query.length > 2) {
+				where.OR.push({ tags: { hasSome: [query] } })
+			}
+		}
+
+		// Category filters - search in both category and subcategory
 		if (categories && categories.length > 0) {
-			productFilters.category = categories[0]
+			where.AND = where.AND || []
+			where.AND.push({
+				OR: [
+					{ category: { in: categories, mode: 'insensitive' } },
+					{ subcategory: { in: categories, mode: 'insensitive' } },
+					{
+						categories: {
+							some: {
+								name: { in: categories, mode: 'insensitive' }
+							}
+						}
+					}
+				]
+			})
 		}
 
-		return await getProducts(productFilters)
+		// Attribute filters - search in keyFeatures and descriptions
+		if (attributes && attributes.length > 0) {
+			where.AND = where.AND || []
+			for (const attribute of attributes) {
+				where.AND.push({
+					OR: [
+						{ keyFeatures: { contains: attribute, mode: 'insensitive' } },
+						{ shortDescription: { contains: attribute, mode: 'insensitive' } },
+						{ detailedDescription: { contains: attribute, mode: 'insensitive' } },
+						{ tags: { hasSome: [attribute] } }
+					]
+				})
+			}
+		}
+
+		// Color filters
+		if (colors && colors.length > 0) {
+			where.colors = {
+				hasSome: colors
+			}
+		}
+
+		// Size filters
+		if (sizes && sizes.length > 0) {
+			where.sizes = {
+				hasSome: sizes
+			}
+		}
+
+		// Brand filters
+		if (brands && brands.length > 0) {
+			where.brand = {
+				in: brands,
+				mode: 'insensitive'
+			}
+		}
+
+		// Price range filters
+		if (priceRange) {
+			where.price = {}
+			if (priceRange.min) where.price.gte = priceRange.min
+			if (priceRange.max) where.price.lte = priceRange.max
+		}
+
+		// Enhanced ordering for AI search
+		const orderBy: any[] = [
+			{ viewCount: 'desc' }, // Popular items first
+			{ createdAt: 'desc' }   // Then by recency
+		]
+
+		// Get products and total count
+		const [products, totalProducts] = await Promise.all([
+			prisma.product.findMany({
+				where,
+				orderBy,
+				skip,
+				take: limit,
+				include: {
+					seller: {
+						select: {
+							id: true,
+							name: true,
+							verificationBadge: true
+						}
+					},
+					categories: {
+						select: {
+							id: true,
+							name: true,
+							description: true
+						}
+					},
+					_count: {
+						select: {
+							reviews: true,
+							orderItems: true,
+							likes: true
+						}
+					}
+				}
+			}),
+			prisma.product.count({ where })
+		])
+
+		// Add average ratings
+		const productsWithRatings = await Promise.all(
+			products.map(async (product) => {
+				const avgRating = await prisma.review.aggregate({
+					where: { productId: product.id },
+					_avg: { rating: true }
+				})
+
+				return {
+					...product,
+					averageRating: avgRating._avg.rating || 0
+				}
+			})
+		)
+
+		const totalPages = Math.ceil(totalProducts / limit)
+
+		return {
+			success: true,
+			products: productsWithRatings,
+			totalProducts,
+			totalPages,
+			currentPage: page
+		}
 
 	} catch (error) {
-		console.error('Error searching products with filters:', error)
+		console.error('Error searching products with AI filters:', error)
 		return {
 			success: false,
 			products: [],

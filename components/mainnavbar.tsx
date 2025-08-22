@@ -16,12 +16,14 @@ import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import CartIcon from "./cart/CartIcon"
 import { AISearchDialog } from "./ai-search-dialog"
+import { getWishlistCount } from "@/actions/wishlist.action"
 
 const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
     const { data: session } = useSession();
     const { theme, setTheme } = useTheme()
     const [scrolled, setScrolled] = useState(false)
     const [searchDialogOpen, setSearchDialogOpen] = useState(false)
+    const [wishlistCount, setWishlistCount] = useState(0)
     const pathname = usePathname()
     const router = useRouter()
 
@@ -33,6 +35,20 @@ const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
         window.addEventListener("scroll", handleScroll)
         return () => window.removeEventListener("scroll", handleScroll)
     }, []);
+
+    useEffect(() => {
+        const loadWishlistCount = async () => {
+            if (session?.user?.id) {
+                try {
+                    const count = await getWishlistCount()
+                    setWishlistCount(count)
+                } catch (error) {
+                    console.error('Error loading wishlist count:', error)
+                }
+            }
+        }
+        loadWishlistCount()
+    }, [session?.user?.id])
 
     const getPageTitle = () => {
         const pathSegments = pathname.split("/").filter(Boolean)
@@ -94,7 +110,6 @@ const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                         </div>
                     </div>
                     <div className="flex items-center gap-2 sm:gap-3">
-                        {/* AI Search Button */}
                         <Button
                             variant="outline"
                             size="sm"
@@ -104,8 +119,6 @@ const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                             <Sparkles className="h-4 w-4" />
                             <span className="hidden md:inline">Search with AI</span>
                         </Button>
-                        
-                        {/* Mobile AI Search Button */}
                         <Button
                             variant="ghost"
                             size="sm"
@@ -114,21 +127,24 @@ const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                         >
                             <Search className="h-4 w-4 text-primary" />
                         </Button>
-
-                        {/* Wishlist Button */}
-                        {session?.user && (
-                            <Link href="/wishlist">
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="relative h-8 w-8 p-0"
-                                >
-                                    <Heart className="h-4 w-4 text-gray-700 dark:text-gray-300" />
-                                    {/* TODO: Add wishlist count badge */}
-                                </Button>
-                            </Link>
-                        )}
-
+                        {
+                            session?.user && (
+                                <Link href="/wishlist">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="relative h-8 w-8 p-0"
+                                    >
+                                        <Heart className="h-4 w-4 text-gray-700 dark:text-gray-300" />
+                                        {wishlistCount > 0 && (
+                                            <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white rounded-full text-xs flex items-center justify-center font-medium">
+                                                {wishlistCount > 9 ? '9+' : wishlistCount}
+                                            </span>
+                                        )}
+                                    </Button>
+                                </Link>
+                            )
+                        }
                         <div className="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg p-1 border border-gray-200 dark:border-gray-700">
                             <Button
                                 variant="ghost"
@@ -227,11 +243,9 @@ const MainNavbar = ({ isCollapsed }: { isCollapsed: boolean }) => {
                     </div>
                 </div>
             </div>
-            
-            {/* AI Search Dialog */}
-            <AISearchDialog 
-                open={searchDialogOpen} 
-                onOpenChange={setSearchDialogOpen} 
+            <AISearchDialog
+                open={searchDialogOpen}
+                onOpenChange={setSearchDialogOpen}
             />
         </nav>
     )
