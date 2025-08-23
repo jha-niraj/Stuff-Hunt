@@ -79,7 +79,7 @@ export async function analyzeSearchQuery(
 	query: string
 ): Promise<AISearchResult> {
 	try {
-		if (!process.env.OPENAI_API_KEY) {
+		if (!process.env.OPEN_AI_API) {
 			return {
 				success: false,
 				error: 'OpenAI API key not configured'
@@ -136,7 +136,7 @@ export async function analyzeImageSearch(
 	imageBase64: string
 ): Promise<AISearchResult> {
 	try {
-		if (!process.env.OPENAI_API_KEY) {
+		if (!process.env.OPEN_AI_API) {
 			return {
 				success: false,
 				error: 'OpenAI API key not configured'
