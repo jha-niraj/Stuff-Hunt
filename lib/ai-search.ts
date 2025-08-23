@@ -1,7 +1,7 @@
 import OpenAI from 'openai'
 
 const openai = new OpenAI({
-	apiKey: process.env.OPEN_AI_API,
+	apiKey: process.env.OPENAI_API_KEY,
 })
 
 export interface AISearchResult {
@@ -79,7 +79,7 @@ export async function analyzeSearchQuery(
 	query: string
 ): Promise<AISearchResult> {
 	try {
-		if (!process.env.OPEN_AI_API) {
+		if (!process.env.OPENAI_API_KEY) {
 			return {
 				success: false,
 				error: 'OpenAI API key not configured'
@@ -136,7 +136,7 @@ export async function analyzeImageSearch(
 	imageBase64: string
 ): Promise<AISearchResult> {
 	try {
-		if (!process.env.OPEN_AI_API) {
+		if (!process.env.OPENAI_API_KEY) {
 			return {
 				success: false,
 				error: 'OpenAI API key not configured'

@@ -5,7 +5,7 @@ import OpenAI from "openai"
 import { cache } from "react"
 
 const openai = new OpenAI({
-	apiKey: process.env.OPEN_AI_API,
+	apiKey: process.env.OPENAI_API_KEY,
 })
 
 export type AISearchResult = {

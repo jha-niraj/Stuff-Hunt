@@ -104,7 +104,7 @@ Before you begin, ensure you have the following installed:
    RESEND_API_KEY="your-resend-api-key"
    
    # AI Services (OpenAI)
-   OPEN_AI_API="your-openai-api-key"
+   OPENAI_API_KEY="your-openai-api-key"
    
    # Cloudinary for Image Management
    NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="your-cloudinary-cloud-name"
@@ -214,7 +214,7 @@ The application requires several environment variables for full functionality:
 | `GOOGLE_CLIENT_ID` | Google OAuth client ID | ❌ |
 | `GOOGLE_SECRET_ID` | Google OAuth client secret | ❌ |
 | `RESEND_API_KEY` | Resend email service API key | ✅ |
-| `OPEN_AI_API` | OpenAI API key for AI features | ❌ |
+| `OPENAI_API_KEY` | OpenAI API key for AI features | ❌ |
 | `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name | ✅ |
 | `CLOUDINARY_API_KEY` | Cloudinary API key | ✅ |
 | `CLOUDINARY_API_SECRET` | Cloudinary API secret | ✅ |
