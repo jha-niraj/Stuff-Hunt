@@ -1,11 +1,13 @@
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+    Card, CardContent, CardDescription,
+    CardHeader, CardTitle
+} from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ProductType } from "@prisma/client"
 import {
-    Droplets, Ruler, Zap,
-    Shield, Wrench, Dumbbell, Book
+    Droplets, Ruler, Zap, Shield, Wrench, Dumbbell, Book
 } from "lucide-react"
 
 interface CategorySpecificDetailsProps {
@@ -30,9 +32,58 @@ const SIZE_GUIDE = {
     'XXL': { chest: '42-44', waist: '36-38', length: '31' }
 }
 
+// Type definition for AI metadata specs
+interface ProductSpecs {
+    [key: string]: unknown
+    fit?: string
+    care?: string | string[]
+    material?: string
+    processor?: string
+    ram?: string
+    storage?: string
+    graphics?: string
+    display?: {
+        size?: string
+        resolution?: string
+    }
+    camera?: {
+        main?: string
+    }
+    screenSize?: string
+    ports?: string[]
+    connectivity?: string[]
+    assembly?: string
+    weight?: string
+    resistance?: string
+    adjustable?: string
+    features?: string[]
+    author?: string
+    publisher?: string
+    pages?: string
+    language?: string
+    isbn?: string
+}
+
 export function CategorySpecificDetails({ product, productType, selectedSize }: CategorySpecificDetailsProps) {
-    const specs = (product.aiMetadata || {}) as any
+    const specs = (product.aiMetadata || {}) as ProductSpecs
     const categoryType = productType.toString().split('_')[0].toLowerCase()
+
+    // Helper functions to safely access spec data
+    const getSpecString = (key: string, defaultValue: string = ''): string => {
+        const value = specs[key]
+        return typeof value === 'string' ? value : defaultValue
+    }
+
+    const getSpecArray = (key: string): string[] => {
+        const value = specs[key]
+        if (Array.isArray(value)) return value.filter((item): item is string => typeof item === 'string')
+        if (typeof value === 'string') return [value]
+        return []
+    }
+
+    const hasSpec = (key: string): boolean => {
+        return specs[key] !== undefined && specs[key] !== null && specs[key] !== ''
+    }
 
     // Clothing-specific details
     if (categoryType === 'clothing') {

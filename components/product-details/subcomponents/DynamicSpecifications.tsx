@@ -274,7 +274,7 @@ export function DynamicSpecifications({ product, productType, detailed = false }
 															))}
 														</div>
 													) : (
-														<p className="text-sm text-muted-foreground">{value}</p>
+														<p className="text-sm text-muted-foreground">No Dynamic Specs</p>
 													)}
 												</div>
 											)
