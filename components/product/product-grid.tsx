@@ -20,9 +20,11 @@ function ProductSkeleton() {
 				</div>
 				<div className="flex items-center justify-between">
 					<div className="flex -space-x-1">
-						{Array.from({ length: 3 }).map((_, i) => (
-							<div key={i} className="w-5 h-5 rounded-full bg-muted"></div>
-						))}
+						{
+							Array.from({ length: 3 }).map((_, i) => (
+								<div key={i} className="w-5 h-5 rounded-full bg-muted"></div>
+							))
+						}
 					</div>
 					<div className="h-8 w-16 bg-muted rounded"></div>
 				</div>
@@ -35,9 +37,11 @@ export function ProductGrid({ products = [], loading = false, skeletonCount = 8 
 	if (loading) {
 		return (
 			<div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-				{Array.from({ length: skeletonCount }).map((_, i) => (
-					<ProductSkeleton key={i} />
-				))}
+				{
+					Array.from({ length: skeletonCount }).map((_, i) => (
+						<ProductSkeleton key={i} />
+					))
+				}
 			</div>
 		)
 	}
@@ -60,9 +64,11 @@ export function ProductGrid({ products = [], loading = false, skeletonCount = 8 
 
 	return (
 		<div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-			{products.map((product) => (
-				<ProductCard key={product.slug} product={product} />
-			))}
+			{
+				products.map((product) => (
+					<ProductCard key={product.slug} product={product} />
+				))
+			}
 		</div>
 	)
 }

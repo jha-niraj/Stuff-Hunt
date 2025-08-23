@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import {
-	ArrowLeft, Save, Loader2, Upload, X, Package, DollarSign, 
+	ArrowLeft, Save, Loader2, Upload, X, Package, DollarSign,
 	Image as ImageIcon, FileText, Settings
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -61,7 +61,7 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 	useEffect(() => {
 		const loadProduct = async () => {
 			const resolvedParams = await params
-			
+
 			try {
 				const result = await getProductBySlug(resolvedParams.productId)
 				if (result.success && result.product) {
@@ -174,7 +174,6 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-black via-purple-900/20 to-black">
-			{/* Header */}
 			<div className="border-b border-white/10 bg-black/50 backdrop-blur-sm sticky top-0 z-50">
 				<div className="container mx-auto px-4 py-4">
 					<div className="flex items-center justify-between">
@@ -193,33 +192,36 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 							</div>
 						</div>
 						<div className="flex items-center gap-3">
-							{hasChanges && (
-								<Badge variant="outline" className="border-yellow-500 text-yellow-400">
-									Unsaved Changes
-								</Badge>
-							)}
+							{
+								hasChanges && (
+									<Badge variant="outline" className="border-yellow-500 text-yellow-400">
+										Unsaved Changes
+									</Badge>
+								)
+							}
 							<Button
 								onClick={handleSave}
 								disabled={!hasChanges || saving}
 								className="bg-gradient-to-r from-[#FF6EC7] to-[#DF87F3] hover:from-[#FF6EC7]/90 hover:to-[#DF87F3]/90 text-white"
 							>
-								{saving ? (
-									<>
-										<Loader2 className="w-4 h-4 mr-2 animate-spin" />
-										Saving...
-									</>
-								) : (
-									<>
-										<Save className="w-4 h-4 mr-2" />
-										Save Changes
-									</>
-								)}
+								{
+									saving ? (
+										<>
+											<Loader2 className="w-4 h-4 mr-2 animate-spin" />
+											Saving...
+										</>
+									) : (
+										<>
+											<Save className="w-4 h-4 mr-2" />
+											Save Changes
+										</>
+									)
+								}
 							</Button>
 						</div>
 					</div>
 				</div>
 			</div>
-
 			<div className="container mx-auto px-4 py-8">
 				<Tabs defaultValue="basic" className="space-y-6">
 					<TabsList className="bg-white/5 border-white/10">
@@ -244,8 +246,6 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 							Settings
 						</TabsTrigger>
 					</TabsList>
-
-					{/* Basic Information */}
 					<TabsContent value="basic" className="space-y-6">
 						<Card className="bg-white/5 backdrop-blur-sm border-white/10">
 							<CardHeader>
@@ -275,7 +275,6 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 										/>
 									</div>
 								</div>
-
 								<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 									<div className="space-y-2">
 										<Label className="text-white">Category</Label>
@@ -305,7 +304,6 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 										/>
 									</div>
 								</div>
-
 								<div className="space-y-2">
 									<Label className="text-white">Short Description</Label>
 									<Textarea
@@ -319,8 +317,6 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 							</CardContent>
 						</Card>
 					</TabsContent>
-
-					{/* Pricing */}
 					<TabsContent value="pricing" className="space-y-6">
 						<Card className="bg-white/5 backdrop-blur-sm border-white/10">
 							<CardHeader>
@@ -372,7 +368,6 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 										</div>
 									</div>
 								</div>
-
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 									<div className="space-y-2">
 										<Label className="text-white">Stock Quantity</Label>
@@ -388,7 +383,7 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 									<div className="space-y-2">
 										<Label className="text-white">Stock Status</Label>
 										<div className="p-3 bg-white/5 border border-white/20 rounded-md">
-											<Badge 
+											<Badge
 												variant={formData.stockQuantity && formData.stockQuantity > 0 ? "default" : "destructive"}
 												className={formData.stockQuantity && formData.stockQuantity > 0 ? "bg-green-500" : ""}
 											>
@@ -400,8 +395,6 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 							</CardContent>
 						</Card>
 					</TabsContent>
-
-					{/* Media */}
 					<TabsContent value="media" className="space-y-6">
 						<Card className="bg-white/5 backdrop-blur-sm border-white/10">
 							<CardHeader>
@@ -411,7 +404,6 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 								</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-6">
-								{/* Image Upload */}
 								<div className="border-2 border-dashed border-white/20 rounded-lg p-6 text-center">
 									<input
 										type="file"
@@ -431,44 +423,46 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 										</div>
 									</label>
 								</div>
-
-								{/* Image Grid */}
-								{formData.images && formData.images.length > 0 && (
-									<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-										{formData.images.map((image, index) => (
-											<motion.div
-												key={index}
-												initial={{ opacity: 0, scale: 0.8 }}
-												animate={{ opacity: 1, scale: 1 }}
-												className="relative group aspect-square rounded-lg overflow-hidden bg-white/5"
-											>
-												<Image
-													src={image}
-													alt={`Product image ${index + 1}`}
-													fill
-													className="object-cover"
-												/>
-												<button
-													type="button"
-													onClick={() => removeImage(index)}
-													className="absolute top-2 right-2 w-6 h-6 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-												>
-													<X className="w-3 h-3 text-white" />
-												</button>
-												{index === 0 && (
-													<Badge className="absolute bottom-2 left-2 bg-[#FF6EC7] text-white">
-														Primary
-													</Badge>
-												)}
-											</motion.div>
-										))}
-									</div>
-								)}
+								{
+									formData.images && formData.images.length > 0 && (
+										<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+											{
+												formData.images.map((image, index) => (
+													<motion.div
+														key={index}
+														initial={{ opacity: 0, scale: 0.8 }}
+														animate={{ opacity: 1, scale: 1 }}
+														className="relative group aspect-square rounded-lg overflow-hidden bg-white/5"
+													>
+														<Image
+															src={image}
+															alt={`Product image ${index + 1}`}
+															fill
+															className="object-cover"
+														/>
+														<button
+															type="button"
+															onClick={() => removeImage(index)}
+															className="absolute top-2 right-2 w-6 h-6 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+														>
+															<X className="w-3 h-3 text-white" />
+														</button>
+														{
+															index === 0 && (
+																<Badge className="absolute bottom-2 left-2 bg-[#FF6EC7] text-white">
+																	Primary
+																</Badge>
+															)
+														}
+													</motion.div>
+												))
+											}
+										</div>
+									)
+								}
 							</CardContent>
 						</Card>
 					</TabsContent>
-
-					{/* Details */}
 					<TabsContent value="details" className="space-y-6">
 						<Card className="bg-white/5 backdrop-blur-sm border-white/10">
 							<CardHeader>
@@ -488,7 +482,6 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 										rows={6}
 									/>
 								</div>
-
 								<div className="space-y-2">
 									<Label className="text-white">Key Features</Label>
 									<Textarea
@@ -499,7 +492,6 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 										rows={4}
 									/>
 								</div>
-
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 									<div className="space-y-2">
 										<Label className="text-white">Size Options</Label>
@@ -520,7 +512,6 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 										/>
 									</div>
 								</div>
-
 								<div className="space-y-2">
 									<Label className="text-white">Return Policy</Label>
 									<Textarea
@@ -534,8 +525,6 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 							</CardContent>
 						</Card>
 					</TabsContent>
-
-					{/* Settings */}
 					<TabsContent value="settings" className="space-y-6">
 						<Card className="bg-white/5 backdrop-blur-sm border-white/10">
 							<CardHeader>
@@ -578,7 +567,6 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 										</div>
 									</div>
 								</div>
-
 								<div className="space-y-2">
 									<Label className="text-white">Product Slug</Label>
 									<div className="p-3 bg-white/5 border border-white/20 rounded-md">

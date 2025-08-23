@@ -77,7 +77,6 @@ export default function ElectronicsLaptop({ product }: ElectronicsLaptopProps) {
     return (
         <div className="max-w-7xl mx-auto px-4 py-8">
             <div className="grid lg:grid-cols-2 gap-8 mb-8">
-                {/* Product Images */}
                 <div className="space-y-4">
                     <motion.div
                         className="aspect-square bg-muted rounded-lg overflow-hidden"
@@ -92,128 +91,134 @@ export default function ElectronicsLaptop({ product }: ElectronicsLaptopProps) {
                             className="w-full h-full object-cover"
                         />
                     </motion.div>
-
-                    {product.images.length > 1 && (
-                        <div className="flex gap-2 overflow-x-auto">
-                            {product.images.map((image, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => setSelectedImage(index)}
-                                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${selectedImage === index ? 'border-primary' : 'border-transparent'
-                                        }`}
-                                >
-                                    <Image
-                                        src={image}
-                                        alt={`${product.name} ${index + 1}`}
-                                        width={80}
-                                        height={80}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </button>
-                            ))}
-                        </div>
-                    )}
+                    {
+                        product.images.length > 1 && (
+                            <div className="flex gap-2 overflow-x-auto">
+                                {
+                                    product.images.map((image, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => setSelectedImage(index)}
+                                            className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${selectedImage === index ? 'border-primary' : 'border-transparent'
+                                                }`}
+                                        >
+                                            <Image
+                                                src={image}
+                                                alt={`${product.name} ${index + 1}`}
+                                                width={80}
+                                                height={80}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </button>
+                                    ))
+                                }
+                            </div>
+                        )
+                    }
                 </div>
-
-                {/* Product Info */}
                 <div className="space-y-6">
                     <div>
                         <div className="flex items-center gap-2 mb-2">
-                            {product.brand && (
-                                <Badge variant="secondary">{product.brand}</Badge>
-                            )}
+                            {
+                                product.brand && (
+                                    <Badge variant="secondary">{product.brand}</Badge>
+                                )
+                            }
                             <Badge variant="outline">Laptop</Badge>
                         </div>
                         <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-
-                        {/* Rating */}
-                        {product.averageRating && (
-                            <div className="flex items-center gap-2 mb-4">
-                                <div className="flex items-center">
-                                    {[...Array(5)].map((_, i) => (
-                                        <Star
-                                            key={i}
-                                            className={`w-4 h-4 ${i < Math.floor(product.averageRating!)
-                                                    ? 'fill-yellow-400 text-yellow-400'
-                                                    : 'text-gray-300'
-                                                }`}
-                                        />
-                                    ))}
+                        {
+                            product.averageRating && (
+                                <div className="flex items-center gap-2 mb-4">
+                                    <div className="flex items-center">
+                                        {
+                                            [...Array(5)].map((_, i) => (
+                                                <Star
+                                                    key={i}
+                                                    className={`w-4 h-4 ${i < Math.floor(product.averageRating!)
+                                                        ? 'fill-yellow-400 text-yellow-400'
+                                                        : 'text-gray-300'
+                                                        }`}
+                                                />
+                                            ))
+                                        }
+                                    </div>
+                                    <span className="text-sm text-muted-foreground">
+                                        {product.averageRating.toFixed(1)} ({product.reviewCount || 0} reviews)
+                                    </span>
                                 </div>
-                                <span className="text-sm text-muted-foreground">
-                                    {product.averageRating.toFixed(1)} ({product.reviewCount || 0} reviews)
-                                </span>
-                            </div>
-                        )}
+                            )
+                        }
                     </div>
-
-                    {/* Price */}
                     <div className="space-y-2">
                         <div className="flex items-center gap-3">
                             <span className="text-3xl font-bold text-primary">
                                 {formatCurrency(product.price)}
                             </span>
-                            {product.originalPrice && product.originalPrice > product.price && (
-                                <>
-                                    <span className="text-xl text-muted-foreground line-through">
-                                        {formatCurrency(product.originalPrice)}
-                                    </span>
-                                    <Badge variant="destructive">
-                                        {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
-                                    </Badge>
-                                </>
-                            )}
+                            {
+                                product.originalPrice && product.originalPrice > product.price && (
+                                    <>
+                                        <span className="text-xl text-muted-foreground line-through">
+                                            {formatCurrency(product.originalPrice)}
+                                        </span>
+                                        <Badge variant="destructive">
+                                            {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+                                        </Badge>
+                                    </>
+                                )
+                            }
                         </div>
                         <p className="text-sm text-muted-foreground">
-                            {product.inStock
-                                ? `${product.stockQuantity} units available`
-                                : 'Out of stock'
+                            {
+                                product.inStock
+                                    ? `${product.stockQuantity} units available`
+                                    : 'Out of stock'
                             }
                         </p>
                     </div>
-
-                    {/* Color Selection */}
-                    {product.colors && product.colors.length > 0 && (
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium">Color</label>
-                            <div className="flex gap-2">
-                                {product.colors.map((color) => (
-                                    <button
-                                        key={color}
-                                        onClick={() => setSelectedColor(color)}
-                                        className={`px-3 py-1 rounded-md border text-sm transition-colors ${selectedColor === color
-                                                ? 'border-primary bg-primary text-primary-foreground'
-                                                : 'border-border hover:border-primary'
-                                            }`}
-                                    >
-                                        {color}
-                                    </button>
-                                ))}
+                    {
+                        product.colors && product.colors.length > 0 && (
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium">Color</label>
+                                <div className="flex gap-2">
+                                    {
+                                        product.colors.map((color) => (
+                                            <button
+                                                key={color}
+                                                onClick={() => setSelectedColor(color)}
+                                                className={`px-3 py-1 rounded-md border text-sm transition-colors ${selectedColor === color
+                                                    ? 'border-primary bg-primary text-primary-foreground'
+                                                    : 'border-border hover:border-primary'
+                                                    }`}
+                                            >
+                                                {color}
+                                            </button>
+                                        ))
+                                    }
+                                </div>
                             </div>
-                        </div>
-                    )}
-
-                    {/* Key Specifications */}
+                        )
+                    }
                     <Card>
                         <CardHeader>
                             <CardTitle className="text-lg">Key Specifications</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {keySpecs.map((spec, index) => (
-                                    <div key={index} className="flex items-center gap-3">
-                                        <spec.icon className="w-4 h-4 text-muted-foreground" />
-                                        <div>
-                                            <p className="text-sm font-medium">{spec.label}</p>
-                                            <p className="text-sm text-muted-foreground">{spec.value}</p>
+                                {
+                                    keySpecs.map((spec, index) => (
+                                        <div key={index} className="flex items-center gap-3">
+                                            <spec.icon className="w-4 h-4 text-muted-foreground" />
+                                            <div>
+                                                <p className="text-sm font-medium">{spec.label}</p>
+                                                <p className="text-sm text-muted-foreground">{spec.value}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))
+                                }
                             </div>
                         </CardContent>
                     </Card>
-
-                    {/* Action Buttons */}
                     <div className="flex gap-3">
                         <Button
                             onClick={handleAddToCart}
@@ -228,8 +233,6 @@ export default function ElectronicsLaptop({ product }: ElectronicsLaptopProps) {
                             <Heart className="w-4 h-4" />
                         </Button>
                     </div>
-
-                    {/* Trust Badges */}
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
                             <Shield className="w-4 h-4" />
@@ -246,8 +249,6 @@ export default function ElectronicsLaptop({ product }: ElectronicsLaptopProps) {
                     </div>
                 </div>
             </div>
-
-            {/* Detailed Information Tabs */}
             <Tabs defaultValue="overview" className="w-full">
                 <TabsList className="grid w-full grid-cols-4">
                     <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -255,25 +256,27 @@ export default function ElectronicsLaptop({ product }: ElectronicsLaptopProps) {
                     <TabsTrigger value="features">Features</TabsTrigger>
                     <TabsTrigger value="reviews">Reviews</TabsTrigger>
                 </TabsList>
-
                 <TabsContent value="overview" className="mt-6">
                     <Card>
                         <CardHeader>
                             <CardTitle>Product Overview</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            {product.shortDescription && (
-                                <p className="text-muted-foreground">{product.shortDescription}</p>
-                            )}
-                            {product.detailedDescription && (
-                                <div className="prose prose-sm max-w-none">
-                                    <p>{product.detailedDescription}</p>
-                                </div>
-                            )}
+                            {
+                                product.shortDescription && (
+                                    <p className="text-muted-foreground">{product.shortDescription}</p>
+                                )
+                            }
+                            {
+                                product.detailedDescription && (
+                                    <div className="prose prose-sm max-w-none">
+                                        <p>{product.detailedDescription}</p>
+                                    </div>
+                                )
+                            }
                         </CardContent>
                     </Card>
                 </TabsContent>
-
                 <TabsContent value="specifications" className="mt-6">
                     <Card>
                         <CardHeader>
@@ -302,7 +305,6 @@ export default function ElectronicsLaptop({ product }: ElectronicsLaptopProps) {
                                         </div>
                                     </div>
                                 </div>
-
                                 <div className="space-y-4">
                                     <h4 className="font-semibold">Display & Design</h4>
                                     <div className="space-y-2">
@@ -325,65 +327,75 @@ export default function ElectronicsLaptop({ product }: ElectronicsLaptopProps) {
                                     </div>
                                 </div>
                             </div>
-
-                            {/* Connectivity */}
-                            {(specs.ports || specs.connectivity) && (
-                                <div className="mt-6 space-y-4">
-                                    <h4 className="font-semibold">Connectivity</h4>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        {specs.ports && (
-                                            <div>
-                                                <p className="text-sm font-medium mb-2">Ports</p>
-                                                <div className="flex flex-wrap gap-1">
-                                                    {specs.ports.map((port, index) => (
-                                                        <Badge key={index} variant="outline" className="text-xs">
-                                                            {port}
-                                                        </Badge>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                        {specs.connectivity && (
-                                            <div>
-                                                <p className="text-sm font-medium mb-2">Wireless</p>
-                                                <div className="flex flex-wrap gap-1">
-                                                    {specs.connectivity.map((conn, index) => (
-                                                        <Badge key={index} variant="outline" className="text-xs">
-                                                            {conn}
-                                                        </Badge>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
+                            {
+                                (specs.ports || specs.connectivity) && (
+                                    <div className="mt-6 space-y-4">
+                                        <h4 className="font-semibold">Connectivity</h4>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            {
+                                                specs.ports && (
+                                                    <div>
+                                                        <p className="text-sm font-medium mb-2">Ports</p>
+                                                        <div className="flex flex-wrap gap-1">
+                                                            {
+                                                                specs.ports.map((port, index) => (
+                                                                    <Badge key={index} variant="outline" className="text-xs">
+                                                                        {port}
+                                                                    </Badge>
+                                                                ))
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                            {
+                                                specs.connectivity && (
+                                                    <div>
+                                                        <p className="text-sm font-medium mb-2">Wireless</p>
+                                                        <div className="flex flex-wrap gap-1">
+                                                            {
+                                                                specs.connectivity.map((conn, index) => (
+                                                                    <Badge key={index} variant="outline" className="text-xs">
+                                                                        {conn}
+                                                                    </Badge>
+                                                                ))
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                )
+                            }
                         </CardContent>
                     </Card>
                 </TabsContent>
-
                 <TabsContent value="features" className="mt-6">
                     <Card>
                         <CardHeader>
                             <CardTitle>Key Features</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            {product.keyFeatures ? (
-                                <div className="prose prose-sm max-w-none">
-                                    {product.keyFeatures.split('\n').map((feature, index) => (
-                                        <div key={index} className="flex items-start gap-2 mb-2">
-                                            <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
-                                            <span>{feature.trim()}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <p className="text-muted-foreground">No detailed features available.</p>
-                            )}
+                            {
+                                product.keyFeatures ? (
+                                    <div className="prose prose-sm max-w-none">
+                                        {
+                                            product.keyFeatures.split('\n').map((feature, index) => (
+                                                <div key={index} className="flex items-start gap-2 mb-2">
+                                                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
+                                                    <span>{feature.trim()}</span>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                ) : (
+                                    <p className="text-muted-foreground">No detailed features available.</p>
+                                )
+                            }
                         </CardContent>
                     </Card>
                 </TabsContent>
-
                 <TabsContent value="reviews" className="mt-6">
                     <Card>
                         <CardHeader>

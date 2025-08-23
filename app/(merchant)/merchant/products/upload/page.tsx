@@ -4,11 +4,14 @@ import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useDropzone } from 'react-dropzone'
 import {
-	Upload, Image as ImageIcon, X, Loader2, ArrowLeft, Save, 
+	Upload, Image as ImageIcon, X, Loader2, ArrowLeft, Save,
 	FileSpreadsheet, ChevronDown, ChevronUp, Plus, Download
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { 
+	Card, CardContent, CardDescription, 
+	CardHeader, CardTitle 
+} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -21,13 +24,13 @@ import * as XLSX from 'xlsx'
 
 export default function ProductUploadPage() {
 	const router = useRouter()
-	
+
 	// Excel upload state
 
 	const [excelData, setExcelData] = useState<ExcelProductData[]>([])
 	const [excelUploading, setExcelUploading] = useState(false)
 	const [excelPreview, setExcelPreview] = useState<ExcelProductData[]>([])
-	
+
 	// Single upload state
 	const [singleUploadOpen, setSingleUploadOpen] = useState(false)
 	const [singleUploading, setSingleUploading] = useState(false)
@@ -57,7 +60,7 @@ export default function ProductUploadPage() {
 		if (!file) return
 
 
-		
+
 		const reader = new FileReader()
 		reader.onload = (e) => {
 			try {
@@ -189,7 +192,7 @@ export default function ProductUploadPage() {
 	// Upload single product
 	const handleSingleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
-		
+
 		if (!singleForm.images.length) {
 			toast.error('Please upload at least one product image')
 			return
@@ -204,7 +207,7 @@ export default function ProductUploadPage() {
 		try {
 			// Convert images to URLs (in real app, upload to cloud storage first)
 			const imageUrls = singleForm.images.map(file => URL.createObjectURL(file))
-			
+
 			const result = await uploadSingleProduct({
 				name: singleForm.name,
 				category: singleForm.category,
@@ -273,7 +276,6 @@ export default function ProductUploadPage() {
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-black via-purple-900/20 to-black">
-			{/* Header */}
 			<div className="border-b border-white/10 bg-black/50 backdrop-blur-sm">
 				<div className="container mx-auto px-4 py-4">
 					<div className="flex items-center gap-4">
@@ -292,9 +294,7 @@ export default function ProductUploadPage() {
 					</div>
 				</div>
 			</div>
-
 			<div className="container mx-auto px-4 py-8 space-y-8">
-				{/* Excel Upload Section */}
 				<Card className="bg-white/5 backdrop-blur-sm border-white/10">
 					<CardHeader>
 						<CardTitle className="text-white flex items-center gap-2">
@@ -306,7 +306,6 @@ export default function ProductUploadPage() {
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-6">
-						{/* Template Download */}
 						<div className="flex items-center justify-between p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
 							<div>
 								<h4 className="text-white font-medium">Need a template?</h4>
@@ -322,8 +321,6 @@ export default function ProductUploadPage() {
 								Download Template
 							</Button>
 						</div>
-
-						{/* Excel Upload Area */}
 						<div
 							{...getExcelRootProps()}
 							className={`
@@ -350,63 +347,63 @@ export default function ProductUploadPage() {
 								</div>
 							</div>
 						</div>
-
-						{/* Excel Preview */}
-						{excelPreview.length > 0 && (
-							<div className="space-y-4">
-								<div className="flex items-center justify-between">
-									<h4 className="text-white font-medium">Preview ({excelData.length} products)</h4>
-									<Badge variant="outline" className="border-green-500 text-green-400">
-										{excelData.length} Products Ready
-									</Badge>
-								</div>
-								
-								<div className="overflow-x-auto">
-									<table className="w-full text-sm">
-										<thead>
-											<tr className="border-b border-white/10">
-												<th className="text-left text-gray-400 p-2">Product Name</th>
-												<th className="text-left text-gray-400 p-2">Category</th>
-												<th className="text-left text-gray-400 p-2">Price</th>
-												<th className="text-left text-gray-400 p-2">Stock</th>
-											</tr>
-										</thead>
-										<tbody>
-											{excelPreview.map((product, index) => (
-												<tr key={index} className="border-b border-white/5">
-													<td className="text-white p-2">{product.productName}</td>
-													<td className="text-gray-300 p-2">{product.category}</td>
-													<td className="text-gray-300 p-2">₹{product.priceINR}</td>
-													<td className="text-gray-300 p-2">{product.stock}</td>
+						{
+							excelPreview.length > 0 && (
+								<div className="space-y-4">
+									<div className="flex items-center justify-between">
+										<h4 className="text-white font-medium">Preview ({excelData.length} products)</h4>
+										<Badge variant="outline" className="border-green-500 text-green-400">
+											{excelData.length} Products Ready
+										</Badge>
+									</div>
+									<div className="overflow-x-auto">
+										<table className="w-full text-sm">
+											<thead>
+												<tr className="border-b border-white/10">
+													<th className="text-left text-gray-400 p-2">Product Name</th>
+													<th className="text-left text-gray-400 p-2">Category</th>
+													<th className="text-left text-gray-400 p-2">Price</th>
+													<th className="text-left text-gray-400 p-2">Stock</th>
 												</tr>
-											))}
-										</tbody>
-									</table>
+											</thead>
+											<tbody>
+												{
+													excelPreview.map((product, index) => (
+														<tr key={index} className="border-b border-white/5">
+															<td className="text-white p-2">{product.productName}</td>
+															<td className="text-gray-300 p-2">{product.category}</td>
+															<td className="text-gray-300 p-2">₹{product.priceINR}</td>
+															<td className="text-gray-300 p-2">{product.stock}</td>
+														</tr>
+													))
+												}
+											</tbody>
+										</table>
+									</div>
+									<Button
+										onClick={handleExcelSubmit}
+										disabled={excelUploading}
+										className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
+									>
+										{
+											excelUploading ? (
+												<>
+													<Loader2 className="w-4 h-4 mr-2 animate-spin" />
+													Uploading {excelData.length} Products...
+												</>
+											) : (
+												<>
+													<Upload className="w-4 h-4 mr-2" />
+													Upload {excelData.length} Products
+												</>
+											)
+										}
+									</Button>
 								</div>
-
-								<Button
-									onClick={handleExcelSubmit}
-									disabled={excelUploading}
-									className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
-								>
-									{excelUploading ? (
-										<>
-											<Loader2 className="w-4 h-4 mr-2 animate-spin" />
-											Uploading {excelData.length} Products...
-										</>
-									) : (
-										<>
-											<Upload className="w-4 h-4 mr-2" />
-											Upload {excelData.length} Products
-										</>
-									)}
-								</Button>
-							</div>
-						)}
+							)
+						}
 					</CardContent>
 				</Card>
-
-				{/* Single Product Upload Section */}
 				<Collapsible open={singleUploadOpen} onOpenChange={setSingleUploadOpen}>
 					<Card className="bg-white/5 backdrop-blur-sm border-white/10">
 						<CollapsibleTrigger asChild>
@@ -421,11 +418,13 @@ export default function ProductUploadPage() {
 											Add individual products with detailed information
 										</CardDescription>
 									</div>
-									{singleUploadOpen ? (
-										<ChevronUp className="w-5 h-5 text-gray-400" />
-									) : (
-										<ChevronDown className="w-5 h-5 text-gray-400" />
-									)}
+									{
+										singleUploadOpen ? (
+											<ChevronUp className="w-5 h-5 text-gray-400" />
+										) : (
+											<ChevronDown className="w-5 h-5 text-gray-400" />
+										)
+									}
 								</div>
 							</CardHeader>
 						</CollapsibleTrigger>
@@ -433,9 +432,7 @@ export default function ProductUploadPage() {
 							<form onSubmit={handleSingleSubmit}>
 								<CardContent className="space-y-6">
 									<div className="grid lg:grid-cols-2 gap-8">
-										{/* Left Column - Image Upload */}
 										<div className="space-y-6">
-											{/* Image Upload Area */}
 											<div className="space-y-4">
 												<Label className="text-white">Product Images *</Label>
 												<div
@@ -459,33 +456,33 @@ export default function ProductUploadPage() {
 														</div>
 													</div>
 												</div>
-
-												{/* Image Previews */}
-												{previewImages.length > 0 && (
-													<div className="grid grid-cols-3 gap-3">
-														{previewImages.map((preview, index) => (
-															<div key={index} className="relative group aspect-square rounded-lg overflow-hidden bg-white/5">
-																<Image
-																	src={preview}
-																	alt={`Preview ${index + 1}`}
-																	fill
-																	className="object-cover"
-																/>
-																<button
-																	type="button"
-																	onClick={() => removeImage(index)}
-																	className="absolute top-1 right-1 w-5 h-5 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-																>
-																	<X className="w-3 h-3 text-white" />
-																</button>
-															</div>
-														))}
-													</div>
-												)}
+												{
+													previewImages.length > 0 && (
+														<div className="grid grid-cols-3 gap-3">
+															{
+																previewImages.map((preview, index) => (
+																	<div key={index} className="relative group aspect-square rounded-lg overflow-hidden bg-white/5">
+																		<Image
+																			src={preview}
+																			alt={`Preview ${index + 1}`}
+																			fill
+																			className="object-cover"
+																		/>
+																		<button
+																			type="button"
+																			onClick={() => removeImage(index)}
+																			className="absolute top-1 right-1 w-5 h-5 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+																		>
+																			<X className="w-3 h-3 text-white" />
+																		</button>
+																	</div>
+																))
+															}
+														</div>
+													)
+												}
 											</div>
 										</div>
-
-										{/* Right Column - Product Details */}
 										<div className="space-y-4">
 											<div className="grid grid-cols-2 gap-4">
 												<div className="space-y-2">
@@ -509,7 +506,6 @@ export default function ProductUploadPage() {
 													/>
 												</div>
 											</div>
-
 											<div className="grid grid-cols-2 gap-4">
 												<div className="space-y-2">
 													<Label className="text-white">Subcategory</Label>
@@ -530,7 +526,6 @@ export default function ProductUploadPage() {
 													/>
 												</div>
 											</div>
-
 											<div className="grid grid-cols-2 gap-4">
 												<div className="space-y-2">
 													<Label className="text-white">Product Type</Label>
@@ -552,7 +547,6 @@ export default function ProductUploadPage() {
 													/>
 												</div>
 											</div>
-
 											<div className="grid grid-cols-3 gap-4">
 												<div className="space-y-2">
 													<Label className="text-white">Price (₹) *</Label>
@@ -586,7 +580,6 @@ export default function ProductUploadPage() {
 													/>
 												</div>
 											</div>
-
 											<div className="space-y-2">
 												<Label className="text-white">Short Description</Label>
 												<Textarea
@@ -597,7 +590,6 @@ export default function ProductUploadPage() {
 													rows={2}
 												/>
 											</div>
-
 											<div className="space-y-2">
 												<Label className="text-white">Detailed Description</Label>
 												<Textarea
@@ -608,7 +600,6 @@ export default function ProductUploadPage() {
 													rows={3}
 												/>
 											</div>
-
 											<div className="space-y-2">
 												<Label className="text-white">Key Features</Label>
 												<Textarea
@@ -621,8 +612,6 @@ export default function ProductUploadPage() {
 											</div>
 										</div>
 									</div>
-
-									{/* Action Buttons */}
 									<div className="flex gap-4 pt-4">
 										<Button
 											type="button"
@@ -638,17 +627,19 @@ export default function ProductUploadPage() {
 											disabled={singleUploading || !singleForm.images.length || !singleForm.name || !singleForm.price}
 											className="flex-1 bg-gradient-to-r from-[#FF6EC7] to-[#DF87F3] hover:from-[#FF6EC7]/90 hover:to-[#DF87F3]/90 text-white"
 										>
-											{singleUploading ? (
-												<>
-													<Loader2 className="w-4 h-4 mr-2 animate-spin" />
-													Uploading...
-												</>
-											) : (
-												<>
-													<Save className="w-4 h-4 mr-2" />
-													Upload Product
-												</>
-											)}
+											{
+												singleUploading ? (
+													<>
+														<Loader2 className="w-4 h-4 mr-2 animate-spin" />
+														Uploading...
+													</>
+												) : (
+													<>
+														<Save className="w-4 h-4 mr-2" />
+														Upload Product
+													</>
+												)
+											}
 										</Button>
 									</div>
 								</CardContent>

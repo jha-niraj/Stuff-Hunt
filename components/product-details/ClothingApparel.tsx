@@ -82,7 +82,6 @@ export default function ClothingApparel({ product }: ClothingApparelProps) {
 	return (
 		<div className="max-w-7xl mx-auto px-4 py-8">
 			<div className="grid lg:grid-cols-2 gap-8 mb-8">
-				{/* Product Images */}
 				<div className="space-y-4">
 					<motion.div
 						className="aspect-[3/4] bg-muted rounded-lg overflow-hidden"
@@ -97,168 +96,178 @@ export default function ClothingApparel({ product }: ClothingApparelProps) {
 							className="w-full h-full object-cover"
 						/>
 					</motion.div>
-
-					{product.images.length > 1 && (
-						<div className="flex gap-2 overflow-x-auto">
-							{product.images.map((image, index) => (
-								<button
-									key={index}
-									onClick={() => setSelectedImage(index)}
-									className={`flex-shrink-0 w-20 h-24 rounded-lg overflow-hidden border-2 transition-colors ${selectedImage === index ? 'border-primary' : 'border-transparent'
-										}`}
-								>
-									<Image
-										src={image}
-										alt={`${product.name} ${index + 1}`}
-										width={80}
-										height={96}
-										className="w-full h-full object-cover"
-									/>
-								</button>
-							))}
-						</div>
-					)}
+					{
+						product.images.length > 1 && (
+							<div className="flex gap-2 overflow-x-auto">
+								{
+									product.images.map((image, index) => (
+										<button
+											key={index}
+											onClick={() => setSelectedImage(index)}
+											className={`flex-shrink-0 w-20 h-24 rounded-lg overflow-hidden border-2 transition-colors ${selectedImage === index ? 'border-primary' : 'border-transparent'
+												}`}
+										>
+											<Image
+												src={image}
+												alt={`${product.name} ${index + 1}`}
+												width={80}
+												height={96}
+												className="w-full h-full object-cover"
+											/>
+										</button>
+									))
+								}
+							</div>
+						)
+					}
 				</div>
-
-				{/* Product Info */}
 				<div className="space-y-6">
 					<div>
 						<div className="flex items-center gap-2 mb-2">
-							{product.brand && (
-								<Badge variant="secondary">{product.brand}</Badge>
-							)}
+							{
+								product.brand && (
+									<Badge variant="secondary">{product.brand}</Badge>
+								)
+							}
 							<Badge variant="outline">Apparel</Badge>
-							{specs.style && (
-								<Badge variant="outline">{specs.style}</Badge>
-							)}
+							{
+								specs.style && (
+									<Badge variant="outline">{specs.style}</Badge>
+								)
+							}
 						</div>
 						<h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-
-						{/* Rating */}
-						{product.averageRating && (
-							<div className="flex items-center gap-2 mb-4">
-								<div className="flex items-center">
-									{[...Array(5)].map((_, i) => (
-										<Star
-											key={i}
-											className={`w-4 h-4 ${i < Math.floor(product.averageRating!)
-												? 'fill-yellow-400 text-yellow-400'
-												: 'text-gray-300'
-												}`}
-										/>
-									))}
+						{
+							product.averageRating && (
+								<div className="flex items-center gap-2 mb-4">
+									<div className="flex items-center">
+										{
+											[...Array(5)].map((_, i) => (
+												<Star
+													key={i}
+													className={`w-4 h-4 ${i < Math.floor(product.averageRating!)
+														? 'fill-yellow-400 text-yellow-400'
+														: 'text-gray-300'
+														}`}
+												/>
+											))
+										}
+									</div>
+									<span className="text-sm text-muted-foreground">
+										{product.averageRating.toFixed(1)} ({product.reviewCount || 0} reviews)
+									</span>
 								</div>
-								<span className="text-sm text-muted-foreground">
-									{product.averageRating.toFixed(1)} ({product.reviewCount || 0} reviews)
-								</span>
-							</div>
-						)}
+							)
+						}
 					</div>
-
-					{/* Price */}
 					<div className="space-y-2">
 						<div className="flex items-center gap-3">
 							<span className="text-3xl font-bold text-primary">
 								{formatCurrency(product.price)}
 							</span>
-							{product.originalPrice && product.originalPrice > product.price && (
-								<>
-									<span className="text-xl text-muted-foreground line-through">
-										{formatCurrency(product.originalPrice)}
-									</span>
-									<Badge variant="destructive">
-										{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
-									</Badge>
-								</>
-							)}
+							{
+								product.originalPrice && product.originalPrice > product.price && (
+									<>
+										<span className="text-xl text-muted-foreground line-through">
+											{formatCurrency(product.originalPrice)}
+										</span>
+										<Badge variant="destructive">
+											{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+										</Badge>
+									</>
+								)
+							}
 						</div>
 						<p className="text-sm text-muted-foreground">
-							{product.inStock
-								? `${product.stockQuantity} units available`
-								: 'Out of stock'
+							{
+								product.inStock
+									? `${product.stockQuantity} units available`
+									: 'Out of stock'
 							}
 						</p>
 					</div>
-
-					{/* Size Selection */}
-					{product.sizes && product.sizes.length > 0 && (
-						<div className="space-y-3">
-							<div className="flex items-center justify-between">
-								<label className="text-sm font-medium">Size</label>
-								<button className="text-sm text-primary hover:underline">
-									Size Guide
-								</button>
-							</div>
-							<div className="grid grid-cols-4 gap-2">
-								{product.sizes.map((size) => (
-									<button
-										key={size}
-										onClick={() => setSelectedSize(size)}
-										className={`aspect-square rounded-md border text-sm font-medium transition-colors ${selectedSize === size
-											? 'border-primary bg-primary text-primary-foreground'
-											: 'border-border hover:border-primary'
-											}`}
-									>
-										{size}
+					{
+						product.sizes && product.sizes.length > 0 && (
+							<div className="space-y-3">
+								<div className="flex items-center justify-between">
+									<label className="text-sm font-medium">Size</label>
+									<button className="text-sm text-primary hover:underline">
+										Size Guide
 									</button>
-								))}
+								</div>
+								<div className="grid grid-cols-4 gap-2">
+									{
+										product.sizes.map((size) => (
+											<button
+												key={size}
+												onClick={() => setSelectedSize(size)}
+												className={`aspect-square rounded-md border text-sm font-medium transition-colors ${selectedSize === size
+													? 'border-primary bg-primary text-primary-foreground'
+													: 'border-border hover:border-primary'
+													}`}
+											>
+												{size}
+											</button>
+										))
+									}
+								</div>
 							</div>
-						</div>
-					)}
-
-					{/* Color Selection */}
-					{product.colors && product.colors.length > 0 && (
-						<div className="space-y-3">
-							<label className="text-sm font-medium">Color: {selectedColor}</label>
-							<div className="flex gap-2 flex-wrap">
-								{product.colors.map((color) => (
-									<button
-										key={color}
-										onClick={() => setSelectedColor(color)}
-										className={`w-12 h-12 rounded-full border-2 transition-all ${selectedColor === color
-											? 'border-primary scale-110'
-											: 'border-border hover:border-primary'
-											}`}
-										style={{
-											backgroundColor: color.toLowerCase() === 'white' ? '#ffffff' :
-												color.toLowerCase() === 'black' ? '#000000' :
-													color.toLowerCase() === 'red' ? '#ef4444' :
-														color.toLowerCase() === 'blue' ? '#3b82f6' :
-															color.toLowerCase() === 'green' ? '#22c55e' :
-																color.toLowerCase() === 'yellow' ? '#eab308' :
-																	color.toLowerCase() === 'pink' ? '#ec4899' :
-																		color.toLowerCase() === 'purple' ? '#a855f7' :
-																			color.toLowerCase() === 'gray' ? '#6b7280' :
-																				'#94a3b8'
-										}}
-										title={color}
-									/>
-								))}
+						)
+					}
+					{
+						product.colors && product.colors.length > 0 && (
+							<div className="space-y-3">
+								<label className="text-sm font-medium">Color: {selectedColor}</label>
+								<div className="flex gap-2 flex-wrap">
+									{
+										product.colors.map((color) => (
+											<button
+												key={color}
+												onClick={() => setSelectedColor(color)}
+												className={`w-12 h-12 rounded-full border-2 transition-all ${selectedColor === color
+													? 'border-primary scale-110'
+													: 'border-border hover:border-primary'
+													}`}
+												style={{
+													backgroundColor: color.toLowerCase() === 'white' ? '#ffffff' :
+														color.toLowerCase() === 'black' ? '#000000' :
+															color.toLowerCase() === 'red' ? '#ef4444' :
+																color.toLowerCase() === 'blue' ? '#3b82f6' :
+																	color.toLowerCase() === 'green' ? '#22c55e' :
+																		color.toLowerCase() === 'yellow' ? '#eab308' :
+																			color.toLowerCase() === 'pink' ? '#ec4899' :
+																				color.toLowerCase() === 'purple' ? '#a855f7' :
+																					color.toLowerCase() === 'gray' ? '#6b7280' :
+																						'#94a3b8'
+												}}
+												title={color}
+											/>
+										))
+									}
+								</div>
 							</div>
-						</div>
-					)}
-
-					{/* Product Details */}
+						)
+					}
 					<Card>
 						<CardHeader>
 							<CardTitle className="text-lg">Product Details</CardTitle>
 						</CardHeader>
 						<CardContent>
 							<div className="grid grid-cols-2 gap-4">
-								{productDetails.map((detail, index) => (
-									<div key={index} className="flex items-center gap-3">
-										<detail.icon className="w-4 h-4 text-muted-foreground" />
-										<div>
-											<p className="text-sm font-medium">{detail.label}</p>
-											<p className="text-sm text-muted-foreground">{detail.value}</p>
+								{
+									productDetails.map((detail, index) => (
+										<div key={index} className="flex items-center gap-3">
+											<detail.icon className="w-4 h-4 text-muted-foreground" />
+											<div>
+												<p className="text-sm font-medium">{detail.label}</p>
+												<p className="text-sm text-muted-foreground">{detail.value}</p>
+											</div>
 										</div>
-									</div>
-								))}
+									))
+								}
 							</div>
 						</CardContent>
 					</Card>
-
-					{/* Action Buttons */}
 					<div className="flex gap-3">
 						<Button
 							onClick={handleAddToCart}
@@ -273,8 +282,6 @@ export default function ClothingApparel({ product }: ClothingApparelProps) {
 							<Heart className="w-4 h-4" />
 						</Button>
 					</div>
-
-					{/* Trust Badges */}
 					<div className="flex items-center gap-4 text-sm text-muted-foreground">
 						<div className="flex items-center gap-1">
 							<Shield className="w-4 h-4" />
@@ -291,8 +298,6 @@ export default function ClothingApparel({ product }: ClothingApparelProps) {
 					</div>
 				</div>
 			</div>
-
-			{/* Detailed Information Tabs */}
 			<Tabs defaultValue="overview" className="w-full">
 				<TabsList className="grid w-full grid-cols-4">
 					<TabsTrigger value="overview">Overview</TabsTrigger>
@@ -300,23 +305,24 @@ export default function ClothingApparel({ product }: ClothingApparelProps) {
 					<TabsTrigger value="care">Care Instructions</TabsTrigger>
 					<TabsTrigger value="reviews">Reviews</TabsTrigger>
 				</TabsList>
-
 				<TabsContent value="overview" className="mt-6">
 					<Card>
 						<CardHeader>
 							<CardTitle>Product Overview</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-4">
-							{product.shortDescription && (
-								<p className="text-muted-foreground">{product.shortDescription}</p>
-							)}
-							{product.detailedDescription && (
-								<div className="prose prose-sm max-w-none">
-									<p>{product.detailedDescription}</p>
-								</div>
-							)}
-
-							{/* Material & Style Info */}
+							{
+								product.shortDescription && (
+									<p className="text-muted-foreground">{product.shortDescription}</p>
+								)
+							}
+							{
+								product.detailedDescription && (
+									<div className="prose prose-sm max-w-none">
+										<p>{product.detailedDescription}</p>
+									</div>
+								)
+							}
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
 								<div className="space-y-2">
 									<h4 className="font-semibold">Material & Fabric</h4>
@@ -334,7 +340,6 @@ export default function ClothingApparel({ product }: ClothingApparelProps) {
 						</CardContent>
 					</Card>
 				</TabsContent>
-
 				<TabsContent value="sizing" className="mt-6">
 					<Card>
 						<CardHeader>
@@ -354,8 +359,6 @@ export default function ClothingApparel({ product }: ClothingApparelProps) {
 										{specs.fit === 'Regular' && ' It provides a comfortable fit that is not too tight or too loose.'}
 									</p>
 								</div>
-
-								{/* Size Chart */}
 								<div className="overflow-x-auto">
 									<table className="w-full border-collapse border border-border">
 										<thead>
@@ -367,18 +370,19 @@ export default function ClothingApparel({ product }: ClothingApparelProps) {
 											</tr>
 										</thead>
 										<tbody>
-											{Object.entries(sizeGuide).map(([size, measurements]) => (
-												<tr key={size} className={selectedSize === size ? 'bg-primary/10' : ''}>
-													<td className="border border-border p-2 font-medium">{size}</td>
-													<td className="border border-border p-2">{measurements.chest}</td>
-													<td className="border border-border p-2">{measurements.waist}</td>
-													<td className="border border-border p-2">{measurements.length}</td>
-												</tr>
-											))}
+											{
+												Object.entries(sizeGuide).map(([size, measurements]) => (
+													<tr key={size} className={selectedSize === size ? 'bg-primary/10' : ''}>
+														<td className="border border-border p-2 font-medium">{size}</td>
+														<td className="border border-border p-2">{measurements.chest}</td>
+														<td className="border border-border p-2">{measurements.waist}</td>
+														<td className="border border-border p-2">{measurements.length}</td>
+													</tr>
+												))
+											}
 										</tbody>
 									</table>
 								</div>
-
 								<div className="bg-muted/50 p-4 rounded-lg">
 									<h5 className="font-medium mb-2">How to Measure</h5>
 									<ul className="text-sm text-muted-foreground space-y-1">
@@ -391,7 +395,6 @@ export default function ClothingApparel({ product }: ClothingApparelProps) {
 						</CardContent>
 					</Card>
 				</TabsContent>
-
 				<TabsContent value="care" className="mt-6">
 					<Card>
 						<CardHeader>
@@ -402,31 +405,34 @@ export default function ClothingApparel({ product }: ClothingApparelProps) {
 						</CardHeader>
 						<CardContent>
 							<div className="space-y-4">
-								{specs.care && specs.care.length > 0 ? (
-									<div className="space-y-2">
-										<h4 className="font-semibold">Care Instructions</h4>
-										<ul className="space-y-1">
-											{specs.care.map((instruction, index) => (
-												<li key={index} className="flex items-start gap-2 text-sm">
-													<Droplets className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
-													<span>{instruction}</span>
-												</li>
-											))}
-										</ul>
-									</div>
-								) : (
-									<div className="space-y-2">
-										<h4 className="font-semibold">General Care Instructions</h4>
-										<ul className="space-y-1 text-sm text-muted-foreground">
-											<li>• Machine wash cold with like colors</li>
-											<li>• Do not bleach</li>
-											<li>• Tumble dry low heat</li>
-											<li>• Iron on low heat if needed</li>
-											<li>• Do not dry clean</li>
-										</ul>
-									</div>
-								)}
-
+								{
+									specs.care && specs.care.length > 0 ? (
+										<div className="space-y-2">
+											<h4 className="font-semibold">Care Instructions</h4>
+											<ul className="space-y-1">
+												{
+													specs.care.map((instruction, index) => (
+														<li key={index} className="flex items-start gap-2 text-sm">
+															<Droplets className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+															<span>{instruction}</span>
+														</li>
+													))
+												}
+											</ul>
+										</div>
+									) : (
+										<div className="space-y-2">
+											<h4 className="font-semibold">General Care Instructions</h4>
+											<ul className="space-y-1 text-sm text-muted-foreground">
+												<li>• Machine wash cold with like colors</li>
+												<li>• Do not bleach</li>
+												<li>• Tumble dry low heat</li>
+												<li>• Iron on low heat if needed</li>
+												<li>• Do not dry clean</li>
+											</ul>
+										</div>
+									)
+								}
 								<div className="bg-muted/50 p-4 rounded-lg">
 									<h5 className="font-medium mb-2">Material: {specs.material || 'Cotton Blend'}</h5>
 									<p className="text-sm text-muted-foreground">
@@ -440,7 +446,6 @@ export default function ClothingApparel({ product }: ClothingApparelProps) {
 						</CardContent>
 					</Card>
 				</TabsContent>
-
 				<TabsContent value="reviews" className="mt-6">
 					<Card>
 						<CardHeader>

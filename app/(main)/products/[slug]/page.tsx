@@ -124,17 +124,16 @@ function ProductDetailSkeleton() {
 	return (
 		<div className="max-w-7xl mx-auto px-4 py-8">
 			<div className="grid lg:grid-cols-2 gap-8 mb-8">
-				{/* Image skeleton */}
 				<div className="space-y-4">
 					<Skeleton className="aspect-square w-full rounded-lg" />
 					<div className="flex gap-2">
-						{[...Array(4)].map((_, i) => (
-							<Skeleton key={i} className="w-20 h-20 rounded-lg" />
-						))}
+						{
+							[...Array(4)].map((_, i) => (
+								<Skeleton key={i} className="w-20 h-20 rounded-lg" />
+							))
+						}
 					</div>
 				</div>
-
-				{/* Info skeleton */}
 				<div className="space-y-6">
 					<div className="space-y-2">
 						<Skeleton className="h-6 w-32" />
@@ -145,9 +144,11 @@ function ProductDetailSkeleton() {
 					<div className="space-y-2">
 						<Skeleton className="h-4 w-16" />
 						<div className="flex gap-2">
-							{[...Array(3)].map((_, i) => (
-								<Skeleton key={i} className="h-8 w-16" />
-							))}
+							{
+								[...Array(3)].map((_, i) => (
+									<Skeleton key={i} className="h-8 w-16" />
+								))
+							}
 						</div>
 					</div>
 					<Skeleton className="h-32 w-full" />

@@ -86,7 +86,6 @@ export function ProductCard({ product }: Props) {
 			viewport={{ once: true, amount: 0.2 }}
 			className="group rounded-xl border overflow-hidden bg-card relative"
 		>
-			{/* Action Buttons Overlay */}
 			<div className="absolute top-2 right-2 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
 				<Button
 					variant="secondary"
@@ -112,7 +111,6 @@ export function ProductCard({ product }: Props) {
 					<GitCompare className="h-4 w-4" />
 				</Button>
 			</div>
-
 			<Link href={`/products/${product.slug}`} className="block">
 				<div className="relative bg-muted">
 					<Image
@@ -145,7 +143,6 @@ export function ProductCard({ product }: Props) {
 						}
 					</div>
 					<div className="flex items-center gap-2">
-						{/* Compare Checkbox for Desktop */}
 						<div className="hidden sm:flex items-center gap-1">
 							<input
 								type="checkbox"

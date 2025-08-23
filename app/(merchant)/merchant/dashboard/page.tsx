@@ -19,7 +19,7 @@ import { format } from "date-fns"
 export default function SellerDashboard() {
     const { data: session, status } = useSession()
     const router = useRouter()
-    
+
     const {
         dashboardData,
         dashboardLoading,
@@ -92,7 +92,6 @@ export default function SellerDashboard() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-black via-purple-900/20 to-black">
-            {/* Header */}
             <div className="border-b border-white/10 bg-black/50 backdrop-blur-sm">
                 <div className="container mx-auto px-4 py-4">
                     <div className="flex items-center justify-between">
@@ -105,7 +104,6 @@ export default function SellerDashboard() {
                                 <p className="text-gray-400">Welcome back, {session?.user?.name || 'Seller'}!</p>
                             </div>
                         </div>
-
                         <div className="flex items-center gap-4">
                             <TooltipProvider>
                                 <Tooltip>
@@ -119,7 +117,6 @@ export default function SellerDashboard() {
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
-
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
@@ -132,7 +129,6 @@ export default function SellerDashboard() {
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
-
                             <Avatar>
                                 <AvatarImage src={session?.user?.image || ""} alt={session?.user?.name || ""} />
                                 <AvatarFallback className="bg-gradient-to-br from-[#FF6EC7] to-[#DF87F3] text-white">
@@ -143,9 +139,7 @@ export default function SellerDashboard() {
                     </div>
                 </div>
             </div>
-
             <div className="container mx-auto px-4 py-8">
-                {/* Stats Overview */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -166,7 +160,6 @@ export default function SellerDashboard() {
                             </CardContent>
                         </Card>
                     </motion.div>
-
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -186,7 +179,6 @@ export default function SellerDashboard() {
                             </CardContent>
                         </Card>
                     </motion.div>
-
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -206,7 +198,6 @@ export default function SellerDashboard() {
                             </CardContent>
                         </Card>
                     </motion.div>
-
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -227,8 +218,6 @@ export default function SellerDashboard() {
                         </Card>
                     </motion.div>
                 </div>
-
-                {/* Quick Actions */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -251,7 +240,6 @@ export default function SellerDashboard() {
                                     <Plus className="w-6 h-6" />
                                     <span className="font-semibold">Add New Product</span>
                                 </Button>
-
                                 <Button
                                     variant="outline"
                                     className="border-[#FF6EC7] text-[#FF6EC7] hover:bg-[#FF6EC7] hover:text-white h-auto p-4 flex-col gap-2"
@@ -260,7 +248,6 @@ export default function SellerDashboard() {
                                     <Eye className="w-6 h-6" />
                                     <span className="font-semibold">View Orders</span>
                                 </Button>
-
                                 <Button
                                     variant="outline"
                                     className="border-[#DF87F3] text-[#DF87F3] hover:bg-[#DF87F3] hover:text-white h-auto p-4 flex-col gap-2"
@@ -273,10 +260,7 @@ export default function SellerDashboard() {
                         </CardContent>
                     </Card>
                 </motion.div>
-
-                {/* Recent Activity */}
                 <div className="grid lg:grid-cols-2 gap-6">
-                    {/* Recent Products */}
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -293,22 +277,24 @@ export default function SellerDashboard() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
-                                {dashboardData.recentProducts.map((product) => (
-                                    <div key={product.id} className="flex items-center justify-between p-3 rounded-lg bg-white/5">
-                                        <div>
-                                            <p className="font-medium text-white">{product.name}</p>
-                                            <p className="text-sm text-gray-400">₹{product.price.toLocaleString()}</p>
-                                            <p className="text-xs text-gray-500">
-                                                {product.viewCount} views • {product.orderCount} orders
-                                            </p>
+                                {
+                                    dashboardData.recentProducts.map((product) => (
+                                        <div key={product.id} className="flex items-center justify-between p-3 rounded-lg bg-white/5">
+                                            <div>
+                                                <p className="font-medium text-white">{product.name}</p>
+                                                <p className="text-sm text-gray-400">₹{product.price.toLocaleString()}</p>
+                                                <p className="text-xs text-gray-500">
+                                                    {product.viewCount} views • {product.orderCount} orders
+                                                </p>
+                                            </div>
+                                            <Badge className={`${getStatusColor(product.status)} text-white`}>
+                                                {product.status}
+                                            </Badge>
                                         </div>
-                                        <Badge className={`${getStatusColor(product.status)} text-white`}>
-                                            {product.status}
-                                        </Badge>
-                                    </div>
-                                ))}
-                                <Button 
-                                    variant="ghost" 
+                                    ))
+                                }
+                                <Button
+                                    variant="ghost"
                                     className="w-full text-[#FF6EC7] hover:bg-[#FF6EC7]/10"
                                     onClick={() => router.push('/merchant/products')}
                                 >
@@ -317,8 +303,6 @@ export default function SellerDashboard() {
                             </CardContent>
                         </Card>
                     </motion.div>
-
-                    {/* Recent Orders */}
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -335,22 +319,24 @@ export default function SellerDashboard() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
-                                {dashboardData.recentOrders.map((order) => (
-                                    <div key={order.id} className="flex items-center justify-between p-3 rounded-lg bg-white/5">
-                                        <div>
-                                            <p className="font-medium text-white">{order.customerName}</p>
-                                            <p className="text-sm text-gray-400">{format(new Date(order.createdAt), 'MMM d, yyyy')}</p>
+                                {
+                                    dashboardData.recentOrders.map((order) => (
+                                        <div key={order.id} className="flex items-center justify-between p-3 rounded-lg bg-white/5">
+                                            <div>
+                                                <p className="font-medium text-white">{order.customerName}</p>
+                                                <p className="text-sm text-gray-400">{format(new Date(order.createdAt), 'MMM d, yyyy')}</p>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="font-medium text-white">₹{order.amount.toLocaleString()}</p>
+                                                <Badge className={`${getStatusColor(order.status)} text-white text-xs`}>
+                                                    {order.status}
+                                                </Badge>
+                                            </div>
                                         </div>
-                                        <div className="text-right">
-                                            <p className="font-medium text-white">₹{order.amount.toLocaleString()}</p>
-                                            <Badge className={`${getStatusColor(order.status)} text-white text-xs`}>
-                                                {order.status}
-                                            </Badge>
-                                        </div>
-                                    </div>
-                                ))}
-                                <Button 
-                                    variant="ghost" 
+                                    ))
+                                }
+                                <Button
+                                    variant="ghost"
                                     className="w-full text-[#DF87F3] hover:bg-[#DF87F3]/10"
                                     onClick={() => router.push('/merchant/orders')}
                                 >
