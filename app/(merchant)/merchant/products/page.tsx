@@ -4,30 +4,24 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import {
-	Plus, Search, Filter, MoreHorizontal, Edit, Trash2, Eye, EyeOff,
-	Package, TrendingUp, DollarSign, ShoppingCart, ArrowLeft
+	Plus, Search, Filter, MoreHorizontal, Edit, Trash2, Eye,
+	Package, TrendingUp, ShoppingCart, ArrowLeft
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Switch } from '@/components/ui/switch'
 import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
+	DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import {
-	Pagination,
-	PaginationContent,
-	PaginationEllipsis,
-	PaginationItem,
-	PaginationLink,
-	PaginationNext,
-	PaginationPrevious,
+	Pagination, PaginationContent, PaginationEllipsis,
+	PaginationItem, PaginationLink, PaginationNext, PaginationPrevious
 } from '@/components/ui/pagination'
-import { getMerchantProducts, deleteProduct, updateProductStatus } from '@/actions/merchant-product.action'
+import { 
+	getMerchantProducts, deleteProduct, updateProductStatus 
+} from '@/actions/merchant-product.action'
 import { toast } from 'sonner'
 import Image from 'next/image'
 import Link from 'next/link'

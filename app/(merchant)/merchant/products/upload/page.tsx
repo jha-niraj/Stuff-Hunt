@@ -3,9 +3,8 @@
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useDropzone } from 'react-dropzone'
-import { motion, AnimatePresence } from 'framer-motion'
 import {
-	Upload, Image as ImageIcon, Check, X, Loader2, ArrowLeft, Save, Sparkles, 
+	Upload, Image as ImageIcon, X, Loader2, ArrowLeft, Save, 
 	FileSpreadsheet, ChevronDown, ChevronUp, Plus, Download
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -14,8 +13,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
-import { Switch } from '@/components/ui/switch'
-import { Separator } from '@/components/ui/separator'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { uploadSingleProduct, uploadProductsFromExcel, type ExcelProductData } from '@/actions/merchant-product.action'
 import { toast } from 'sonner'
@@ -26,7 +23,7 @@ export default function ProductUploadPage() {
 	const router = useRouter()
 	
 	// Excel upload state
-	const [excelFile, setExcelFile] = useState<File | null>(null)
+
 	const [excelData, setExcelData] = useState<ExcelProductData[]>([])
 	const [excelUploading, setExcelUploading] = useState(false)
 	const [excelPreview, setExcelPreview] = useState<ExcelProductData[]>([])
@@ -59,7 +56,7 @@ export default function ProductUploadPage() {
 		const file = acceptedFiles[0]
 		if (!file) return
 
-		setExcelFile(file)
+
 		
 		const reader = new FileReader()
 		reader.onload = (e) => {
@@ -68,32 +65,53 @@ export default function ProductUploadPage() {
 				const workbook = XLSX.read(data, { type: 'array' })
 				const sheetName = workbook.SheetNames[0]
 				const worksheet = workbook.Sheets[sheetName]
-				const jsonData = XLSX.utils.sheet_to_json(worksheet) as any[]
+				const jsonData = XLSX.utils.sheet_to_json(worksheet) as Record<string, unknown>[]
 
 				// Map Excel columns to our data structure
-				const mappedData: ExcelProductData[] = jsonData.map((row) => ({
-					productName: row['Product Name'] || row['productName'] || '',
-					category: row['Category'] || row['category'] || '',
-					subcategory: row['Subcategory'] || row['subcategory'] || '',
-					brand: row['Brand'] || row['brand'] || '',
-					priceINR: parseFloat(row['Price (INR)'] || row['priceINR'] || '0'),
-					discountPercent: parseFloat(row['Discount (%)'] || row['discountPercent'] || '0'),
-					finalPriceINR: parseFloat(row['Final Price (INR)'] || row['finalPriceINR'] || '0'),
-					productDescription: row['Product Description'] || row['productDescription'] || '',
-					keyFeatures: row['Key Features'] || row['keyFeatures'] || '',
-					productType: row['Product Type'] || row['productType'] || '',
-					imageURL1: row['Image URL 1'] || row['imageURL1'] || '',
-					imageURL2: row['Image URL 2'] || row['imageURL2'] || '',
-					imageURL3: row['Image URL 3'] || row['imageURL3'] || '',
-					imageURL4: row['Image URL 4'] || row['imageURL4'] || '',
-					imageURL5: row['Image URL 5'] || row['imageURL5'] || '',
-					stock: parseInt(row['Stock'] || row['stock'] || '0'),
-					extraOptions: row['Extra Options'] || row['extraOptions'] || '',
-					sizeOptions: row['Size Options'] || row['sizeOptions'] || '',
-					sellerName: row['Seller Name'] || row['sellerName'] || '',
-					itemsTempQty: parseInt(row['Items Temp Qty'] || row['itemsTempQty'] || '0'),
-					returnPolicy: row['Return Policy'] || row['returnPolicy'] || ''
-				}))
+				const mappedData: ExcelProductData[] = jsonData.map((row) => {
+					const getValue = (key: string, fallback: string = '') => {
+						const value = row[key]
+						return value !== null && value !== undefined ? String(value) : fallback
+					}
+
+					const getNumericValue = (key: string, fallback: number = 0) => {
+						const value = row[key]
+						if (value === null || value === undefined || value === '') return fallback
+						const parsed = typeof value === 'number' ? value : parseFloat(String(value))
+						return isNaN(parsed) ? fallback : parsed
+					}
+
+					const getIntValue = (key: string, fallback: number = 0) => {
+						const value = row[key]
+						if (value === null || value === undefined || value === '') return fallback
+						const parsed = typeof value === 'number' ? Math.floor(value) : parseInt(String(value))
+						return isNaN(parsed) ? fallback : parsed
+					}
+
+					return {
+						productName: getValue('Product Name') || getValue('productName'),
+						category: getValue('Category') || getValue('category'),
+						subcategory: getValue('Subcategory') || getValue('subcategory'),
+						brand: getValue('Brand') || getValue('brand'),
+						priceINR: getNumericValue('Price (INR)') || getNumericValue('priceINR'),
+						discountPercent: getNumericValue('Discount (%)') || getNumericValue('discountPercent'),
+						finalPriceINR: getNumericValue('Final Price (INR)') || getNumericValue('finalPriceINR'),
+						productDescription: getValue('Product Description') || getValue('productDescription'),
+						keyFeatures: getValue('Key Features') || getValue('keyFeatures'),
+						productType: getValue('Product Type') || getValue('productType'),
+						imageURL1: getValue('Image URL 1') || getValue('imageURL1'),
+						imageURL2: getValue('Image URL 2') || getValue('imageURL2'),
+						imageURL3: getValue('Image URL 3') || getValue('imageURL3'),
+						imageURL4: getValue('Image URL 4') || getValue('imageURL4'),
+						imageURL5: getValue('Image URL 5') || getValue('imageURL5'),
+						stock: getIntValue('Stock') || getIntValue('stock'),
+						extraOptions: getValue('Extra Options') || getValue('extraOptions'),
+						sizeOptions: getValue('Size Options') || getValue('sizeOptions'),
+						sellerName: getValue('Seller Name') || getValue('sellerName'),
+						itemsTempQty: getIntValue('Items Temp Qty') || getIntValue('itemsTempQty'),
+						returnPolicy: getValue('Return Policy') || getValue('returnPolicy')
+					}
+				})
 
 				setExcelData(mappedData)
 				setExcelPreview(mappedData.slice(0, 5)) // Show first 5 for preview
@@ -188,8 +206,22 @@ export default function ProductUploadPage() {
 			const imageUrls = singleForm.images.map(file => URL.createObjectURL(file))
 			
 			const result = await uploadSingleProduct({
-				...singleForm,
-				images: imageUrls
+				name: singleForm.name,
+				category: singleForm.category,
+				subcategory: singleForm.subcategory || undefined,
+				brand: singleForm.brand || undefined,
+				price: singleForm.price,
+				originalPrice: singleForm.originalPrice || undefined,
+				discountPercentage: singleForm.discountPercentage || undefined,
+				shortDescription: singleForm.shortDescription || undefined,
+				detailedDescription: singleForm.detailedDescription || undefined,
+				keyFeatures: singleForm.keyFeatures || undefined,
+				productType: singleForm.productType || undefined,
+				images: imageUrls,
+				stockQuantity: singleForm.stockQuantity,
+				extraOptions: singleForm.extraOptions || undefined,
+				sizeOptions: singleForm.sizeOptions || undefined,
+				returnPolicy: singleForm.returnPolicy || undefined
 			})
 
 			if (result.success) {
@@ -480,6 +512,15 @@ export default function ProductUploadPage() {
 
 											<div className="grid grid-cols-2 gap-4">
 												<div className="space-y-2">
+													<Label className="text-white">Subcategory</Label>
+													<Input
+														value={singleForm.subcategory}
+														onChange={(e) => setSingleForm(prev => ({ ...prev, subcategory: e.target.value }))}
+														placeholder="e.g., Smartphones"
+														className="bg-white/5 border-white/20 text-white"
+													/>
+												</div>
+												<div className="space-y-2">
 													<Label className="text-white">Brand</Label>
 													<Input
 														value={singleForm.brand}
@@ -488,12 +529,25 @@ export default function ProductUploadPage() {
 														className="bg-white/5 border-white/20 text-white"
 													/>
 												</div>
+											</div>
+
+											<div className="grid grid-cols-2 gap-4">
 												<div className="space-y-2">
 													<Label className="text-white">Product Type</Label>
 													<Input
 														value={singleForm.productType}
 														onChange={(e) => setSingleForm(prev => ({ ...prev, productType: e.target.value }))}
 														placeholder="e.g., Physical, Digital"
+														className="bg-white/5 border-white/20 text-white"
+													/>
+												</div>
+												<div className="space-y-2">
+													<Label className="text-white">Original Price (₹)</Label>
+													<Input
+														type="number"
+														value={singleForm.originalPrice}
+														onChange={(e) => setSingleForm(prev => ({ ...prev, originalPrice: parseFloat(e.target.value) || 0 }))}
+														placeholder="0"
 														className="bg-white/5 border-white/20 text-white"
 													/>
 												</div>
@@ -541,6 +595,17 @@ export default function ProductUploadPage() {
 													placeholder="Brief product description"
 													className="bg-white/5 border-white/20 text-white resize-none"
 													rows={2}
+												/>
+											</div>
+
+											<div className="space-y-2">
+												<Label className="text-white">Detailed Description</Label>
+												<Textarea
+													value={singleForm.detailedDescription}
+													onChange={(e) => setSingleForm(prev => ({ ...prev, detailedDescription: e.target.value }))}
+													placeholder="Detailed product description"
+													className="bg-white/5 border-white/20 text-white resize-none"
+													rows={3}
 												/>
 											</div>
 

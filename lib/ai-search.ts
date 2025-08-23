@@ -76,8 +76,7 @@ const SEARCH_SYSTEM_PROMPT = `You are an AI assistant for an e-commerce platform
 `
 
 export async function analyzeSearchQuery(
-	query: string,
-	context?: ProductContext
+	query: string
 ): Promise<AISearchResult> {
 	try {
 		if (!process.env.OPENAI_API_KEY) {
@@ -134,8 +133,7 @@ export async function analyzeSearchQuery(
 }
 
 export async function analyzeImageSearch(
-	imageBase64: string,
-	context?: ProductContext
+	imageBase64: string
 ): Promise<AISearchResult> {
 	try {
 		if (!process.env.OPENAI_API_KEY) {

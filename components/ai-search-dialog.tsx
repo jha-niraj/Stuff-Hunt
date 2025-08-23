@@ -253,7 +253,7 @@ export function AISearchDialog({ open, onOpenChange }: AISearchDialogProps) {
 						</div>
 						
 						<p className="text-xs text-muted-foreground text-center">
-							Upload an image or describe what you're looking for
+							Upload an image or describe what you&apos;re looking for
 						</p>
 					</div>
 

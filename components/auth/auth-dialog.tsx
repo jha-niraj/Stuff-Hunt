@@ -196,7 +196,7 @@ export function AuthDialog() {
 								
 								<div className="text-center">
 									<p className="text-sm text-muted-foreground mb-3">
-										Don't have an account yet?
+										Don&apos;t have an account yet?
 									</p>
 									<Button
 										variant="outline"

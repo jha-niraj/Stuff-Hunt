@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Sparkles, Menu, X, Upload, Search } from "lucide-react"
+import { Sparkles, Menu, X } from "lucide-react"
 import { useSession } from "next-auth/react"
 
 export function Navbar() {

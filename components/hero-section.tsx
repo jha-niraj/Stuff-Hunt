@@ -2,7 +2,6 @@
 
 import { useState, useRef } from "react"
 import { motion } from "framer-motion"
-import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Search, Upload, X, Loader2 } from "lucide-react"
 import { toast } from "sonner"
@@ -385,7 +384,7 @@ export function HeroSection() {
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.8, delay: 0.6 }}
 				>
-					Find exactly what you're looking for with intelligent search, personalized recommendations, and seamless shopping experience.
+					Find exactly what you&apos;re looking for with intelligent search, personalized recommendations, and seamless shopping experience.
 				</motion.p>
 			</motion.div>
 			<motion.div
@@ -472,7 +471,7 @@ export function HeroSection() {
 						</div>
 					</div>
 					<p className="text-xs text-muted-foreground mt-3 text-center">
-						Upload an image or describe what you're looking for
+						Upload an image or describe what you&apos;re looking for
 					</p>
 				</div>
 			</motion.div>

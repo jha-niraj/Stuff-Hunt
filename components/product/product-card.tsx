@@ -72,6 +72,7 @@ export function ProductCard({ product }: Props) {
 				}
 			}
 		} catch (error) {
+			console.log("Error Occurred: " + error);
 			toast.error('Failed to update wishlist')
 		} finally {
 			setIsAddingToWishlist(false)

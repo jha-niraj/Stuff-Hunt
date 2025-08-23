@@ -51,7 +51,7 @@ export function ProductGrid({ products = [], loading = false, skeletonCount = 8 
 					</div>
 					<h3 className="text-lg font-semibold text-foreground mb-2">No Products Found</h3>
 					<p className="text-muted-foreground">
-						Try adjusting your search criteria or browse our categories to find what you're looking for.
+						Try adjusting your search criteria or browse our categories to find what you&apos;re looking for.
 					</p>
 				</div>
 			</div>

@@ -15,13 +15,14 @@ import { toast } from "sonner"
 
 export default function ComparePage() {
 	const searchParams = useSearchParams()
-	const productIds = searchParams.get('products')?.split(',') || []
 	const [products, setProducts] = useState<ProductWithDetails[]>([])
 	const [loading, setLoading] = useState(true)
 	const { add } = useCart()
 	const { removeFromCompare, clearCompare } = useCompare()
 
 	useEffect(() => {
+		const productIds = searchParams.get('products')?.split(',') || []
+		
 		const fetchProducts = async () => {
 			if (productIds.length === 0) {
 				setLoading(false)
@@ -40,7 +41,7 @@ export default function ComparePage() {
 		}
 
 		fetchProducts()
-	}, [productIds])
+	}, [searchParams])
 
 	const handleRemoveProduct = (productId: string) => {
 		removeFromCompare(productId)
@@ -79,14 +80,14 @@ export default function ComparePage() {
 	}
 
 	const comparisonFeatures = [
-		{ key: 'price', label: 'Price', format: (value: any) => formatCurrency(value) },
-		{ key: 'category', label: 'Category', format: (value: any) => value || 'N/A' },
-		{ key: 'brand', label: 'Brand', format: (value: any) => value || 'N/A' },
-		{ key: 'inStock', label: 'Availability', format: (value: any) => value ? 'In Stock' : 'Out of Stock' },
-		{ key: 'stockQuantity', label: 'Stock Quantity', format: (value: any) => value || 0 },
-		{ key: 'weight', label: 'Weight', format: (value: any) => value ? `${value} kg` : 'N/A' },
-		{ key: 'dimensions', label: 'Dimensions', format: (value: any) => value || 'N/A' },
-		{ key: 'material', label: 'Material', format: (value: any) => value || 'N/A' },
+		{ key: 'price', label: 'Price', format: (value: number) => formatCurrency(value) },
+		{ key: 'category', label: 'Category', format: (value: string) => value || 'N/A' },
+		{ key: 'brand', label: 'Brand', format: (value: string) => value || 'N/A' },
+		{ key: 'inStock', label: 'Availability', format: (value: boolean) => value ? 'In Stock' : 'Out of Stock' },
+		{ key: 'stockQuantity', label: 'Stock Quantity', format: (value: number) => value || 0 },
+		{ key: 'weight', label: 'Weight', format: (value: number) => value ? `${value} kg` : 'N/A' },
+		{ key: 'dimensions', label: 'Dimensions', format: (value: string) => value || 'N/A' },
+		{ key: 'material', label: 'Material', format: (value: string) => value || 'N/A' },
 	]
 
 	return (
@@ -178,7 +179,7 @@ export default function ComparePage() {
 								</div>
 								{products.map((product) => (
 									<div key={`${product.id}-${feature.key}`} className="text-sm md:text-base">
-										{feature.format((product as any)[feature.key])}
+										{feature.format(product[feature.key as keyof ProductWithDetails] as never)}
 									</div>
 								))}
 							</div>

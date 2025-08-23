@@ -99,7 +99,7 @@ export function FeaturedGrid() {
 							</div> */}
 							<h3 className="text-lg font-semibold text-foreground mb-2">No Featured Products Yet</h3>
 							<p className="text-muted-foreground mb-6">
-								We're working on adding amazing products for you. Check back soon or explore our full catalog.
+								We&apos;re working on adding amazing products for you. Check back soon or explore our full catalog.
 							</p>
 							<Link href="/products">
 								<Button className="bg-primary text-primary-foreground hover:bg-primary/90">

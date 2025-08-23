@@ -16,6 +16,7 @@ export interface WishlistItem {
 		originalPrice?: number | null
 		images: string[]
 		inStock: boolean
+		stockQuantity: number
 		brand?: string | null
 		categories: {
 			id: string
@@ -62,6 +63,7 @@ export async function getWishlist(): Promise<WishlistResponse> {
 						originalPrice: true,
 						images: true,
 						inStock: true,
+						stockQuantity: true,
 						brand: true,
 						categories: {
 							select: {

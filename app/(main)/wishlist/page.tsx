@@ -4,18 +4,27 @@ import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
+import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Heart, ShoppingCart, Trash2, ArrowLeft } from "lucide-react"
 import { getWishlist, removeFromWishlist, clearWishlist, type WishlistItem } from "@/actions/wishlist.action"
 import { formatCurrency } from "@/lib/format"
 import { useCart } from "@/stores/cart-store"
 import { toast } from "sonner"
+import { ProductType } from "@prisma/client"
 
 export default function WishlistPage() {
 	const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([])
 	const [loading, setLoading] = useState(true)
 	const [removing, setRemoving] = useState<string | null>(null)
-	const { add } = useCart()
+	const [addingToCart, setAddingToCart] = useState<string | null>(null)
+	const { data: session } = useSession()
+	const { add, setAuthenticated } = useCart()
+
+	// Set authentication status when session changes
+	useEffect(() => {
+		setAuthenticated(!!session)
+	}, [session, setAuthenticated])
 
 	useEffect(() => {
 		const fetchWishlist = async () => {
@@ -70,9 +79,55 @@ export default function WishlistPage() {
 		}
 	}
 
-	const handleAddToCart = (item: WishlistItem) => {
-		add(item.product as any, 1, undefined)
-		toast.success('Added to cart')
+	const handleAddToCart = async (item: WishlistItem) => {
+		setAddingToCart(item.productId)
+		try {
+			// Transform the product to match ProductWithDetails type
+			const productForCart = {
+				...item.product,
+				originalPrice: item.product.originalPrice ?? undefined,
+				// Add missing required fields with defaults
+				shortDescription: null,
+				detailedDescription: null,
+				keyFeatures: null,
+				viewCount: 0,
+				isActive: true,
+				stockQuantity: item.product.stockQuantity || 1,
+				colors: [],
+				sizes: [],
+				discountPercentage: null,
+				category: null,
+				subcategory: null,
+				productType: ProductType.GENERIC_PRODUCT, // Default product type
+				weight: null,
+				dimensions: null,
+				material: null,
+				aiMetadata: null,
+				sku: null,
+				createdAt: new Date(),
+				updatedAt: new Date(),
+				seller: {
+					id: 'default',
+					name: 'StuffHunt',
+					verificationBadge: false
+				},
+				categories: item.product.categories || [],
+				_count: {
+					reviews: 0,
+					orderItems: 0,
+					likes: 0
+				},
+				averageRating: 0
+			}
+
+			await add(productForCart, 1, undefined)
+			toast.success('Added to cart')
+		} catch (error) {
+			console.error('Error adding to cart:', error)
+			toast.error('Failed to add to cart')
+		} finally {
+			setAddingToCart(null)
+		}
 	}
 
 	if (loading) {
@@ -212,11 +267,15 @@ export default function WishlistPage() {
 									<Button
 										size="sm"
 										onClick={() => handleAddToCart(item)}
-										disabled={!item.product.inStock}
+										disabled={!item.product.inStock || addingToCart === item.productId}
 										className="flex-1"
 									>
-										<ShoppingCart className="w-4 h-4 mr-2" />
-										{item.product.inStock ? 'Add to Cart' : 'Out of Stock'}
+										{addingToCart === item.productId ? (
+											<div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current mr-2"></div>
+										) : (
+											<ShoppingCart className="w-4 h-4 mr-2" />
+										)}
+										{!item.product.inStock ? 'Out of Stock' : addingToCart === item.productId ? 'Adding...' : 'Add to Cart'}
 									</Button>
 									<Button
 										variant="outline"

@@ -1,7 +1,5 @@
 'use client'
 
-import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
 import OnboardingCheck from '@/components/onboardingcheck';
 import { CompareProvider } from '@/contexts/compare-context';
 import { CompareFloatingButton } from '@/components/compare-floating-button';
@@ -12,21 +10,6 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-	const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
-	const { data: session } = useSession();
-
-	useEffect(() => {
-		const savedState = localStorage.getItem('mainSidebarCollapsed');
-		if (savedState !== null) {
-			setSidebarCollapsed(JSON.parse(savedState));
-		}
-	}, []);
-
-	// const toggleSidebar = () => {
-	// 	const newState = !sidebarCollapsed;
-	// 	setSidebarCollapsed(newState);
-	// 	localStorage.setItem('mainSidebarCollapsed', JSON.stringify(newState));
-	// };
 
 	return (
 		<OnboardingCheck>

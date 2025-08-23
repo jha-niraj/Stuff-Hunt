@@ -3,11 +3,15 @@
 import { useTheme } from "next-themes"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { Moon, Sun, Home, User, LogOut, Shield, LogIn, Store, Package, BarChart3, Settings, Bell } from "lucide-react"
+import { 
+    Moon, Sun, User, LogOut, LogIn, Store, Package, 
+    BarChart3, Settings, Bell 
+} from "lucide-react"
 import { Button } from "./ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
-    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, 
+    DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger
 } from "./ui/dropdown-menu"
 import { motion } from "framer-motion"
 import { signOut, useSession } from "next-auth/react"

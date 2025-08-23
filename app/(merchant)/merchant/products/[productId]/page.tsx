@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import {
-	ArrowLeft, Save, Loader2, Upload, X, Plus, Trash2, Eye, EyeOff,
-	Package, DollarSign, Tag, Image as ImageIcon, FileText, Settings
+	ArrowLeft, Save, Loader2, Upload, X, Package, DollarSign, 
+	Image as ImageIcon, FileText, Settings
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -19,6 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { getProductBySlug, updateProduct } from '@/actions/merchant-product.action'
 import { toast } from 'sonner'
 import Image from 'next/image'
+import { ProductType } from '@prisma/client'
 
 interface ProductData {
 	id: string
@@ -30,7 +31,7 @@ interface ProductData {
 	shortDescription?: string
 	detailedDescription?: string
 	keyFeatures?: string
-	productType?: string
+	productType?: ProductType
 	images: string[]
 	stockQuantity: number
 	category?: string
@@ -48,7 +49,6 @@ interface ProductData {
 
 export default function MerchantProductDetailPage({ params }: { params: Promise<{ productId: string }> }) {
 	const router = useRouter()
-	const [productId, setProductId] = useState<string>('')
 	const [product, setProduct] = useState<ProductData | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [saving, setSaving] = useState(false)
@@ -56,13 +56,11 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 
 	// Form state
 	const [formData, setFormData] = useState<Partial<ProductData>>({})
-	const [newImages, setNewImages] = useState<string[]>([])
 
 	// Load product data
 	useEffect(() => {
 		const loadProduct = async () => {
 			const resolvedParams = await params
-			setProductId(resolvedParams.productId)
 			
 			try {
 				const result = await getProductBySlug(resolvedParams.productId)
@@ -86,7 +84,7 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 	}, [params, router])
 
 	// Handle form changes
-	const handleInputChange = (field: keyof ProductData, value: any) => {
+	const handleInputChange = (field: keyof ProductData, value: string | number | boolean | string[]) => {
 		setFormData(prev => ({ ...prev, [field]: value }))
 		setHasChanges(true)
 	}
@@ -100,7 +98,6 @@ export default function MerchantProductDetailPage({ params }: { params: Promise<
 			const reader = new FileReader()
 			reader.onload = (e) => {
 				const imageUrl = e.target?.result as string
-				setNewImages(prev => [...prev, imageUrl])
 				setFormData(prev => ({
 					...prev,
 					images: [...(prev.images || []), imageUrl]

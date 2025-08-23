@@ -4,7 +4,7 @@ import { ProductType } from "@prisma/client"
 // This follows the JSON-driven approach used by major e-commerce platforms
 
 export interface BaseProductSchema {
-    [key: string]: any
+    [key: string]: unknown
 }
 
 // Electronics Schemas
@@ -215,20 +215,22 @@ export function getProductSchema<T extends ProductType>(
     productType: T
 ): ProductSchemaMap[T] {
     // This is a type-safe way to get the schema for a product type
+    // In a real implementation, you might return actual schema validation
+    console.log('Getting schema for product type:', productType)
     return {} as ProductSchemaMap[T]
 }
 
 // Validation functions for each schema type
 export const schemaValidators = {
-    [ProductType.ELECTRONICS_LAPTOP]: (data: any): data is LaptopSchema => {
+    [ProductType.ELECTRONICS_LAPTOP]: (data: unknown): data is LaptopSchema => {
         return typeof data === 'object' && data !== null
     },
 
-    [ProductType.ELECTRONICS_SMARTPHONE]: (data: any): data is SmartphoneSchema => {
+    [ProductType.ELECTRONICS_SMARTPHONE]: (data: unknown): data is SmartphoneSchema => {
         return typeof data === 'object' && data !== null
     },
 
-    [ProductType.CLOTHING_APPAREL]: (data: any): data is ApparelSchema => {
+    [ProductType.CLOTHING_APPAREL]: (data: unknown): data is ApparelSchema => {
         return typeof data === 'object' && data !== null
     },
 
@@ -281,7 +283,7 @@ export const defaultSchemas: Partial<ProductSchemaMap> = {
 // Helper function to merge user data with default schema
 export function mergeWithDefaultSchema<T extends ProductType>(
     productType: T,
-    userData: any
+    userData: Record<string, unknown>
 ): ProductSchemaMap[T] {
     const defaultSchema = defaultSchemas[productType] || {}
     return { ...defaultSchema, ...userData } as ProductSchemaMap[T]

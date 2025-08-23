@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { Search, Sparkles, ShoppingBag, Zap, Heart, Star } from "lucide-react"
+import { Search, Sparkles, ShoppingBag, Zap, Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
@@ -193,7 +193,7 @@ function CTASection() {
 						Start Shopping Today
 					</h2>
 					<p className="text-muted-foreground text-sm md:text-base font-medium leading-[18.20px] md:leading-relaxed break-words max-w-2xl">
-						Join millions of happy customers who discover amazing products every day with StuffHunt's AI-powered marketplace
+						Join millions of happy customers who discover amazing products every day with StuffHunt&apos;s AI-powered marketplace
 					</p>
 				</div>
 				<Link href="/products">

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Store, Menu, X, BarChart3, Package, Settings } from "lucide-react"
+import { Store, Menu, X, BarChart3, Package } from "lucide-react"
 import { useSession } from "next-auth/react"
 
 export function MerchantNavbar() {
