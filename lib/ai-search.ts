@@ -207,7 +207,7 @@ export async function analyzeImageSearch(
 }
 
 // Helper function to convert file to base64
-export function fileToBase64(file: File): Promise<string> {
+export async function fileToBase64(file: File): Promise<string> {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader()
 		reader.readAsDataURL(file)
